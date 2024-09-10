@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import React from "react";
 import {
   View,
@@ -32,16 +33,22 @@ export default function SignupScreen() {
       />
 
       {/* Register Buttons */}
-      <TouchableOpacity style={styles.registerButtonPassenger}>
-        <Text style={styles.registerButtonPassengerText}>
-          Register as passenger
-        </Text>
+      <TouchableOpacity
+        style={styles.registerButtonPassenger}
+        onPress={() => {
+          router.push("/(registerFlow)/(initialFlow)/FrequentCommuter");
+        }}
+      >
+        <Text style={styles.registerButtonPassengerText}>Register</Text>
       </TouchableOpacity>
 
       <Text style={styles.orText}>or</Text>
 
-      <TouchableOpacity style={styles.registerButtonRider}>
-        <Text style={styles.registerButtonRiderText}>Register as rider</Text>
+      <TouchableOpacity
+        style={styles.registerButtonRider}
+        onPress={() => router.push("/login")}
+      >
+        <Text style={styles.registerButtonRiderText}>Login</Text>
       </TouchableOpacity>
     </View>
   );

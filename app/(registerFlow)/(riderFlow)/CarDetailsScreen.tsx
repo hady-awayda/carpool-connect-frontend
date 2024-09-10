@@ -8,36 +8,26 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 
-export default function LoginScreen() {
+export default function CarDetailsScreen() {
   const router = useRouter();
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome back! Glad to see you, Again!</Text>
+      <Text style={styles.title}>Car details</Text>
 
-      {/* Input Fields */}
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        keyboardType="email-address"
-      />
-      <TextInput style={styles.input} placeholder="Password" secureTextEntry />
+      <TextInput style={styles.input} placeholder="Manufacturer" />
+      <TextInput style={styles.input} placeholder="Model" />
+      <TextInput style={styles.input} placeholder="Year" />
 
-      {/* Login Button */}
       <TouchableOpacity
-        style={styles.loginButton}
-        onPress={() => router.replace("/(tabs)/Home")}
+        style={styles.button}
+        onPress={() => router.push("/(preferencesFlow)/SmokingScreen")}
       >
-        <Text style={styles.loginButtonText}>Login</Text>
+        <Text style={styles.buttonText}>Confirm</Text>
       </TouchableOpacity>
 
-      {/* Register Button */}
-      <Text style={styles.orText}>or</Text>
-      <TouchableOpacity
-        style={styles.registerButton}
-        onPress={() => router.push("/register")}
-      >
-        <Text style={styles.registerButtonText}>Register</Text>
+      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+        <Text style={styles.backButtonText}>Back</Text>
       </TouchableOpacity>
     </View>
   );
@@ -52,10 +42,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   title: {
-    fontFamily: "Urbanist_700Bold",
     fontSize: 28,
-    textAlign: "center",
-    marginBottom: 20,
+    fontWeight: "bold",
+    marginBottom: 100,
   },
   input: {
     borderWidth: 1,
@@ -64,10 +53,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 5,
     fontSize: 16,
-    marginBottom: 15,
+    marginBottom: 20,
     width: "100%",
   },
-  loginButton: {
+  button: {
     backgroundColor: "#333",
     paddingVertical: 15,
     paddingHorizontal: 40,
@@ -75,30 +64,23 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 15,
   },
-  loginButtonText: {
-    fontFamily: "Urbanist_700Bold",
+  buttonText: {
     color: "#fff",
     fontSize: 16,
     textAlign: "center",
   },
-  registerButton: {
+  backButton: {
     borderColor: "#333",
     borderWidth: 1,
     paddingVertical: 15,
     paddingHorizontal: 40,
     borderRadius: 5,
     width: "100%",
-    marginBottom: 20,
+    marginTop: 20,
   },
-  registerButtonText: {
-    fontFamily: "Urbanist_700Bold",
+  backButtonText: {
     color: "#333",
     fontSize: 16,
     textAlign: "center",
-  },
-  orText: {
-    fontFamily: "Urbanist_400Regular",
-    color: "#666",
-    marginBottom: 10,
   },
 });
