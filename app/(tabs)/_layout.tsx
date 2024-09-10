@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
 
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
@@ -15,7 +15,7 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="schedule"
+        name="Schedule"
         options={{
           title: "Schedule",
           tabBarIcon: ({ color, size }) => (
@@ -26,7 +26,7 @@ export default function TabLayout() {
 
       {/* Explore Tab */}
       <Tabs.Screen
-        name="explore"
+        name="Explore"
         options={{
           title: "Explore",
           tabBarIcon: ({ color, size }) => (
@@ -37,7 +37,7 @@ export default function TabLayout() {
 
       {/* Home Tab */}
       <Tabs.Screen
-        name="home"
+        name="Home"
         options={{
           title: "Home",
           tabBarIcon: ({ color, size }) => (
@@ -48,7 +48,7 @@ export default function TabLayout() {
 
       {/* Messages Tab */}
       <Tabs.Screen
-        name="messages"
+        name="Messages"
         options={{
           title: "Messages",
           tabBarIcon: ({ color, size }) => (
@@ -59,7 +59,7 @@ export default function TabLayout() {
 
       {/* Profile Tab */}
       <Tabs.Screen
-        name="profile"
+        name="Profile"
         options={{
           title: "Profile",
           tabBarIcon: ({ color, size }) => (
