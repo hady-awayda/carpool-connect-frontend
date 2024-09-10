@@ -8,18 +8,20 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 
-export default function CarTemperatureScreen() {
+export default function MusicTypeScreen() {
   const router = useRouter();
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>What is your preferred car temperature?</Text>
+      <Text style={styles.title}>
+        What type of music do you prefer during rides?
+      </Text>
 
-      <TextInput style={styles.input} placeholder="Enter temperature (°C)" />
+      <TextInput style={styles.input} placeholder="Enter music genre" />
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("/MusicPreferenceScreen")}
+        onPress={() => router.push("/PetPreferenceScreen")}
       >
         <Text style={styles.buttonText}>Confirm</Text>
       </TouchableOpacity>

@@ -1,27 +1,30 @@
 import React from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-} from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 
-export default function CarTemperatureScreen() {
+export default function MusicPreferenceScreen() {
   const router = useRouter();
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>What is your preferred car temperature?</Text>
+      <Text style={styles.title}>
+        Do you prefer listening to music during rides?
+      </Text>
 
-      <TextInput style={styles.input} placeholder="Enter temperature (°C)" />
-
+      {/* Yes Button */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("/MusicPreferenceScreen")}
+        onPress={() => router.push("/MusicTypeScreen")}
       >
-        <Text style={styles.buttonText}>Confirm</Text>
+        <Text style={styles.buttonText}>Yes</Text>
+      </TouchableOpacity>
+
+      {/* No Button */}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => router.push("/PetPreferenceScreen")}
+      >
+        <Text style={styles.buttonText}>No</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
@@ -44,16 +47,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 20,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    fontSize: 16,
-    marginBottom: 15,
-    width: "100%",
   },
   button: {
     backgroundColor: "#333",
