@@ -2,20 +2,20 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 
-export default function LongTripsScreen() {
+export default function SilencePreferenceScreen() {
   const router = useRouter();
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Are you comfortable with long trips (more than 1 hour)?</Text>
+      <Text style={styles.title}>Do you prefer silence during rides?</Text>
 
       {/* Yes Button */}
-      <TouchableOpacity style={styles.button} onPress={() => router.push('/SilencePreferenceScreen')}>
+      <TouchableOpacity style={styles.button} onPress={() => router.push('/ChattingPreferenceScreen')}>
         <Text style={styles.buttonText}>Yes</Text>
       </TouchableOpacity>
 
       {/* No Button */}
-      <TouchableOpacity style={styles.button} onPress={() => router.push('/SilencePreferenceScreen')}>
+      <TouchableOpacity style={styles.button} onPress={() => router.push('/ChattingPreferenceScreen')}>
         <Text style={styles.buttonText}>No</Text>
       </TouchableOpacity>
 
