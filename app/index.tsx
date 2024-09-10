@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     fontFamily: "Urbanist_700Bold",
     fontSize: 28,
     textAlign: "center",
-    marginBottom: 20,
+    marginBottom: 100,
     marginTop: 60, // Move the title away from the other elements
   },
   subtitle: {

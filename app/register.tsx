@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     fontFamily: "Urbanist_700Bold",
     fontSize: 28,
     textAlign: "center",
-    marginBottom: 20,
+    marginBottom: 100,
   },
   input: {
     borderWidth: 1,

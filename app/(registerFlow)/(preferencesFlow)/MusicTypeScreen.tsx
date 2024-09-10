@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 20,
+    marginBottom: 100,
   },
   input: {
     borderWidth: 1,
