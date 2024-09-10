@@ -10,17 +10,13 @@ export default function CarOwnerScreen() {
       <Text style={styles.title}>Are you a car owner?</Text>
       <TouchableOpacity
         style={styles.button}
-        onPress={() =>
-          router.push("/(registerFlow)/(riderFlow)/CarDetailsScreen")
-        }
+        onPress={() => router.push("/CarDetailsScreen")}
       >
         <Text style={styles.buttonText}>Yes</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() =>
-          router.push("/(registerFlow)/(preferencesFlow)/SmokingScreen")
-        }
+        onPress={() => router.push("/SmokingScreen")}
       >
         <Text style={styles.buttonText}>No</Text>
       </TouchableOpacity>

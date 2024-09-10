@@ -39,7 +39,7 @@ export default function UserAddressScreen() {
       {/* Confirm Button */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("/(registerFlow)/CarOwnerScreen")}
+        onPress={() => router.push("/CarOwnerScreen")}
       >
         <Text style={styles.buttonText}>Confirm</Text>
       </TouchableOpacity>

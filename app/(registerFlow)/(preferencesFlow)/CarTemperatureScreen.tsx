@@ -1,25 +1,17 @@
-import React from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-} from "react-native";
-import { useRouter } from "expo-router";
+import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import { useRouter } from 'expo-router';
 
-export default function HowOftenScreen() {
+export default function CarTemperatureScreen() {
   const router = useRouter();
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>How often do you commute?</Text>
-      <TextInput style={styles.input} placeholder="Select" />
+      <Text style={styles.title}>What is your preferred car temperature?</Text>
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => router.push("/UserAddressScreen")}
-      >
+      <TextInput style={styles.input} placeholder="Enter temperature (°C)" />
+
+      <TouchableOpacity style={styles.button} onPress={() => router.push('/MusicPreferenceScreen')}>
         <Text style={styles.buttonText}>Confirm</Text>
       </TouchableOpacity>
 
@@ -33,52 +25,52 @@ export default function HowOftenScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingHorizontal: 20,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   title: {
-    textAlign: "center",
     fontSize: 28,
-    fontWeight: "bold",
-    marginBottom: 100,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: '#ccc',
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderRadius: 5,
     fontSize: 16,
-    marginBottom: 20,
-    width: "100%",
+    marginBottom: 15,
+    width: '100%',
   },
   button: {
-    backgroundColor: "#333",
+    backgroundColor: '#333',
     paddingVertical: 15,
     paddingHorizontal: 40,
     borderRadius: 5,
-    width: "100%",
+    width: '100%',
     marginBottom: 15,
   },
   buttonText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 16,
-    textAlign: "center",
+    textAlign: 'center',
   },
   backButton: {
-    borderColor: "#333",
+    borderColor: '#333',
     borderWidth: 1,
     paddingVertical: 15,
     paddingHorizontal: 40,
     borderRadius: 5,
-    width: "100%",
+    width: '100%',
     marginTop: 20,
   },
   backButtonText: {
-    color: "#333",
+    color: '#333',
     fontSize: 16,
-    textAlign: "center",
+    textAlign: 'center',
   },
 });
