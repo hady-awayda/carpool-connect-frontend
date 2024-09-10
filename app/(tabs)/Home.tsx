@@ -4,7 +4,9 @@ import { View, Text, StyleSheet } from 'react-native';
 export default function HomeScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Home Screen</Text>
+      <Text style={styles.title}>Welcome, John</Text>
+      <Text style={styles.subtitle}>Upcoming Schedule</Text>
+      {/* You can add more details for the schedule here */}
     </View>
   );
 }
@@ -12,10 +14,15 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: 20,
   },
-  text: {
+  title: {
     fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  subtitle: {
+    fontSize: 18,
+    marginBottom: 10,
   },
 });
