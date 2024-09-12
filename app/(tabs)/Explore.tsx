@@ -27,7 +27,6 @@ const ridersData: Rider[] = [
     car: "2022 BMW 335i",
     color: "Silver",
   },
-  // Add more items as needed
 ];
 
 const _onPress = (item: Rider) => {
