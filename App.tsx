@@ -1,6 +1,11 @@
 import {
+  Urbanist_200ExtraLight,
+  Urbanist_300Light,
   Urbanist_400Regular,
+  Urbanist_600SemiBold,
   Urbanist_700Bold,
+  Urbanist_800ExtraBold,
+  Urbanist_900Black,
   useFonts,
 } from "@expo-google-fonts/urbanist";
 import * as SplashScreen from "expo-splash-screen";
@@ -14,8 +19,13 @@ SplashScreen.preventAutoHideAsync();
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
   const [fontsLoaded] = useFonts({
+    Urbanist_200ExtraLight,
+    Urbanist_300Light,
     Urbanist_400Regular,
+    Urbanist_600SemiBold,
     Urbanist_700Bold,
+    Urbanist_800ExtraBold,
+    Urbanist_900Black,
   });
 
   useEffect(() => {
@@ -38,7 +48,7 @@ export default function App() {
 
   return (
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <LoginScreen />
+        <LoginScreen />
     </View>
   );
 }

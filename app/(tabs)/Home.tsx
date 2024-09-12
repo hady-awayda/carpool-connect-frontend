@@ -1,12 +1,14 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
+  const insets = useSafeAreaInsets();
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome, John</Text>
       <Text style={styles.subtitle}>Upcoming Schedule</Text>
-      {/* You can add more details for the schedule here */}
     </View>
   );
 }
@@ -16,11 +18,13 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: "#fff",
+    paddingBottom: Platform.OS === "android" ? 50 : 0,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 100,
+    fontSize: 28,
+    fontWeight: "800",
+    marginTop: 40,
+    marginBottom: 40,
   },
   subtitle: {
     fontSize: 18,
