@@ -1,19 +1,18 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import React from "react";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 
 const scheduleData = [
   {
-    id: '1',
-    from: 'Achrafieh',
-    to: 'Hadath',
-    driver: 'Ahmad Maxi',
-    carModel: 'Mercedes C63 AMG',
-    plate: 'G 781264',
-    year: '2014',
-    color: 'Black',
-    time: '17-8-2024 9:55 AM',
+    id: "1",
+    from: "Achrafieh",
+    to: "Hadath",
+    driver: "Ahmad Madi",
+    carModel: "Mercedes C63 AMG",
+    plate: "G 781264",
+    year: "2014",
+    color: "Black",
+    time: "17-8-2024 9:55 AM",
   },
-  // Add more items as needed
 ];
 
 export default function ScheduleScreen() {
@@ -29,7 +28,9 @@ export default function ScheduleScreen() {
             <Text style={styles.scheduleText}>Driver: {item.driver}</Text>
             <Text style={styles.scheduleText}>Car Model: {item.carModel}</Text>
             <Text style={styles.scheduleText}>Plate #: {item.plate}</Text>
-            <Text style={styles.scheduleText}>Year & Color: {item.year} {item.color}</Text>
+            <Text style={styles.scheduleText}>
+              Year & Color: {item.year} {item.color}
+            </Text>
             <Text style={styles.scheduleText}>Time: {item.time}</Text>
           </View>
         )}
@@ -47,7 +48,7 @@ const styles = StyleSheet.create({
   scheduleItem: {
     marginBottom: 15,
     padding: 10,
-    backgroundColor: '#f8f8f8',
+    backgroundColor: "#f8f8f8",
     borderRadius: 8,
   },
   scheduleText: {
