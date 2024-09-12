@@ -31,7 +31,7 @@ export default function CarpoolWithSmokersScreen() {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.FinishLaterButton}
-        onPress={() => router.push("/Home")}
+        onPress={() => router.replace("/Home")}
       >
         <Text style={styles.FinishLaterText}>Finish Later</Text>
       </TouchableOpacity>

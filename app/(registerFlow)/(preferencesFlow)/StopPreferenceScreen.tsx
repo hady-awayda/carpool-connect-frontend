@@ -14,7 +14,7 @@ export default function StopPreferenceScreen() {
       {/* Yes Button */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("/Home")}
+        onPress={() => router.replace("/Home")}
       >
         <Text style={styles.buttonText}>Yes</Text>
       </TouchableOpacity>
@@ -22,7 +22,7 @@ export default function StopPreferenceScreen() {
       {/* No Button */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("/Home")}
+        onPress={() => router.replace("/Home")}
       >
         <Text style={styles.buttonText}>No</Text>
       </TouchableOpacity>
@@ -33,7 +33,7 @@ export default function StopPreferenceScreen() {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.FinishLaterButton}
-        onPress={() => router.push("/Home")}
+        onPress={() => router.replace("/Home")}
       >
         <Text style={styles.FinishLaterText}>Finish Later</Text>
       </TouchableOpacity>
