@@ -16,42 +16,53 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack screenOptions={{ headerShown: false }}>
+      <Stack  screenOptions={{ headerShown: false }}>
         <Stack.Screen
-          name="index"
+          name="frequent-commuter"
           options={{
             title: "Welcome",
+            headerShown: false,
             animation: "slide_from_right",
+            headerBackButtonMenuEnabled: false,
           }}
         />
         <Stack.Screen
-          name="login"
+          name="how-often"
           options={{
-            title: "Login",
+            title: "Welcome",
+            headerShown: false,
             animation: "slide_from_right",
+            headerBackButtonMenuEnabled: false,
           }}
         />
         <Stack.Screen
-          name="register"
+          name="user-address"
           options={{
-            title: "Sign Up",
+            title: "Welcome",
+            headerShown: false,
             animation: "slide_from_right",
+            headerBackButtonMenuEnabled: false,
+          }}
+        />
+        <Stack.Screen
+          name="car-owner"
+          options={{
+            title: "Welcome",
+            headerShown: false,
+            animation: "slide_from_right",
+            headerBackButtonMenuEnabled: false,
+          }}
+        />
+        <Stack.Screen
+          name="car-details"
+          options={{
+            title: "Welcome",
+            headerShown: false,
+            animation: "slide_from_right",
+            headerBackButtonMenuEnabled: false,
           }}
         />
       </Stack>
