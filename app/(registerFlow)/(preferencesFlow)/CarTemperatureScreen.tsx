@@ -27,9 +27,12 @@ export default function CarTemperatureScreen() {
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Text style={styles.backButtonText}>Back</Text>
       </TouchableOpacity>
-      <Text style={styles.FinishLaterText} onPress={() => router.push("/Home")}>
-        Finish Later
-      </Text>
+      <TouchableOpacity
+        style={styles.FinishLaterButton}
+        onPress={() => router.push("/Home")}
+      >
+        <Text style={styles.FinishLaterText}>Finish Later</Text>
+      </TouchableOpacity>
     </View>
   );
 }
