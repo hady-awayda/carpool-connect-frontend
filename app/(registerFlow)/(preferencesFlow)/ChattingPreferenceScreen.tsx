@@ -35,7 +35,7 @@ export default function ChattingPreferenceScreen() {
         style={styles.FinishLaterButton}
         onPress={() => router.replace("/Home")}
       >
-        <Text style={styles.FinishLaterText}>Finish Later</Text>
+        <Text style={styles.FinishLaterText}>Skip</Text>
       </TouchableOpacity>
     </View>
   );
