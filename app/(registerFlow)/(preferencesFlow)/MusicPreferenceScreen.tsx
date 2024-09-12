@@ -85,7 +85,15 @@ const styles = StyleSheet.create({
     color: "#333",
     fontSize: 16,
     textAlign: "center",
-    marginTop: 50,
+    marginTop: 16,
+    marginBottom: 16,
     textDecorationLine: "underline",
+  },
+  FinishLaterButton: {
+    backgroundColor: "#fff",
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    width: "50%",
+    marginTop: 40,
   },
 });
