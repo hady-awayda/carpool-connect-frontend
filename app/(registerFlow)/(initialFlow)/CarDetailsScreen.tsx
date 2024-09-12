@@ -1,31 +1,31 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  TextInput,
+} from "react-native";
 import { useRouter } from "expo-router";
 
-export default function FrequentCommuter() {
+export default function CarDetailsScreen() {
   const router = useRouter();
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Are you a frequent commuter?</Text>
+      <Text style={styles.title}>Car details</Text>
 
-      {/* Yes Button */}
+      <TextInput style={styles.input} placeholder="Manufacturer" />
+      <TextInput style={styles.input} placeholder="Model" />
+      <TextInput style={styles.input} placeholder="Year" />
+
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("/HowOftenScreen")}
+        onPress={() => router.push("/CarpoolWithSmokersScreen")}
       >
-        <Text style={styles.buttonText}>Yes</Text>
+        <Text style={styles.buttonText}>Confirm</Text>
       </TouchableOpacity>
 
-      {/* No Button */}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => router.push("/UserAddressScreen")}
-      >
-        <Text style={styles.buttonText}>No</Text>
-      </TouchableOpacity>
-
-      {/* Back Button */}
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Text style={styles.backButtonText}>Back</Text>
       </TouchableOpacity>
@@ -44,8 +44,17 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: "bold",
-    textAlign: "center",
     marginBottom: 100,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    fontSize: 16,
+    marginBottom: 20,
+    width: "100%",
   },
   button: {
     backgroundColor: "#333",

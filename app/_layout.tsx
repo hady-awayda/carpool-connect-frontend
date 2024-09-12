@@ -1,42 +1,53 @@
+import { useColorScheme } from "@/hooks/useColorScheme";
 import {
   DarkTheme,
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
-import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { BackHandler } from "react-native";
 import "react-native-reanimated";
-import { Ionicons } from "@expo/vector-icons";
 
-import { useColorScheme } from "@/hooks/useColorScheme";
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-  });
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => true
+    );
 
-  if (!loaded) {
-    return null;
-  }
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="index" options={{ title: "Welcome" }} />
-        <Stack.Screen name="login" options={{ title: "Login" }} />
-        <Stack.Screen name="signup" options={{ title: "Sign Up" }} />
+      <Stack screenOptions={{ headerShown: false, animation: "simple_push" }}>
+        <Stack.Screen
+          name="index"
+          options={{
+            title: "Welcome",
+            animation: "slide_from_right",
+          }}
+        />
+        <Stack.Screen
+          name="login"
+          options={{
+            title: "Login",
+            animation: "slide_from_right",
+          }}
+        />
+        <Stack.Screen
+          name="register"
+          options={{
+            title: "Sign Up",
+            animation: "slide_from_right",
+          }}
+        />
       </Stack>
     </ThemeProvider>
   );

@@ -1,17 +1,23 @@
-import { Tabs } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
-
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { Ionicons } from "@expo/vector-icons";
+import { Tabs } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const insets = useSafeAreaInsets();
 
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         headerShown: false,
+        tabBarStyle: {
+          paddingBottom: insets.bottom > 0 ? insets.bottom + 25 : 10,
+          paddingTop: insets.bottom > 0 ? insets.bottom + 5 : 5,
+          height: insets.bottom > 0 ? insets.bottom + 80 : 65,
+        },
       }}
     >
       <Tabs.Screen
@@ -23,8 +29,6 @@ export default function TabLayout() {
           ),
         }}
       />
-
-      {/* Explore Tab */}
       <Tabs.Screen
         name="Explore"
         options={{
@@ -34,8 +38,6 @@ export default function TabLayout() {
           ),
         }}
       />
-
-      {/* Home Tab */}
       <Tabs.Screen
         name="Home"
         options={{
@@ -45,8 +47,6 @@ export default function TabLayout() {
           ),
         }}
       />
-
-      {/* Messages Tab */}
       <Tabs.Screen
         name="Messages"
         options={{
@@ -56,8 +56,6 @@ export default function TabLayout() {
           ),
         }}
       />
-
-      {/* Profile Tab */}
       <Tabs.Screen
         name="Profile"
         options={{

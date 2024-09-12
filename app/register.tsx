@@ -36,7 +36,7 @@ export default function SignupScreen() {
       <TouchableOpacity
         style={styles.registerButtonPassenger}
         onPress={() => {
-          router.push("/FrequentCommuter");
+          router.push("/HowOftenScreen");
         }}
       >
         <Text style={styles.registerButtonPassengerText}>Register</Text>
