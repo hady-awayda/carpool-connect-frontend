@@ -27,6 +27,9 @@ export default function CarTemperatureScreen() {
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Text style={styles.backButtonText}>Back</Text>
       </TouchableOpacity>
+      <Text style={styles.FinishLaterText} onPress={() => router.push("/Home")}>
+        Finish Later
+      </Text>
     </View>
   );
 }
@@ -81,5 +84,12 @@ const styles = StyleSheet.create({
     color: "#333",
     fontSize: 16,
     textAlign: "center",
+  },
+  FinishLaterText: {
+    color: "#333",
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 50,
+    textDecorationLine: "underline",
   },
 });

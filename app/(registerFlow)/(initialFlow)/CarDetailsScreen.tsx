@@ -21,7 +21,7 @@ export default function CarDetailsScreen() {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("/SmokingScreen")}
+        onPress={() => router.push("/CarpoolWithSmokersScreen")}
       >
         <Text style={styles.buttonText}>Confirm</Text>
       </TouchableOpacity>
