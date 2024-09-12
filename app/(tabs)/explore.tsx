@@ -7,7 +7,17 @@ import {
   StyleSheet,
 } from "react-native";
 
-const ridersData = [
+type Rider = {
+  id: string;
+  name: string;
+  location: string;
+  gender: string;
+  age: number;
+  car: string;
+  color: string;
+};
+
+const ridersData: Rider[] = [
   {
     id: "1",
     name: "Mohamad Ibrahim",
@@ -20,11 +30,11 @@ const ridersData = [
   // Add more items as needed
 ];
 
-const _onPress = (item) => {
+const _onPress = (item: Rider) => {
   console.log(item);
 };
 
-const _renderItem = ({ item }) => (
+const _renderItem = ({ item }: { item: Rider }) => (
   <TouchableOpacity style={styles.item} onPress={() => _onPress(item)}>
     <Text style={styles.name}>{item.name}</Text>
     <Text style={styles.details}>Location: {item.location}</Text>
