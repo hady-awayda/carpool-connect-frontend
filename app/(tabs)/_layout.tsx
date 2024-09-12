@@ -18,6 +18,7 @@ export default function TabLayout() {
         name="Schedule"
         options={{
           title: "Schedule",
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="calendar" color={color} size={size} />
           ),
@@ -29,6 +30,7 @@ export default function TabLayout() {
         name="Explore"
         options={{
           title: "Explore",
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="search" color={color} size={size} />
           ),
@@ -40,6 +42,7 @@ export default function TabLayout() {
         name="Home"
         options={{
           title: "Home",
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home" color={color} size={size} />
           ),
@@ -51,6 +54,7 @@ export default function TabLayout() {
         name="Messages"
         options={{
           title: "Messages",
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="chatbox" color={color} size={size} />
           ),
@@ -62,6 +66,7 @@ export default function TabLayout() {
         name="Profile"
         options={{
           title: "Profile",
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person" color={color} size={size} />
           ),

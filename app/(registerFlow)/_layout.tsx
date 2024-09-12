@@ -17,7 +17,7 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    SpaceMono: require("../../assets/fonts/SpaceMono-Regular.ttf"),
   });
 
   useEffect(() => {
@@ -38,25 +38,12 @@ export default function RootLayout() {
           options={{
             title: "Welcome",
             headerShown: false,
+            headerBackButtonMenuEnabled: false,
             animation: "slide_from_right",
           }}
         />
-        <Stack.Screen
-          name="login"
-          options={{
-            title: "Login",
-            headerShown: false,
-            animation: "slide_from_right",
-          }}
-        />
-        <Stack.Screen
-          name="signup"
-          options={{
-            title: "Sign Up",
-            headerShown: false,
-            animation: "slide_from_right",
-          }}
-        />
+        <Stack.Screen name="login" options={{ title: "Login" }} />
+        <Stack.Screen name="signup" options={{ title: "Sign Up" }} />
       </Stack>
     </ThemeProvider>
   );
