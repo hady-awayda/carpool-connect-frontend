@@ -14,7 +14,7 @@ export default function ChattingPreferenceScreen() {
       {/* Yes Button */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("/StopPreferenceScreen")}
+        onPress={() => router.push("/Home")}
       >
         <Text style={styles.buttonText}>Yes</Text>
       </TouchableOpacity>
@@ -22,7 +22,7 @@ export default function ChattingPreferenceScreen() {
       {/* No Button */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("/StopPreferenceScreen")}
+        onPress={() => router.push("/Home")}
       >
         <Text style={styles.buttonText}>No</Text>
       </TouchableOpacity>
