@@ -1,3 +1,5 @@
+import BoldButton from "@/components/BoldButton";
+import BorderedButton from "@/components/BorderedButton";
 import {
   Urbanist_400Regular,
   Urbanist_700Bold,
@@ -29,6 +31,9 @@ export default function WelcomeScreen() {
     return null;
   }
 
+  const handleLogin = () => router.push("/login");
+  const handleRegister = () => router.push("/register");
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Ride Together. Save. Together.</Text>
@@ -37,19 +42,9 @@ export default function WelcomeScreen() {
         sustainability.
       </Text>
 
-      <TouchableOpacity
-        style={styles.loginButton}
-        onPress={() => router.push("/login")}
-      >
-        <Text style={styles.loginButtonText}>Login</Text>
-      </TouchableOpacity>
+      <BoldButton buttonText="Login" onPress={handleLogin} />
 
-      <TouchableOpacity
-        style={styles.registerButton}
-        onPress={() => router.push("/CarOwnerScreen")}
-      >
-        <Text style={styles.registerButtonText}>Register</Text>
-      </TouchableOpacity>
+      <BorderedButton buttonText="Register" onPress={handleRegister} />
 
       <Text style={styles.orText}>or login with</Text>
       <View style={styles.socialContainer}>
@@ -88,37 +83,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#666",
     marginBottom: 30,
-  },
-  loginButton: {
-    backgroundColor: "#333",
-    paddingVertical: 15,
-    paddingHorizontal: 40,
-    borderRadius: 5,
-    width: "100%",
-    marginBottom: 15,
-    marginTop: 15,
-  },
-  loginButtonText: {
-    fontFamily: "Urbanist_700Bold",
-    color: "#fff",
-    fontSize: 16,
-    textAlign: "center",
-  },
-  registerButton: {
-    borderColor: "#333",
-    borderWidth: 1,
-    paddingVertical: 15,
-    paddingHorizontal: 40,
-    borderRadius: 5,
-    width: "100%",
-    marginTop: 10,
-    marginBottom: 30,
-  },
-  registerButtonText: {
-    fontFamily: "Urbanist_700Bold",
-    color: "#333",
-    fontSize: 16,
-    textAlign: "center",
   },
   orText: {
     fontFamily: "Urbanist_400Regular",
