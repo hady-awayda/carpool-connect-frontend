@@ -12,11 +12,14 @@ import * as SplashScreen from "expo-splash-screen";
 import { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
 import LoginScreen from "./app/index";
+import { useDispatch } from "react-redux";
+import { setToken } from "@/data/redux/tokenSlice/slice";
+import { getToken } from "@/data/local/storage";
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
+  const dispatch = useDispatch();
   const [appIsReady, setAppIsReady] = useState(false);
   const [fontsLoaded] = useFonts({
     Urbanist_200ExtraLight,
@@ -29,6 +32,13 @@ export default function App() {
   });
 
   useEffect(() => {
+    const token = getToken();
+    if (token) {
+      dispatch(setToken(token));
+    }
+  }, []);
+
+  useEffect(() => {
     if (fontsLoaded) {
       setAppIsReady(true);
       SplashScreen.hideAsync();
@@ -37,18 +47,17 @@ export default function App() {
 
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
-      // Ensure the splash screen is hidden after everything is loaded
       await SplashScreen.hideAsync();
     }
   }, [appIsReady]);
 
   if (!appIsReady) {
-    return null; // Show nothing until app is ready
+    return null;
   }
 
   return (
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-        <LoginScreen />
+      <LoginScreen />
     </View>
   );
 }
