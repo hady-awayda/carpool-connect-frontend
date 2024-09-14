@@ -1,18 +1,18 @@
 import FloatingLabelInput from "@/components/FloatingLabelInput";
-import { router } from "expo-router";
-import React, { useRef, useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from "react-native";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { router } from "expo-router";
+import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import {
+  Keyboard,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
+import { z } from "zod";
 
 const schema = z
   .object({
@@ -95,8 +95,9 @@ export default function SignupScreen() {
           secureTextEntry={false}
           setSecureTextEntry={() => {}}
         />
-        {errors.email && <Text style={styles.errorText}>{errors.email.message}</Text>}
-
+        {errors.email && (
+          <Text style={styles.errorText}>{errors.email.message}</Text>
+        )}
 
         <FloatingLabelInput
           inputRef={phoneInputRef}
@@ -106,25 +107,27 @@ export default function SignupScreen() {
           secureTextEntry={secureTextEntry}
           setSecureTextEntry={setSecureTextEntry}
         />
-        {errors.phoneNumber && <Text style={styles.errorText}>{errors.phoneNumber.message}</Text>}
-
+        {errors.phoneNumber && (
+          <Text style={styles.errorText}>{errors.phoneNumber.message}</Text>
+        )}
 
         <FloatingLabelInput
           inputRef={passwordInputRef}
           placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
+          value={""}
+          onChangeText={(text) => setValue("password", text)}
           secureTextEntry={secureTextEntry}
           setSecureTextEntry={setSecureTextEntry}
         />
-        {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
-
+        {errors.password && (
+          <Text style={styles.errorText}>{errors.password.message}</Text>
+        )}
 
         <FloatingLabelInput
           inputRef={confirmPasswordInputRef}
           placeholder="Confirm Password"
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
+          value={""}
+          onChangeText={(text) => setValue("confirmPassword", text)}
           secureTextEntry={secureTextEntry}
           setSecureTextEntry={setSecureTextEntry}
         />
@@ -134,9 +137,7 @@ export default function SignupScreen() {
 
         <TouchableOpacity
           style={styles.registerButton}
-          onPress={() => {
-            router.push("/HowOftenScreen");
-          }}
+          onPress={handleSubmit(onSubmit)}
         >
           <Text style={styles.registerButtonText}>Register</Text>
         </TouchableOpacity>
@@ -212,5 +213,10 @@ const styles = StyleSheet.create({
     fontFamily: "Urbanist_400Regular",
     color: "#666",
     marginBottom: 12,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    alignSelf: "flex-start",
   },
 });
