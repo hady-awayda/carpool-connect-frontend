@@ -32,11 +32,15 @@ export default function App() {
   });
 
   useEffect(() => {
-    const token = getToken();
-    if (token) {
-      dispatch(setToken(token));
-    }
-  }, []);
+    const fetchToken = async () => {
+      const token = await getToken();
+      if (token) {
+        dispatch(setToken(token));
+      }
+    };
+
+    fetchToken();
+  }, [dispatch]);
 
   useEffect(() => {
     if (fontsLoaded) {

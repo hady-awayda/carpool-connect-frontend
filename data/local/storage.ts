@@ -1,16 +1,14 @@
-import { MMKV } from "react-native-mmkv";
+import * as SecureStore from "expo-secure-store";
 
-export const storage = new MMKV();
+export async function saveToken(token: string) {
+  await SecureStore.setItemAsync("token", token);
+}
 
-export const saveToken = (token: string) => {
-  storage.set("token", token);
-};
+export async function getToken() {
+  const token = await SecureStore.getItemAsync("token");
+  return token;
+}
 
-export const getToken = (): string | null => {
-  const token = storage.getString("token");
-  return token !== undefined ? token : null;
-};
-
-export const removeToken = () => {
-  storage.delete("token");
-};
+export async function removeToken() {
+  await SecureStore.deleteItemAsync("token");
+}
