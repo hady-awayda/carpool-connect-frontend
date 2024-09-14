@@ -56,9 +56,9 @@ export default function LoginScreen() {
   return (
     <TouchableWithoutFeedback onPress={handleScreenPress}>
       <View style={styles.container}>
-        {serverError && <Text style={styles.errorText}>{serverError}</Text>}
-
         <Text style={styles.title}>Welcome back! Glad to see you, Again!</Text>
+
+        {serverError && <Text style={styles.errorText}>{serverError}</Text>}
 
         <Controller
           control={control}
