@@ -1,42 +1,68 @@
-import React from "react";
+import { useState, useRef } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   TextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { useRouter } from "expo-router";
+import FloatingLabelInput from "@/components/FloatingLabelInput";
 
 export default function LoginScreen() {
   const router = useRouter();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [secureTextEntry, setSecureTextEntry] = useState<boolean>(true);
+  const emailInputRef = useRef<TextInput>(null);
+  const passwordInputRef = useRef<TextInput>(null);
+
+  const handleScreenPress = () => {
+    Keyboard.dismiss();
+    emailInputRef.current?.blur();
+    passwordInputRef.current?.blur();
+  };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Welcome back! Glad to see you, Again!</Text>
+    <TouchableWithoutFeedback onPress={handleScreenPress}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Welcome back! Glad to see you, Again!</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        keyboardType="email-address"
-      />
-      <TextInput style={styles.input} placeholder="Password" secureTextEntry />
+        <FloatingLabelInput
+          inputRef={emailInputRef}
+          placeholder="Email"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={secureTextEntry}
+          setSecureTextEntry={setSecureTextEntry}
+        />
 
-      <TouchableOpacity
-        style={styles.loginButton}
-        onPress={() => router.replace("/Home")}
-      >
-        <Text style={styles.loginButtonText}>Login</Text>
-      </TouchableOpacity>
+        <FloatingLabelInput
+          inputRef={passwordInputRef}
+          placeholder="Password"
+          value={email}
+          onChangeText={setEmail}
+          secureTextEntry={secureTextEntry}
+          setSecureTextEntry={setSecureTextEntry}
+        />
 
-      <Text style={styles.orText}>or</Text>
-      <TouchableOpacity
-        style={styles.registerButton}
-        onPress={() => router.push("/register")}
-      >
-        <Text style={styles.registerButtonText}>Register</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity
+          style={styles.loginButton}
+          onPress={() => router.replace("/Home")}
+        >
+          <Text style={styles.loginButtonText}>Login</Text>
+        </TouchableOpacity>
+        <Text style={styles.orText}>or</Text>
+        <TouchableOpacity
+          style={styles.registerButton}
+          onPress={() => router.push("/register")}
+        >
+          <Text style={styles.registerButtonText}>Register</Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -96,6 +122,6 @@ const styles = StyleSheet.create({
   orText: {
     fontFamily: "Urbanist_400Regular",
     color: "#666",
-    marginBottom: 10,
+    marginBottom: 16,
   },
 });

@@ -16,9 +16,7 @@ const HomeScreen = () => {
   const [destination, setDestination] = useState<string>("");
   const [departure, setDeparture] =
     useState<Location.LocationObjectCoords | null>(null);
-  const [value, setValue] = useState<string>("");
 
-  // Get user's current location
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -43,14 +41,11 @@ const HomeScreen = () => {
   };
 
   const handleFormSubmit = async () => {
-    // Example payload
     const scheduleData = {
       departure: departure,
       destination: destination,
-      // Assuming you will calculate CO2 reductions on the server-side
     };
 
-    // Post request logic here
     const response = await fetch("https://your-api-endpoint.com/schedule", {
       method: "POST",
       headers: {
@@ -114,5 +109,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontSize: 16,
     marginHorizontal: 10,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 10,
+    marginTop: 10,
+    marginLeft: 10,
   },
 });
