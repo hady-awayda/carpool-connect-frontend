@@ -1,6 +1,11 @@
 import FloatingLabelInput from "@/components/FloatingLabelInput";
+import { saveToken } from "@/data/local/storage";
+import { setToken } from "@/data/redux/tokenSlice/slice";
+import { loginUser } from "@/data/remote/apiHandler";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
 import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import {
   Keyboard,
   StyleSheet,
@@ -9,13 +14,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { loginUser } from "@/data/remote/apiHandler";
-import { saveToken, removeToken } from "@/data/local/storage";
 import { useDispatch } from "react-redux";
-import { setToken, clearToken } from "@/data/redux/tokenSlice/slice";
+import { z } from "zod";
 
 const schema = z.object({
   email: z.string().email("Please enter a valid email"),
@@ -131,7 +131,8 @@ const styles = StyleSheet.create({
     fontFamily: "Urbanist_700Bold",
     fontSize: 28,
     textAlign: "center",
-    marginBottom: 100,
+    marginBottom: 80,
+    marginTop: 60,
   },
   input: {
     borderWidth: 1,

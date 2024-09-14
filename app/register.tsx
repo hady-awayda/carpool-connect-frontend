@@ -1,5 +1,7 @@
 import FloatingLabelInput from "@/components/FloatingLabelInput";
-import { registerUser } from "@/data/remote/apiHandler"; // Import the register function
+import { saveToken } from "@/data/local/storage";
+import { setToken } from "@/data/redux/tokenSlice/slice";
+import { registerUser } from "@/data/remote/apiHandler";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import { useState } from "react";
@@ -12,6 +14,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { useDispatch } from "react-redux";
 import { z } from "zod";
 
 const schema = z
@@ -44,6 +47,7 @@ type FormValues = {
 };
 
 export default function SignupScreen() {
+  const dispatch = useDispatch();
   const {
     control,
     handleSubmit,
@@ -72,7 +76,11 @@ export default function SignupScreen() {
     if (result.error) {
       setServerError(result.error);
     } else {
-      router.push("/UserAddressScreen");
+      const token = result.token;
+      dispatch(setToken(token));
+
+      saveToken(token);
+      router.push("/CarOwnerScreen");
     }
   };
 

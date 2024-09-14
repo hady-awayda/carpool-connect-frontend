@@ -1,14 +1,13 @@
-import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
 import {
-  useFonts,
   Urbanist_400Regular,
   Urbanist_700Bold,
+  useFonts,
 } from "@expo-google-fonts/urbanist";
+import { FontAwesome } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 SplashScreen.preventAutoHideAsync();
 

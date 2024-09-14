@@ -59,7 +59,7 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
     }),
     color: animatedIsFocused.interpolate({
       inputRange: [0, 1],
-      outputRange: ["#666", "#00A9A5"],
+      outputRange: ["#666", "#49E99C"],
     }),
     backgroundColor: "white",
     paddingHorizontal: 4,
