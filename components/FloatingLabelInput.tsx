@@ -77,7 +77,10 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
           onChangeText={onChangeText}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          secureTextEntry={secureTextEntry}
+          secureTextEntry={
+            (placeholder == "Password" || placeholder == "Confirm Password") &&
+            secureTextEntry
+          }
         />
         {placeholder == "Password" && (
           <TouchableOpacity

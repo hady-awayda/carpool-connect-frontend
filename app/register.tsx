@@ -15,9 +15,11 @@ export default function SignupScreen() {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const nameInputRef = useRef<TextInput>(null);
   const emailInputRef = useRef<TextInput>(null);
+  const phoneInputRef = useRef<TextInput>(null);
   const passwordInputRef = useRef<TextInput>(null);
   const [secureTextEntry, setSecureTextEntry] = useState<boolean>(true);
 
@@ -40,16 +42,25 @@ export default function SignupScreen() {
           secureTextEntry={secureTextEntry}
           setSecureTextEntry={setSecureTextEntry}
         />
-        <TextInput
-          style={styles.input}
+
+        <FloatingLabelInput
+          inputRef={emailInputRef}
           placeholder="Email"
-          keyboardType="email-address"
+          value={email}
+          onChangeText={setEmail}
+          secureTextEntry={secureTextEntry}
+          setSecureTextEntry={setSecureTextEntry}
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Phone Number"
-          keyboardType="phone-pad"
+
+        <FloatingLabelInput
+          inputRef={phoneInputRef}
+          placeholder="Email"
+          value={phoneNumber}
+          onChangeText={setPhoneNumber}
+          secureTextEntry={secureTextEntry}
+          setSecureTextEntry={setSecureTextEntry}
         />
+
         <FloatingLabelInput
           inputRef={passwordInputRef}
           placeholder="Password"
@@ -58,6 +69,7 @@ export default function SignupScreen() {
           secureTextEntry={secureTextEntry}
           setSecureTextEntry={setSecureTextEntry}
         />
+
         <FloatingLabelInput
           inputRef={passwordInputRef}
           placeholder="Confirm Password"
