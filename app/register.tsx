@@ -119,7 +119,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     borderRadius: 5,
     width: "100%",
-    marginBottom: 15,
+    marginBottom: 10,
+    marginTop: 16,
   },
   loginButton: {
     borderColor: "#333",
@@ -145,6 +146,6 @@ const styles = StyleSheet.create({
   orText: {
     fontFamily: "Urbanist_400Regular",
     color: "#666",
-    marginBottom: 16,
+    marginBottom: 12,
   },
 });

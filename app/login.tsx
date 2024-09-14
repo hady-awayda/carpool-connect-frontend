@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     borderRadius: 5,
     width: "100%",
+    marginTop: 15,
     marginBottom: 15,
   },
   loginButtonText: {
