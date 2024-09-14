@@ -35,6 +35,10 @@ export default function LoginScreen() {
     resolver: zodResolver(schema),
   });
 
+  const onSubmit = async (data: FormValues) => {
+    router.replace("/Home");
+  };
+
   const handleScreenPress = () => {
     Keyboard.dismiss();
   };
@@ -44,20 +48,32 @@ export default function LoginScreen() {
       <View style={styles.container}>
         <Text style={styles.title}>Welcome back! Glad to see you, Again!</Text>
 
-        <FloatingLabelInput
-          placeholder="Email"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry={secureTextEntry}
-          setSecureTextEntry={setSecureTextEntry}
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onChange, value } }) => (
+            <FloatingLabelInput
+              placeholder="Email"
+              value={value}
+              onChangeText={onChange}
+              secureTextEntry={false}
+              setSecureTextEntry={() => {}}
+            />
+          )}
         />
 
-        <FloatingLabelInput
-          placeholder="Password"
-          value={email}
-          onChangeText={setEmail}
-          secureTextEntry={secureTextEntry}
-          setSecureTextEntry={setSecureTextEntry}
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onChange, value } }) => (
+            <FloatingLabelInput
+              placeholder="Password"
+              value={value}
+              onChangeText={onChange}
+              secureTextEntry={secureTextEntry}
+              setSecureTextEntry={setSecureTextEntry}
+            />
+          )}
         />
 
         <TouchableOpacity
