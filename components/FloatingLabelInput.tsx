@@ -14,9 +14,9 @@ interface FloatingLabelInputProps {
   placeholder: string;
   value: string;
   onChangeText: (text: string) => void;
+  onBlur?: () => void;
   secureTextEntry: boolean;
   setSecureTextEntry: (value: boolean) => void;
-  inputRef?: RefObject<TextInput>;
 }
 
 const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
@@ -25,13 +25,15 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
   onChangeText,
   secureTextEntry,
   setSecureTextEntry,
-  inputRef,
 }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const animatedIsFocused = useRef(new Animated.Value(value ? 1 : 0)).current;
 
   const handleFocus = () => setIsFocused(true);
-  const handleBlur = () => setIsFocused(value !== "");
+  const handleBlur = () => {
+    setIsFocused(value !== "");
+    setIsFocused(false);
+  };
 
   useEffect(() => {
     Animated.timing(animatedIsFocused, {
@@ -71,7 +73,6 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
         <Animated.Text style={labelStyle}>{placeholder}</Animated.Text>
 
         <TextInput
-          ref={inputRef}
           style={styles.input}
           value={value}
           onChangeText={onChangeText}
@@ -82,6 +83,7 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
             secureTextEntry
           }
         />
+
         {placeholder == "Password" && (
           <TouchableOpacity
             style={styles.eyeIcon}

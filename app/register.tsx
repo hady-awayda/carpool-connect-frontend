@@ -2,7 +2,7 @@ import FloatingLabelInput from "@/components/FloatingLabelInput";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import {
   Keyboard,
   StyleSheet,
@@ -48,25 +48,17 @@ export default function SignupScreen() {
     control,
     handleSubmit,
     formState: { errors },
-    setValue,
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
   });
 
   const [secureTextEntry, setSecureTextEntry] = useState<boolean>(true);
-  const nameInputRef = useRef<TextInput>(null);
-  const emailInputRef = useRef<TextInput>(null);
-  const phoneInputRef = useRef<TextInput>(null);
-  const passwordInputRef = useRef<TextInput>(null);
-  const confirmPasswordInputRef = useRef<TextInput>(null);
 
   const handleScreenPress = () => {
     Keyboard.dismiss();
   };
 
   const onSubmit = (data: FormValues) => {
-    // If the form is valid, proceed with navigation or form submission logic
-    console.log(data);
     router.push("/UserAddressScreen");
   };
 
@@ -75,61 +67,86 @@ export default function SignupScreen() {
       <View style={styles.container}>
         <Text style={styles.title}>Create account</Text>
 
-        <FloatingLabelInput
-          inputRef={nameInputRef}
-          placeholder="Full Name"
-          value={""}
-          onChangeText={(text) => setValue("name", text)}
-          secureTextEntry={false}
-          setSecureTextEntry={() => {}}
+        <Controller
+          control={control}
+          name="name"
+          render={({ field: { onChange, value } }) => (
+            <FloatingLabelInput
+              placeholder="Full Name"
+              value={value}
+              onChangeText={onChange}
+              secureTextEntry={false}
+              setSecureTextEntry={() => {}}
+            />
+          )}
         />
         {errors.name && (
           <Text style={styles.errorText}>{errors.name.message}</Text>
         )}
 
-        <FloatingLabelInput
-          inputRef={emailInputRef}
-          placeholder="Email"
-          value={""}
-          onChangeText={(text) => setValue("email", text)}
-          secureTextEntry={false}
-          setSecureTextEntry={() => {}}
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onChange, value } }) => (
+            <FloatingLabelInput
+              placeholder="Email"
+              value={value}
+              onChangeText={onChange}
+              secureTextEntry={false}
+              setSecureTextEntry={() => {}}
+            />
+          )}
         />
         {errors.email && (
           <Text style={styles.errorText}>{errors.email.message}</Text>
         )}
 
-        <FloatingLabelInput
-          inputRef={phoneInputRef}
-          placeholder="Phone Number"
-          value={""}
-          onChangeText={(text) => setValue("phoneNumber", text)}
-          secureTextEntry={secureTextEntry}
-          setSecureTextEntry={setSecureTextEntry}
+        <Controller
+          control={control}
+          name="phoneNumber"
+          render={({ field: { onChange, value } }) => (
+            <FloatingLabelInput
+              placeholder="Phone Number"
+              value={value}
+              onChangeText={onChange}
+              secureTextEntry={false}
+              setSecureTextEntry={() => {}}
+            />
+          )}
         />
         {errors.phoneNumber && (
           <Text style={styles.errorText}>{errors.phoneNumber.message}</Text>
         )}
 
-        <FloatingLabelInput
-          inputRef={passwordInputRef}
-          placeholder="Password"
-          value={""}
-          onChangeText={(text) => setValue("password", text)}
-          secureTextEntry={secureTextEntry}
-          setSecureTextEntry={setSecureTextEntry}
+        <Controller
+          control={control}
+          name="password"
+          render={({ field: { onChange, value } }) => (
+            <FloatingLabelInput
+              placeholder="Password"
+              value={value}
+              onChangeText={onChange}
+              secureTextEntry={secureTextEntry}
+              setSecureTextEntry={setSecureTextEntry}
+            />
+          )}
         />
         {errors.password && (
           <Text style={styles.errorText}>{errors.password.message}</Text>
         )}
 
-        <FloatingLabelInput
-          inputRef={confirmPasswordInputRef}
-          placeholder="Confirm Password"
-          value={""}
-          onChangeText={(text) => setValue("confirmPassword", text)}
-          secureTextEntry={secureTextEntry}
-          setSecureTextEntry={setSecureTextEntry}
+        <Controller
+          control={control}
+          name="confirmPassword"
+          render={({ field: { onChange, value } }) => (
+            <FloatingLabelInput
+              placeholder="Confirm Password"
+              value={value}
+              onChangeText={onChange}
+              secureTextEntry={true}
+              setSecureTextEntry={() => {}}
+            />
+          )}
         />
         {errors.confirmPassword && (
           <Text style={styles.errorText}>{errors.confirmPassword.message}</Text>
@@ -168,16 +185,6 @@ const styles = StyleSheet.create({
     fontSize: 28,
     textAlign: "center",
     marginBottom: 100,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    fontSize: 16,
-    marginBottom: 15,
-    width: "100%",
   },
   registerButton: {
     backgroundColor: "#333",

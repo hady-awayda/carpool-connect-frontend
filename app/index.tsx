@@ -32,14 +32,12 @@ export default function WelcomeScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Title */}
       <Text style={styles.title}>Ride Together. Save. Together.</Text>
       <Text style={styles.subtitle}>
         Join our community to reduce traffic, save costs, and promote
         sustainability.
       </Text>
 
-      {/* Login Button */}
       <TouchableOpacity
         style={styles.loginButton}
         onPress={() => router.push("/login")}
@@ -47,7 +45,6 @@ export default function WelcomeScreen() {
         <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity>
 
-      {/* Register Button */}
       <TouchableOpacity
         style={styles.registerButton}
         onPress={() => router.push("/register")}
@@ -55,7 +52,6 @@ export default function WelcomeScreen() {
         <Text style={styles.registerButtonText}>Register</Text>
       </TouchableOpacity>
 
-      {/* Social Login Icons */}
       <Text style={styles.orText}>or login with</Text>
       <View style={styles.socialContainer}>
         <TouchableOpacity style={styles.socialButton}>
