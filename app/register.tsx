@@ -10,23 +10,64 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const schema = z
+  .object({
+    name: z
+      .string()
+      .min(2, { message: "Full name must be at least 2 characters long" }),
+    email: z.string().email({ message: "Please enter a valid email address" }),
+    phoneNumber: z
+      .string()
+      .min(10, { message: "Phone number must be at least 10 digits" }),
+    password: z
+      .string()
+      .min(6, { message: "Password must be at least 6 characters" }),
+    confirmPassword: z
+      .string()
+      .min(6, { message: "Confirm password must be at least 6 characters" }),
+  })
+  .refine((data: FormValues) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+type FormValues = {
+  name: string;
+  email: string;
+  phoneNumber: string;
+  password: string;
+  confirmPassword: string;
+};
 
 export default function SignupScreen() {
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm<FormValues>({
+    resolver: zodResolver(schema),
+  });
+
+  const [secureTextEntry, setSecureTextEntry] = useState<boolean>(true);
   const nameInputRef = useRef<TextInput>(null);
   const emailInputRef = useRef<TextInput>(null);
   const phoneInputRef = useRef<TextInput>(null);
   const passwordInputRef = useRef<TextInput>(null);
-  const [secureTextEntry, setSecureTextEntry] = useState<boolean>(true);
+  const confirmPasswordInputRef = useRef<TextInput>(null);
 
   const handleScreenPress = () => {
     Keyboard.dismiss();
-    emailInputRef.current?.blur();
-    passwordInputRef.current?.blur();
+  };
+
+  const onSubmit = (data: FormValues) => {
+    // If the form is valid, proceed with navigation or form submission logic
+    console.log(data);
+    router.push("/UserAddressScreen");
   };
 
   return (
@@ -45,7 +86,7 @@ export default function SignupScreen() {
 
         <FloatingLabelInput
           inputRef={emailInputRef}
-          placeholder="Email"
+          placeholder="Phone Number"
           value={email}
           onChangeText={setEmail}
           secureTextEntry={secureTextEntry}
@@ -71,7 +112,7 @@ export default function SignupScreen() {
         />
 
         <FloatingLabelInput
-          inputRef={passwordInputRef}
+          inputRef={confirmPasswordInputRef}
           placeholder="Confirm Password"
           value={confirmPassword}
           onChangeText={setConfirmPassword}
