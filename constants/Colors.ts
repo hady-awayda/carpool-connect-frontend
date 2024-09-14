@@ -24,3 +24,43 @@ export const Colors = {
     tabIconSelected: tintColorDark,
   },
 };
+
+export const Colors1 = {
+  light: {
+    primary: "#333",
+    secondary: "#555",
+    background: "#f8f8f8",
+    accent: "#00bfa5",
+    error: "#d9534f",
+    text: "#333",
+  },
+  dark: {
+    primary: "#fff",
+    secondary: "#ccc",
+    background: "#000",
+    accent: "#00bfa5",
+    error: "#d9534f",
+    text: "#fff",
+  },
+};
+
+export const Typography = {
+  heading: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  subheading: {
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  body: {
+    fontSize: 16,
+    fontWeight: 'normal',
+  },
+};
+
+export const Spacing = {
+  small: 8,
+  medium: 16,
+  large: 24,
+};

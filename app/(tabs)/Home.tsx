@@ -1,14 +1,35 @@
-import React from "react";
-import { View, Text, StyleSheet, Platform } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import React, { useEffect, useState } from 'react';
+import MapView, { Marker } from 'react-native-maps';
+import { View, TextInput, Button, StyleSheet } from 'react-native';
 
-export default function HomeScreen() {
-  const insets = useSafeAreaInsets();
+export default function HomeTab() {
+  const [location, setLocation] = useState(null);
+  const [destination, setDestination] = useState('');
+  const [departure, setDeparture] = useState('');
+
+  useEffect(() => {
+    // Fetch user's current location logic here
+    setLocation({
+      latitude: 37.78825,
+      longitude: -122.4324,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    });
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome, John</Text>
-      <Text style={styles.subtitle}>Upcoming Schedule</Text>
+      <MapView style={styles.map} region={location}>
+        {location && <Marker coordinate={location} />}
+      </MapView>
+      <TextInput
+        style={styles.input}
+        placeholder="Where to?"
+        value={destination}
+        onChangeText={setDestination}
+      />
+      <Button title="Set Departure" onPress={() => console.log('Set Departure')} />
+      <Button title="Schedule" onPress={() => console.log('Set Schedule')} />
     </View>
   );
 }
@@ -16,18 +37,14 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: "#fff",
-    paddingBottom: Platform.OS === "android" ? 50 : 0,
   },
-  title: {
-    fontSize: 28,
-    fontWeight: "800",
-    marginTop: 40,
-    marginBottom: 40,
+  map: {
+    flex: 1,
   },
-  subtitle: {
-    fontSize: 18,
-    marginBottom: 10,
+  input: {
+    borderWidth: 1,
+    padding: 10,
+    margin: 10,
+    borderRadius: 8,
   },
 });
