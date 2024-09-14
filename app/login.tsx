@@ -84,7 +84,7 @@ export default function LoginScreen() {
 
         <TouchableOpacity
           style={styles.loginButton}
-          onPress={() => router.replace("/Home")}
+          onPress={handleSubmit(onSubmit)}
         >
           <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>
@@ -158,5 +158,13 @@ const styles = StyleSheet.create({
     fontFamily: "Urbanist_400Regular",
     color: "#666",
     marginBottom: 12,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    alignSelf: "flex-start",
+    marginBottom: 12,
+    width: "100%",
+    textAlign: "center",
   },
 });
