@@ -1,0 +1,50 @@
+// api.ts
+import axios, { AxiosRequestConfig, Method } from "axios";
+
+const API_BASE_URL =
+  "http://carpool-dev-load-balancer-854327849.eu-central-1.elb.amazonaws.com";
+
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  timeout: 10000,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+export const apiRequest = async (
+  endpoint: string,
+  method: Method = "GET",
+  data: any = {},
+  config: AxiosRequestConfig = {}
+) => {
+  try {
+    const response = await api({
+      url: endpoint,
+      method: method,
+      data: method !== "GET" ? data : undefined,
+      ...config,
+    });
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      return {
+        error:
+          error.response.data.message || "An error occurred during the request",
+      };
+    } else if (error.request) {
+      return { error: "No response received from the server" };
+    } else {
+      return { error: "Something went wrong during the request" };
+    }
+  }
+};
+
+export const registerUser = async (data: {
+  name: string;
+  email: string;
+  phoneNumber: string;
+  password: string;
+}) => {
+  return await apiRequest("/register", "POST", data);
+};

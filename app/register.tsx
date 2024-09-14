@@ -1,13 +1,13 @@
+import { registerUser } from "@/constants/apiHandler"; // Import the register function
 import FloatingLabelInput from "@/components/FloatingLabelInput";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
-import { useRef, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import {
   Keyboard,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
@@ -53,19 +53,33 @@ export default function SignupScreen() {
   });
 
   const [secureTextEntry, setSecureTextEntry] = useState<boolean>(true);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const handleScreenPress = () => {
     Keyboard.dismiss();
   };
 
-  const onSubmit = (data: FormValues) => {
-    router.push("/UserAddressScreen");
+  const onSubmit = async (data: FormValues) => {
+    const result = await registerUser({
+      name: data.name,
+      email: data.email,
+      phoneNumber: data.phoneNumber,
+      password: data.password,
+    });
+
+    if (result.error) {
+      setServerError(result.error); // Display error message from server
+    } else {
+      router.push("/UserAddressScreen");
+    }
   };
 
   return (
     <TouchableWithoutFeedback onPress={handleScreenPress}>
       <View style={styles.container}>
         <Text style={styles.title}>Create account</Text>
+
+        {serverError && <Text style={styles.errorText}>{serverError}</Text>}
 
         <Controller
           control={control}
