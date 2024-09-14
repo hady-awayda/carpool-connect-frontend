@@ -15,7 +15,6 @@ export default function LoginScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Welcome back! Glad to see you, Again!</Text>
 
-      {/* Input Fields */}
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -23,7 +22,6 @@ export default function LoginScreen() {
       />
       <TextInput style={styles.input} placeholder="Password" secureTextEntry />
 
-      {/* Login Button */}
       <TouchableOpacity
         style={styles.loginButton}
         onPress={() => router.replace("/Home")}
@@ -31,7 +29,6 @@ export default function LoginScreen() {
         <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity>
 
-      {/* Register Button */}
       <Text style={styles.orText}>or</Text>
       <TouchableOpacity
         style={styles.registerButton}
