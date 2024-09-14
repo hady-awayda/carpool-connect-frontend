@@ -78,29 +78,36 @@ export default function SignupScreen() {
         <FloatingLabelInput
           inputRef={nameInputRef}
           placeholder="Full Name"
-          value={name}
-          onChangeText={setName}
-          secureTextEntry={secureTextEntry}
-          setSecureTextEntry={setSecureTextEntry}
+          value={""}
+          onChangeText={(text) => setValue("name", text)}
+          secureTextEntry={false}
+          setSecureTextEntry={() => {}}
         />
+        {errors.name && (
+          <Text style={styles.errorText}>{errors.name.message}</Text>
+        )}
 
         <FloatingLabelInput
           inputRef={emailInputRef}
-          placeholder="Phone Number"
-          value={email}
-          onChangeText={setEmail}
-          secureTextEntry={secureTextEntry}
-          setSecureTextEntry={setSecureTextEntry}
+          placeholder="Email"
+          value={""}
+          onChangeText={(text) => setValue("email", text)}
+          secureTextEntry={false}
+          setSecureTextEntry={() => {}}
         />
+        {errors.email && <Text style={styles.errorText}>{errors.email.message}</Text>}
+
 
         <FloatingLabelInput
           inputRef={phoneInputRef}
-          placeholder="Email"
-          value={phoneNumber}
-          onChangeText={setPhoneNumber}
+          placeholder="Phone Number"
+          value={""}
+          onChangeText={(text) => setValue("phoneNumber", text)}
           secureTextEntry={secureTextEntry}
           setSecureTextEntry={setSecureTextEntry}
         />
+        {errors.phoneNumber && <Text style={styles.errorText}>{errors.phoneNumber.message}</Text>}
+
 
         <FloatingLabelInput
           inputRef={passwordInputRef}
@@ -110,6 +117,8 @@ export default function SignupScreen() {
           secureTextEntry={secureTextEntry}
           setSecureTextEntry={setSecureTextEntry}
         />
+        {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
+
 
         <FloatingLabelInput
           inputRef={confirmPasswordInputRef}
@@ -119,6 +128,9 @@ export default function SignupScreen() {
           secureTextEntry={secureTextEntry}
           setSecureTextEntry={setSecureTextEntry}
         />
+        {errors.confirmPassword && (
+          <Text style={styles.errorText}>{errors.confirmPassword.message}</Text>
+        )}
 
         <TouchableOpacity
           style={styles.registerButton}
