@@ -2,7 +2,7 @@
 import axios, { AxiosRequestConfig, Method } from "axios";
 
 const API_BASE_URL =
-  "http://carpool-dev-load-balancer-854327849.eu-central-1.elb.amazonaws.com";
+  "http://carpool-dev-load-balancer-854327849.eu-central-1.elb.amazonaws.com/api/";
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -27,7 +27,8 @@ export const apiRequest = async (
     });
     return response.data;
   } catch (error: any) {
-    if (error.response) {
+    console.log(error);
+    if (error.response.data.message) {
       return {
         error:
           error.response.data.message || "An error occurred during the request",
@@ -46,9 +47,9 @@ export const registerUser = async (data: {
   phoneNumber: string;
   password: string;
 }) => {
-  return await apiRequest("/register", "POST", data);
+  return await apiRequest("/auth/register", "POST", data);
 };
 
 export const loginUser = async (data: { email: string; password: string }) => {
-  return await apiRequest("/login", "POST", data);
+  return await apiRequest("/auth/login", "POST", data);
 };
