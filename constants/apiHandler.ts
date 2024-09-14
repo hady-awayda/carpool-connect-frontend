@@ -48,3 +48,7 @@ export const registerUser = async (data: {
 }) => {
   return await apiRequest("/register", "POST", data);
 };
+
+export const loginUser = async (data: { email: string; password: string }) => {
+  return await apiRequest("/login", "POST", data);
+};

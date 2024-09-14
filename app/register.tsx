@@ -60,6 +60,7 @@ export default function SignupScreen() {
   };
 
   const onSubmit = async (data: FormValues) => {
+    setServerError(null);
     const result = await registerUser({
       name: data.name,
       email: data.email,

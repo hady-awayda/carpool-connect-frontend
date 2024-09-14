@@ -36,7 +36,15 @@ export default function LoginScreen() {
   });
 
   const onSubmit = async (data: FormValues) => {
-    router.replace("/Home");
+    setServerError(null);
+    const result = await loginUser(data);
+
+    if (result.error) {
+      setServerError(result.error); // Show error message from the server
+    } else {
+      console.log("Login successful!", result); // Handle success case
+      router.replace("/Home"); // Navigate to Home on success
+    }
   };
 
   const handleScreenPress = () => {
