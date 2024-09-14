@@ -23,23 +23,32 @@ const BorderedButton: React.FC<BorderedButtonProps> = ({
   buttonText,
 }) => {
   const [animation] = useState(new Animated.Value(0));
+  let pressInTime = 0;
 
   const handlePressIn = () => {
+    pressInTime = Date.now();
+
     Animated.timing(animation, {
       toValue: 1,
-      duration: 300,
+      duration: 150,
       useNativeDriver: false,
     }).start();
   };
 
   const handlePressOut = () => {
-    Animated.timing(animation, {
-      toValue: 0,
-      duration: 300,
-      useNativeDriver: false,
-    }).start(() => {
-      onPress();
-    });
+    const pressOutTime = Date.now();
+    const pressDuration = pressOutTime - pressInTime;
+    const remainingTime = Math.max(200 - pressDuration, 0);
+
+    setTimeout(() => {
+      Animated.timing(animation, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: false,
+      }).start(() => {
+        onPress();
+      });
+    }, remainingTime);
   };
 
   const animatedBorderColor = animation.interpolate({

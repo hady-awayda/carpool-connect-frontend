@@ -30,7 +30,7 @@ const BoldButton: React.FC<BoldButtonProps> = ({
 
     Animated.timing(animation, {
       toValue: 1,
-      duration: 100,
+      duration: 150,
       useNativeDriver: false,
     }).start();
   };
@@ -38,15 +38,16 @@ const BoldButton: React.FC<BoldButtonProps> = ({
   const handlePressOut = () => {
     const pressOutTime = Date.now();
     const pressDuration = pressOutTime - pressInTime;
-    const remainingTime = Math.max(500 - pressDuration, 0);
-    onPress();
+    const remainingTime = Math.max(200 - pressDuration, 0);
 
     setTimeout(() => {
       Animated.timing(animation, {
         toValue: 0,
-        duration: 300,
+        duration: 200,
         useNativeDriver: false,
-      }).start();
+      }).start(() => {
+        onPress();
+      });
     }, remainingTime);
   };
 
@@ -63,7 +64,10 @@ const BoldButton: React.FC<BoldButtonProps> = ({
       style={[styles.button, buttonStyle]}
     >
       <Animated.View
-        style={[styles.animationStyle, { backgroundColor: animatedBackgroundColor }]}
+        style={[
+          styles.animationStyle,
+          { backgroundColor: animatedBackgroundColor },
+        ]}
       >
         <Text style={[styles.buttonText, textStyle]}>{buttonText}</Text>
       </Animated.View>
