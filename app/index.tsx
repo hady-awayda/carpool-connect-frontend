@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   title: {
-    fontFamily: "Urbanist_700Bold",
+    fontWeight: "bold",
     fontSize: 28,
     textAlign: "center",
     marginBottom: 100,

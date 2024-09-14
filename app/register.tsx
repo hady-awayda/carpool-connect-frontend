@@ -1,5 +1,5 @@
 import FloatingLabelInput from "@/components/FloatingLabelInput";
-import { registerUser } from "@/constants/apiHandler"; // Import the register function
+import { registerUser } from "@/data/remote/apiHandler"; // Import the register function
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import { useState } from "react";
@@ -61,7 +61,7 @@ export default function SignupScreen() {
 
   const onSubmit = async (data: FormValues) => {
     setServerError(null);
-    
+
     const result = await registerUser({
       name: data.name,
       email: data.email,

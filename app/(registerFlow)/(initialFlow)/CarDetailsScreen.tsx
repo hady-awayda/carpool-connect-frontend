@@ -10,7 +10,7 @@ import { useRouter } from "expo-router";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { submitCarDetails } from "@/constants/apiHandler";
+import { submitCarDetails } from "@/data/remote/apiHandler";
 import FloatingLabelInput from "@/components/FloatingLabelInput";
 
 const schema = z.object({

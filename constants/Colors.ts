@@ -1,30 +1,30 @@
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+const tintColorLight = "#0a7ea4";
+const tintColorDark = "#fff";
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
+    text: "#11181C",
+    background: "#fff",
     tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
+    icon: "#687076",
+    tabIconDefault: "#687076",
     tabIconSelected: tintColorLight,
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
+    text: "#ECEDEE",
+    background: "#151718",
     tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
+    icon: "#9BA1A6",
+    tabIconDefault: "#9BA1A6",
     tabIconSelected: tintColorDark,
   },
 };
 
 export const Colors1 = {
   light: {
-    primary: "#333",
-    secondary: "#555",
-    background: "#f8f8f8",
+    primary: "#49E99C",
+    secondary: "#A8FFD5",
+    background: "#E7FFF3",
     accent: "#00bfa5",
     error: "#d9534f",
     text: "#333",
@@ -42,15 +42,15 @@ export const Colors1 = {
 export const Typography = {
   heading: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   subheading: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   body: {
     fontSize: 16,
-    fontWeight: 'normal',
+    fontWeight: "normal",
   },
 };
 

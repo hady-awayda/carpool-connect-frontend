@@ -12,7 +12,10 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginUser } from "@/constants/apiHandler";
+import { loginUser } from "@/data/remote/apiHandler";
+import { saveToken, removeToken } from "@/data/local/storage";
+import { useDispatch } from "react-redux";
+import { setToken, clearToken } from "@/data/redux/tokenSlice/slice";
 
 const schema = z.object({
   email: z.string().email("Please enter a valid email"),
@@ -25,6 +28,7 @@ type FormValues = {
 };
 
 export default function LoginScreen() {
+  const dispatch = useDispatch();
   const router = useRouter();
   const [secureTextEntry, setSecureTextEntry] = useState<boolean>(true);
   const [serverError, setServerError] = useState<string | null>(null);
@@ -44,7 +48,10 @@ export default function LoginScreen() {
     if (result.error) {
       setServerError(result.error);
     } else {
-      console.log("Login successful!", result);
+      const token = result.token;
+      dispatch(setToken(token));
+
+      saveToken(token);
       router.replace("/Home");
     }
   };
