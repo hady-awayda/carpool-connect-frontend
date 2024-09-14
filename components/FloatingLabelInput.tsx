@@ -17,6 +17,7 @@ interface FloatingLabelInputProps {
   onBlur?: () => void;
   secureTextEntry: boolean;
   setSecureTextEntry: (value: boolean) => void;
+  keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
 }
 
 const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
@@ -25,6 +26,7 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
   onChangeText,
   secureTextEntry,
   setSecureTextEntry,
+  keyboardType,
 }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const animatedIsFocused = useRef(new Animated.Value(value ? 1 : 0)).current;
@@ -78,6 +80,7 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
           onChangeText={onChangeText}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          keyboardType={keyboardType}
           secureTextEntry={
             (placeholder == "Password" || placeholder == "Confirm Password") &&
             secureTextEntry

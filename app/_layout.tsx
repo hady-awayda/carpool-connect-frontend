@@ -20,21 +20,18 @@ export default function RootLayout() {
           name="index"
           options={{
             title: "Welcome",
-            animation: "slide_from_right",
           }}
         />
         <Stack.Screen
           name="login"
           options={{
             title: "Login",
-            animation: "slide_from_right",
           }}
         />
         <Stack.Screen
           name="register"
           options={{
             title: "Sign Up",
-            animation: "slide_from_right",
           }}
         />
       </Stack>
