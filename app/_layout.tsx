@@ -1,3 +1,4 @@
+import store from "@/data/redux/store";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import {
   DarkTheme,
@@ -7,6 +8,7 @@ import {
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import "react-native-reanimated";
+import { Provider } from "react-redux";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -14,27 +16,29 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack screenOptions={{ headerShown: false, animation: "simple_push" }}>
-        <Stack.Screen
-          name="index"
-          options={{
-            title: "Welcome",
-          }}
-        />
-        <Stack.Screen
-          name="login"
-          options={{
-            title: "Login",
-          }}
-        />
-        <Stack.Screen
-          name="register"
-          options={{
-            title: "Sign Up",
-          }}
-        />
-      </Stack>
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <Stack screenOptions={{ headerShown: false, animation: "simple_push" }}>
+          <Stack.Screen
+            name="index"
+            options={{
+              title: "Welcome",
+            }}
+          />
+          <Stack.Screen
+            name="login"
+            options={{
+              title: "Login",
+            }}
+          />
+          <Stack.Screen
+            name="register"
+            options={{
+              title: "Sign Up",
+            }}
+          />
+        </Stack>
+      </ThemeProvider>
+    </Provider>
   );
 }

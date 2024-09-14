@@ -1,3 +1,5 @@
+import React, { useCallback, useEffect, useState } from "react";
+import { View } from "react-native";
 import {
   Urbanist_200ExtraLight,
   Urbanist_300Light,
@@ -9,17 +11,16 @@ import {
   useFonts,
 } from "@expo-google-fonts/urbanist";
 import * as SplashScreen from "expo-splash-screen";
-import { useCallback, useEffect, useState } from "react";
-import { View } from "react-native";
-import LoginScreen from "./app/index";
+import { Provider } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setToken } from "@/data/redux/tokenSlice/slice";
 import { getToken } from "@/data/local/storage";
+import store from "@/data/redux/store";
+import { Stack } from "expo-router";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const dispatch = useDispatch();
   const [appIsReady, setAppIsReady] = useState(false);
   const [fontsLoaded] = useFonts({
     Urbanist_200ExtraLight,
@@ -35,12 +36,12 @@ export default function App() {
     const fetchToken = async () => {
       const token = await getToken();
       if (token) {
-        dispatch(setToken(token));
+        store.dispatch(setToken(token));
       }
     };
 
     fetchToken();
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     if (fontsLoaded) {
@@ -60,8 +61,10 @@ export default function App() {
   }
 
   return (
-    <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <LoginScreen />
-    </View>
+    <Provider store={store}>
+      <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+        <Stack />
+      </View>
+    </Provider>
   );
 }
