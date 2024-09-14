@@ -96,8 +96,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     borderRadius: 5,
     width: "100%",
-    marginTop: 15,
-    marginBottom: 15,
+    marginTop: 16,
+    marginBottom: 10,
   },
   loginButtonText: {
     fontFamily: "Urbanist_700Bold",
@@ -123,6 +123,6 @@ const styles = StyleSheet.create({
   orText: {
     fontFamily: "Urbanist_400Regular",
     color: "#666",
-    marginBottom: 16,
+    marginBottom: 12,
   },
 });
