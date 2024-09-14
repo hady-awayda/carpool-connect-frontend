@@ -47,7 +47,7 @@ export default function WelcomeScreen() {
 
       <TouchableOpacity
         style={styles.registerButton}
-        onPress={() => router.push("/register")}
+        onPress={() => router.push("/CarOwnerScreen")}
       >
         <Text style={styles.registerButtonText}>Register</Text>
       </TouchableOpacity>

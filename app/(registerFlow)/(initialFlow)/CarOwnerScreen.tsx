@@ -16,7 +16,7 @@ export default function CarOwnerScreen() {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("/SmokingScreen")}
+        onPress={() => router.push("/CarpoolWithSmokersScreen")}
       >
         <Text style={styles.buttonText}>No</Text>
       </TouchableOpacity>

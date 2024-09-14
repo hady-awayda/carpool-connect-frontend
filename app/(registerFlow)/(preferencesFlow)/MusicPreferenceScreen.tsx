@@ -11,15 +11,13 @@ export default function MusicPreferenceScreen() {
         Do you prefer listening to music during rides?
       </Text>
 
-      {/* Yes Button */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => router.push("/MusicTypeScreen")}
+        onPress={() => router.push("/PetPreferenceScreen")}
       >
         <Text style={styles.buttonText}>Yes</Text>
       </TouchableOpacity>
 
-      {/* No Button */}
       <TouchableOpacity
         style={styles.button}
         onPress={() => router.push("/PetPreferenceScreen")}

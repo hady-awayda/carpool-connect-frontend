@@ -53,3 +53,11 @@ export const registerUser = async (data: {
 export const loginUser = async (data: { email: string; password: string }) => {
   return await apiRequest("/auth/login", "POST", data);
 };
+
+export const submitCarDetails = async (data: {
+  manufacturer: string;
+  model: string;
+  year: string;
+}) => {
+  return await apiRequest("/car-details", "POST", data);
+};
