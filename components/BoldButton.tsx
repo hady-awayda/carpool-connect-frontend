@@ -30,7 +30,7 @@ const BoldButton: React.FC<BoldButtonProps> = ({
 
     Animated.timing(animation, {
       toValue: 1,
-      duration: 300,
+      duration: 100,
       useNativeDriver: false,
     }).start();
   };
@@ -56,21 +56,18 @@ const BoldButton: React.FC<BoldButtonProps> = ({
   });
 
   return (
-    <Animated.View
-      style={[
-        styles.button,
-        buttonStyle,
-        { backgroundColor: animatedBackgroundColor },
-      ]}
+    <TouchableOpacity
+      activeOpacity={1}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      style={[styles.button, buttonStyle]}
     >
-      <TouchableOpacity
-        activeOpacity={1}
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
+      <Animated.View
+        style={[styles.animationStyle, { backgroundColor: animatedBackgroundColor }]}
       >
         <Text style={[styles.buttonText, textStyle]}>{buttonText}</Text>
-      </TouchableOpacity>
-    </Animated.View>
+      </Animated.View>
+    </TouchableOpacity>
   );
 };
 
@@ -79,17 +76,27 @@ export default BoldButton;
 const styles = StyleSheet.create({
   button: {
     backgroundColor: "#333",
-    paddingVertical: 15,
-    paddingHorizontal: 40,
     borderRadius: 5,
     width: "100%",
+    height: 54,
     marginBottom: 15,
     marginTop: 15,
+    justifyContent: "center",
+    alignItems: "center",
   },
   buttonText: {
     fontFamily: "Urbanist_700Bold",
     color: "#fff",
     fontSize: 16,
     textAlign: "center",
+    width: "100%",
+  },
+  animationStyle: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 5,
   },
 });
