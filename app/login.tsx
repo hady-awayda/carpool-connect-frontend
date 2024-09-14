@@ -1,28 +1,36 @@
-import { useState, useRef } from "react";
+import FloatingLabelInput from "@/components/FloatingLabelInput";
+import { useRouter } from "expo-router";
+import { useState } from "react";
 import {
-  View,
+  Keyboard,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  StyleSheet,
-  TextInput,
   TouchableWithoutFeedback,
-  Keyboard,
+  View,
 } from "react-native";
-import { useRouter } from "expo-router";
-import FloatingLabelInput from "@/components/FloatingLabelInput";
+import { useForm, Controller } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const schema = z.object({
+  email: z.string().email("Please enter a valid email"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+type FormValues = {
+  email: string;
+  password: string;
+};
 
 export default function LoginScreen() {
   const router = useRouter();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [secureTextEntry, setSecureTextEntry] = useState<boolean>(true);
-  const emailInputRef = useRef<TextInput>(null);
-  const passwordInputRef = useRef<TextInput>(null);
 
   const handleScreenPress = () => {
     Keyboard.dismiss();
-    emailInputRef.current?.blur();
-    passwordInputRef.current?.blur();
   };
 
   return (
@@ -31,7 +39,6 @@ export default function LoginScreen() {
         <Text style={styles.title}>Welcome back! Glad to see you, Again!</Text>
 
         <FloatingLabelInput
-          inputRef={emailInputRef}
           placeholder="Email"
           value={password}
           onChangeText={setPassword}
@@ -40,7 +47,6 @@ export default function LoginScreen() {
         />
 
         <FloatingLabelInput
-          inputRef={passwordInputRef}
           placeholder="Password"
           value={email}
           onChangeText={setEmail}

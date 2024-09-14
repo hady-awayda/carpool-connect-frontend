@@ -1,5 +1,5 @@
-import { registerUser } from "@/constants/apiHandler"; // Import the register function
 import FloatingLabelInput from "@/components/FloatingLabelInput";
+import { registerUser } from "@/constants/apiHandler"; // Import the register function
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import { useState } from "react";
@@ -68,7 +68,7 @@ export default function SignupScreen() {
     });
 
     if (result.error) {
-      setServerError(result.error); // Display error message from server
+      setServerError(result.error);
     } else {
       router.push("/UserAddressScreen");
     }
@@ -239,5 +239,8 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 12,
     alignSelf: "flex-start",
+    marginBottom: 12,
+    width: "100%",
+    textAlign: "center",
   },
 });
