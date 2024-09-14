@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: "100%",
     marginBottom: 15,
+    marginTop: 15,
   },
   loginButtonText: {
     fontFamily: "Urbanist_700Bold",
@@ -115,7 +116,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     borderRadius: 5,
     width: "100%",
-    marginBottom: 20,
+    marginTop: 10,
+    marginBottom: 30,
   },
   registerButtonText: {
     fontFamily: "Urbanist_700Bold",
@@ -126,7 +128,7 @@ const styles = StyleSheet.create({
   orText: {
     fontFamily: "Urbanist_400Regular",
     color: "#666",
-    marginBottom: 10,
+    marginBottom: 20,
   },
   socialContainer: {
     flexDirection: "row",
