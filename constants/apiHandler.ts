@@ -1,5 +1,5 @@
-// api.ts
 import axios, { AxiosRequestConfig, Method } from "axios";
+import Config from "react-native-config";
 
 const API_BASE_URL =
   "http://carpool-dev-load-balancer-854327849.eu-central-1.elb.amazonaws.com/api/";

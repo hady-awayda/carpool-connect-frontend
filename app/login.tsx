@@ -56,6 +56,8 @@ export default function LoginScreen() {
   return (
     <TouchableWithoutFeedback onPress={handleScreenPress}>
       <View style={styles.container}>
+        {serverError && <Text style={styles.errorText}>{serverError}</Text>}
+
         <Text style={styles.title}>Welcome back! Glad to see you, Again!</Text>
 
         <Controller
@@ -77,7 +79,7 @@ export default function LoginScreen() {
 
         <Controller
           control={control}
-          name="email"
+          name="password"
           render={({ field: { onChange, value } }) => (
             <FloatingLabelInput
               placeholder="Password"
