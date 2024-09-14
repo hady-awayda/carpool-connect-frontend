@@ -12,6 +12,7 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { loginUser } from "@/constants/apiHandler";
 
 const schema = z.object({
   email: z.string().email("Please enter a valid email"),
@@ -26,6 +27,7 @@ type FormValues = {
 export default function LoginScreen() {
   const router = useRouter();
   const [secureTextEntry, setSecureTextEntry] = useState<boolean>(true);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const {
     control,
@@ -40,10 +42,10 @@ export default function LoginScreen() {
     const result = await loginUser(data);
 
     if (result.error) {
-      setServerError(result.error); // Show error message from the server
+      setServerError(result.error);
     } else {
-      console.log("Login successful!", result); // Handle success case
-      router.replace("/Home"); // Navigate to Home on success
+      console.log("Login successful!", result);
+      router.replace("/Home");
     }
   };
 
