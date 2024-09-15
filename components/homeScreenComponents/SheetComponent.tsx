@@ -80,11 +80,11 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
     <View style={styles.sheetContainer}>
       <View style={styles.routeHeader}>
         <TouchableOpacity onPress={closeRouteSheet}>
-          <Ionicons name="close" size={48} />
+          <Ionicons name="close" size={28} />
         </TouchableOpacity>
         <Text style={styles.routeTitle}>Your route</Text>
         <TouchableOpacity>
-          <Ionicons name="add" size={24} />
+          <Ionicons name="add" size={28} />
         </TouchableOpacity>
       </View>
 
@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
   routeTitle: {
     fontSize: 18,
     fontWeight: "bold",
+    width: "60%",
   },
   routeDetails: {
     marginTop: 20,
