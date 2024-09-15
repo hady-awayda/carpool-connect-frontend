@@ -1,12 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import { Ionicons } from "@expo/vector-icons";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+import { useEffect, useRef, useState } from "react";
 import {
-  View,
+  Animated,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
+  View,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 
 type SheetComponentProps = {
   closeRouteSheet: () => void;
@@ -25,11 +27,53 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   setDeparture,
   destinationInputRef,
 }) => {
+  const [focusedField, setFocusedField] = useState<
+    "departure" | "destination" | null
+  >(null);
+
+  const departureBorderColor = useRef(new Animated.Value(0)).current;
+  const destinationBorderColor = useRef(new Animated.Value(0)).current;
+
+  const animateBorderColor = (
+    field: "departure" | "destination",
+    focused: boolean
+  ) => {
+    const animatedValue =
+      field === "departure" ? departureBorderColor : destinationBorderColor;
+    Animated.timing(animatedValue, {
+      toValue: focused ? 1 : 0,
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+  };
+
+  const handleFocus = (field: "departure" | "destination") => {
+    setFocusedField(field);
+    animateBorderColor(field, true);
+  };
+
+  const handleBlur = (field: "departure" | "destination") => {
+    if (focusedField === field) {
+      setFocusedField(null);
+    }
+    animateBorderColor(field, false);
+  };
+
+  const departureBorderColorAnim = departureBorderColor.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["#ccc", Colors.light.primary],
+  });
+
+  const destinationBorderColorAnim = destinationBorderColor.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["#ccc", Colors.light.primary],
+  });
+
   useEffect(() => {
-    if (destinationInputRef && destinationInputRef.current) {
+    if (focusedField === "destination" && destinationInputRef.current) {
       destinationInputRef.current.focus();
     }
-  }, []);
+  }, [focusedField, destinationInputRef]);
 
   return (
     <View style={styles.sheetContainer}>
@@ -42,21 +86,41 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
           <Ionicons name="add" size={24} />
         </TouchableOpacity>
       </View>
+
       <View style={styles.routeDetails}>
-        <TextInput
-          style={[styles.destinationInput, { borderColor: "#49E99C" }]}
-          placeholder="Departure"
-          value={departure}
-          onChangeText={setDeparture}
-        />
-        <TextInput
-          ref={destinationInputRef}
-          style={[styles.destinationInput, { borderColor: "#49E99C" }]}
-          placeholder="Destination"
-          value={destination}
-          onChangeText={setDestination}
-          autoFocus={false}
-        />
+        <Animated.View
+          style={[
+            styles.inputContainer,
+            { borderColor: departureBorderColorAnim },
+          ]}
+        >
+          <TextInput
+            placeholder="Departure"
+            value={departure}
+            onChangeText={setDeparture}
+            onFocus={() => handleFocus("departure")}
+            onBlur={() => handleBlur("departure")}
+            style={styles.textInput}
+          />
+        </Animated.View>
+
+        <Animated.View
+          style={[
+            styles.inputContainer,
+            { borderColor: destinationBorderColorAnim },
+          ]}
+        >
+          <TextInput
+            ref={destinationInputRef}
+            placeholder="Destination"
+            value={destination}
+            onChangeText={setDestination}
+            onFocus={() => handleFocus("destination")}
+            onBlur={() => handleBlur("destination")}
+            style={styles.textInput}
+            autoFocus
+          />
+        </Animated.View>
       </View>
     </View>
   );
@@ -81,11 +145,14 @@ const styles = StyleSheet.create({
   routeDetails: {
     marginTop: 20,
   },
-  destinationInput: {
+  inputContainer: {
     borderWidth: 2,
     borderRadius: 10,
     padding: 10,
     marginTop: 10,
+  },
+  textInput: {
+    fontSize: 16,
   },
 });
 
