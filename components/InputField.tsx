@@ -9,22 +9,18 @@ import {
   View,
 } from "react-native";
 
-interface FloatingLabelInputProps {
+interface InputFieldProps {
   placeholder: string;
   value: string;
   onChangeText: (text: string) => void;
   onBlur?: () => void;
-  secureTextEntry?: boolean;
-  setSecureTextEntry?: (value: boolean) => void;
   keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
 }
 
-const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
+const InputField: React.FC<InputFieldProps> = ({
   placeholder,
   value,
   onChangeText,
-  secureTextEntry,
-  setSecureTextEntry,
   keyboardType,
 }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -35,8 +31,6 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
     setIsFocused(value !== "");
     setIsFocused(false);
   };
-  const handleIconChange = () =>
-    setSecureTextEntry && setSecureTextEntry(!secureTextEntry);
 
   useEffect(() => {
     Animated.timing(animatedIsFocused, {
@@ -82,27 +76,13 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
           onFocus={handleFocus}
           onBlur={handleBlur}
           keyboardType={keyboardType}
-          secureTextEntry={
-            (placeholder == "Password" || placeholder == "Confirm Password") &&
-            secureTextEntry
-          }
         />
-
-        {placeholder == "Password" && (
-          <TouchableOpacity style={styles.eyeIcon} onPress={handleIconChange}>
-            <Ionicons
-              name={secureTextEntry ? "eye-off" : "eye"}
-              size={24}
-              color="#999"
-            />
-          </TouchableOpacity>
-        )}
       </View>
     </View>
   );
 };
 
-export default FloatingLabelInput;
+export default InputField;
 
 const styles = StyleSheet.create({
   container: {

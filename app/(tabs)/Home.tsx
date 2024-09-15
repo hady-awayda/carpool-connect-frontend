@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
-import { Typography, Spacing, Colors, Colors1 } from "@/constants/Variables";
+import { Typography, Spacing, Colors } from "@/constants/Variables";
+import FloatingLabelInput from "@/components/FloatingLabelInput";
 
 type LocationCoords = {
   latitude: number;
@@ -45,22 +46,10 @@ const HomeScreen = () => {
       departure: departure,
       destination: destination,
     };
-
-    const response = await fetch("https://your-api-endpoint.com/schedule", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(scheduleData),
-    });
-
-    const data = await response.json();
-    console.log(data);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Home Screen</Text>
       {location ? (
         <MapView style={styles.map} initialRegion={location}>
           <Marker coordinate={location} title="Your Location" />
@@ -71,12 +60,10 @@ const HomeScreen = () => {
       )}
 
       <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
+        <FloatingLabelInput
           placeholder="Where to?"
-          placeholderTextColor="#000"
           value={destination}
-          onChangeText={handleDestinationChange}
+          onChangeText={setDestination}
         />
       </View>
 
@@ -109,12 +96,5 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontSize: 16,
     marginHorizontal: 10,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 10,
-    marginTop: 10,
-    marginLeft: 10,
   },
 });

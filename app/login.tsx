@@ -1,6 +1,6 @@
 import BoldButton from "@/components/BoldButton";
 import BorderedButton from "@/components/BorderedButton";
-import FormInputField from "@/components/ControlledInputField";
+import ControlledInputField from "@/components/ControlledInputField";
 import { saveToken } from "@/data/local/storage";
 import { setToken } from "@/data/redux/tokenSlice/slice";
 import { loginUser } from "@/data/remote/apiHandler";
@@ -68,14 +68,14 @@ export default function LoginScreen() {
 
         {serverError && <Text style={styles.errorText}>{serverError}</Text>}
 
-        <FormInputField
+        <ControlledInputField
           control={control}
           name="email"
           placeholder="Email"
           error={errors.email?.message}
         />
 
-        <FormInputField
+        <ControlledInputField
           control={control}
           name="password"
           placeholder="Password"
