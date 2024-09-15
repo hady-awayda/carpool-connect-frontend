@@ -7,7 +7,6 @@ import {
   StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import DestinationField from "./DestinationField";
 
 type SheetComponentProps = {
   isSheetVisible: boolean;
@@ -16,6 +15,7 @@ type SheetComponentProps = {
   destination: string;
   setDestination: (text: string) => void;
   departure: string;
+  setDeparture: (text: string) => void;
 };
 
 const SheetComponent: React.FC<SheetComponentProps> = ({
@@ -25,36 +25,34 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   destination,
   setDestination,
   departure,
+  setDeparture,
 }) => {
   return (
     <View style={styles.sheetContainer}>
-      {isSheetVisible ? (
-        <>
-          <View style={styles.routeHeader}>
-            <TouchableOpacity onPress={closeRouteSheet}>
-              <Ionicons name="close" size={24} />
-            </TouchableOpacity>
-            <Text style={styles.routeTitle}>Your route</Text>
-            <TouchableOpacity>
-              <Ionicons name="add" size={24} />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.routeDetails}>
-            <Text>{departure}</Text>
-            <TextInput
-              style={[styles.destinationInput, { borderColor: "#49E99C" }]}
-              placeholder="Destination"
-              value={destination}
-              onChangeText={setDestination}
-              autoFocus
-            />
-          </View>
-        </>
-      ) : (
-        <DestinationField
-          {...{ destination, setDestination, showRouteSheet }}
+      <View style={styles.routeHeader}>
+        <TouchableOpacity onPress={closeRouteSheet}>
+          <Ionicons name="close" size={24} />
+        </TouchableOpacity>
+        <Text style={styles.routeTitle}>Your route</Text>
+        <TouchableOpacity>
+          <Ionicons name="add" size={24} />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.routeDetails}>
+        <TextInput
+          style={[styles.destinationInput, { borderColor: "#49E99C" }]}
+          placeholder="Departure"
+          value={departure}
+          onChangeText={setDeparture}
         />
-      )}
+        <TextInput
+          style={[styles.destinationInput, { borderColor: "#49E99C" }]}
+          placeholder="Destination"
+          value={destination}
+          onChangeText={setDestination}
+          autoFocus
+        />
+      </View>
     </View>
   );
 };

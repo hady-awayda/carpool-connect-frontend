@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useRef } from "react";
-import {
-  View,
-  StyleSheet,
-  Animated,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from "react-native";
-import * as Location from "expo-location";
+import DestinationField from "@/components/homeScreenComponents/DestinationField";
+import LastDestinations from "@/components/homeScreenComponents/LastThreeDestinations";
 import MapComponent from "@/components/homeScreenComponents/MapComponent";
 import SheetComponent from "@/components/homeScreenComponents/SheetComponent";
-import LastDestinations from "@/components/homeScreenComponents/LastThreeDestinations";
+import * as Location from "expo-location";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  Animated,
+  Keyboard,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 
 type LocationCoords = {
   latitude: number;
@@ -72,14 +73,23 @@ const HomeScreen = () => {
         {location && <MapComponent location={location} />}
 
         <Animated.View style={[styles.bottomSheet]}>
-          <SheetComponent
-            isSheetVisible={isSheetVisible}
-            showRouteSheet={showRouteSheet}
-            closeRouteSheet={closeRouteSheet}
-            destination={destination}
-            setDestination={setDestination}
-            departure={departure}
-          />
+          {isSheetVisible ? (
+            <>
+              <SheetComponent
+                isSheetVisible={isSheetVisible}
+                showRouteSheet={showRouteSheet}
+                closeRouteSheet={closeRouteSheet}
+                destination={destination}
+                setDestination={setDestination}
+                departure={departure}
+                setDeparture={setDeparture}
+              />
+            </>
+          ) : (
+            <DestinationField
+              {...{ destination, setDestination, showRouteSheet }}
+            />
+          )}
 
           {!isSheetVisible && <LastDestinations />}
         </Animated.View>
