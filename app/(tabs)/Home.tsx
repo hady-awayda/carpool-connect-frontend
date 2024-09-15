@@ -3,6 +3,7 @@ import LastDestinations from "@/components/homeScreenComponents/LastThreeDestina
 import MapComponent from "@/components/homeScreenComponents/MapComponent";
 import SheetComponent from "@/components/homeScreenComponents/SheetComponent";
 import * as Location from "expo-location";
+import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef, useState } from "react";
 import {
   Animated,
@@ -51,7 +52,7 @@ const HomeScreen = () => {
     setIsSheetVisible(true);
     Animated.timing(animatedValue, {
       toValue: 1,
-      duration: 500,
+      duration: 300,
       easing: Easing.bezier(0.42, 0, 0.58, 1),
       useNativeDriver: false,
     }).start(() => {
@@ -63,55 +64,51 @@ const HomeScreen = () => {
     setIsSheetVisible(false);
     Animated.timing(animatedValue, {
       toValue: 0,
-      duration: 500,
+      duration: 300,
       easing: Easing.bezier(0.42, 0, 0.58, 1),
       useNativeDriver: false,
     }).start(() => setIsSheetVisible(false));
   };
 
-  const dismissKeyboard = () => {
-    Keyboard.dismiss();
-  };
-
   const sheetTranslateY = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, -400],
+    outputRange: [0, -200],
   });
 
   return (
-    <TouchableWithoutFeedback onPress={dismissKeyboard}>
-      <View style={styles.container}>
-        {location && <MapComponent location={location} />}
+    <View style={styles.inner}>
+      <StatusBar style="auto" />
+      {location && <MapComponent location={location} />}
 
-        <Animated.View
-          style={[
-            styles.bottomSheet,
-            {
-              transform: [{ translateY: sheetTranslateY }],
-            },
-          ]}
-        >
-          {isSheetVisible ? (
-            <SheetComponent
-              {...{
-                closeRouteSheet,
-                destination,
-                setDestination,
-                departure,
-                setDeparture,
-                isAnimationComplete,
-              }}
-            />
-          ) : (
+      <Animated.View
+        style={[
+          styles.bottomSheet,
+          {
+            transform: [{ translateY: sheetTranslateY }],
+          },
+        ]}
+      >
+        {isSheetVisible ? (
+          <SheetComponent
+            {...{
+              closeRouteSheet,
+              destination,
+              setDestination,
+              departure,
+              setDeparture,
+              isAnimationComplete,
+            }}
+          />
+        ) : (
+          <>
             <DestinationField
               {...{ destination, setDestination, showRouteSheet }}
             />
-          )}
-
-          {!isSheetVisible && <LastDestinations />}
-        </Animated.View>
-      </View>
-    </TouchableWithoutFeedback>
+            <LastDestinations />
+          </>
+        )}
+      </Animated.View>
+    </View>
   );
 };
 
@@ -119,10 +116,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  inner: {
+    flex: 1,
+  },
   bottomSheet: {
     position: "absolute",
     bottom: 0,
-    width: "100%",
+    left: 0,
+    right: 0,
     backgroundColor: "white",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,

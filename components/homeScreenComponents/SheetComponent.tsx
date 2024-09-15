@@ -80,7 +80,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
     <View style={styles.sheetContainer}>
       <View style={styles.routeHeader}>
         <TouchableOpacity onPress={closeRouteSheet}>
-          <Ionicons name="close" size={24} />
+          <Ionicons name="close" size={48} />
         </TouchableOpacity>
         <Text style={styles.routeTitle}>Your route</Text>
         <TouchableOpacity>
@@ -118,7 +118,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
             onFocus={() => handleFocus("destination")}
             onBlur={() => handleBlur("destination")}
             style={styles.textInput}
-            // autoFocus
+            autoFocus
           />
         </Animated.View>
       </View>
