@@ -3,7 +3,7 @@ import LastDestinations from "@/components/homeScreenComponents/LastThreeDestina
 import MapComponent from "@/components/homeScreenComponents/MapComponent";
 import SheetComponent from "@/components/homeScreenComponents/SheetComponent";
 import * as Location from "expo-location";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Animated,
   Keyboard,
@@ -25,6 +25,7 @@ const HomeScreen = () => {
   const [departure, setDeparture] = useState<string>("Fetching...");
   const [destination, setDestination] = useState<string>("");
   const [isSheetVisible, setIsSheetVisible] = useState(false);
+  const [isAnimationComplete, setIsAnimationComplete] = useState(false);
   const animatedValue = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -50,20 +51,22 @@ const HomeScreen = () => {
     setIsSheetVisible(true);
     Animated.timing(animatedValue, {
       toValue: 1,
-      duration: 500,
+      duration: 2500,
       easing: Easing.bezier(0.42, 0, 0.58, 1),
       useNativeDriver: false,
-    }).start();
+    }).start(() => {
+      setIsAnimationComplete(true);
+    });
   };
 
   const closeRouteSheet = () => {
     setIsSheetVisible(false);
     Animated.timing(animatedValue, {
       toValue: 0,
-      duration: 500,
+      duration: 2500,
       easing: Easing.bezier(0.42, 0, 0.58, 1),
       useNativeDriver: false,
-    }).start();
+    }).start(() => setIsSheetVisible(false));
   };
 
   const dismissKeyboard = () => {
@@ -72,7 +75,7 @@ const HomeScreen = () => {
 
   const sheetTranslateY = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [400, 0],
+    outputRange: [0, 0],
   });
 
   return (
@@ -96,6 +99,7 @@ const HomeScreen = () => {
                 setDestination,
                 departure,
                 setDeparture,
+                isAnimationComplete,
               }}
             />
           ) : (
