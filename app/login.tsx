@@ -1,3 +1,5 @@
+import BoldButton from "@/components/BoldButton";
+import BorderedButton from "@/components/BorderedButton";
 import FloatingLabelInput from "@/components/FloatingLabelInput";
 import { saveToken } from "@/data/local/storage";
 import { setToken } from "@/data/redux/tokenSlice/slice";
@@ -101,19 +103,14 @@ export default function LoginScreen() {
           <Text style={styles.errorText}>{errors.password.message}</Text>
         )}
 
-        <TouchableOpacity
-          style={styles.loginButton}
-          onPress={handleSubmit(onSubmit)}
-        >
-          <Text style={styles.loginButtonText}>Login</Text>
-        </TouchableOpacity>
+        <BoldButton buttonText="Login" onPress={handleSubmit(onSubmit)} />
+
         <Text style={styles.orText}>or</Text>
-        <TouchableOpacity
-          style={styles.registerButton}
+
+        <BorderedButton
+          buttonText="Register"
           onPress={() => router.push("/register")}
-        >
-          <Text style={styles.registerButtonText}>Register</Text>
-        </TouchableOpacity>
+        />
       </View>
     </TouchableWithoutFeedback>
   );
@@ -143,36 +140,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 15,
     width: "100%",
-  },
-  loginButton: {
-    backgroundColor: "#333",
-    paddingVertical: 15,
-    paddingHorizontal: 40,
-    borderRadius: 5,
-    width: "100%",
-    marginTop: 16,
-    marginBottom: 10,
-  },
-  loginButtonText: {
-    fontFamily: "Urbanist_700Bold",
-    color: "#fff",
-    fontSize: 16,
-    textAlign: "center",
-  },
-  registerButton: {
-    borderColor: "#333",
-    borderWidth: 1,
-    paddingVertical: 15,
-    paddingHorizontal: 40,
-    borderRadius: 5,
-    width: "100%",
-    marginBottom: 20,
-  },
-  registerButtonText: {
-    fontFamily: "Urbanist_700Bold",
-    color: "#333",
-    fontSize: 16,
-    textAlign: "center",
   },
   orText: {
     fontFamily: "Urbanist_400Regular",
