@@ -1,13 +1,12 @@
 import BoldButton from "@/components/BoldButton";
 import BorderedButton from "@/components/BorderedButton";
 import FormInputField from "@/components/FormInputField";
-import { getToken, saveToken } from "@/data/local/storage";
-import { RootState } from "@/data/redux/store";
+import { saveToken } from "@/data/local/storage";
 import { setToken } from "@/data/redux/tokenSlice/slice";
 import { loginUser } from "@/data/remote/apiHandler";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Keyboard,
@@ -16,7 +15,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { z } from "zod";
 
 const schema = z.object({
@@ -33,8 +32,6 @@ export default function LoginScreen() {
   const [secureTextEntry, setSecureTextEntry] = useState<boolean>(true);
   const [serverError, setServerError] = useState<string | null>(null);
 
-  const tokenFromRedux = useSelector((state: RootState) => state.token.token);
-
   const {
     control,
     handleSubmit,
@@ -45,26 +42,20 @@ export default function LoginScreen() {
 
   const onSubmit = async (data: FormValues) => {
     setServerError(null);
+
     const result = await loginUser(data);
 
     if (result.error) {
       setServerError(result.error);
     } else {
       const token = result.token;
+
       dispatch(setToken(token));
       await saveToken(token);
-
-      // router.replace("/Home");
-      const savedToken = await getToken();
-      console.log("Saved Token from SecureStore:", savedToken);
+      
+      router.replace("/Home");
     }
   };
-
-  useEffect(() => {
-    if (tokenFromRedux) {
-      console.log("Token from Redux Store:", tokenFromRedux);
-    }
-  }, [tokenFromRedux]);
 
   const handleScreenPress = () => {
     Keyboard.dismiss();

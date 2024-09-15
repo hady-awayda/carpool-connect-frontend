@@ -39,15 +39,14 @@ const BoldButton: React.FC<BoldButtonProps> = ({
     const pressOutTime = Date.now();
     const pressDuration = pressOutTime - pressInTime;
     const remainingTime = Math.max(200 - pressDuration, 0);
+    onPress();
 
     setTimeout(() => {
       Animated.timing(animation, {
         toValue: 0,
         duration: 200,
         useNativeDriver: false,
-      }).start(() => {
-        onPress();
-      });
+      }).start();
     }, remainingTime);
   };
 
