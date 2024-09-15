@@ -1,7 +1,7 @@
 // SignupScreen.tsx
 import BoldButton from "@/components/BoldButton";
 import BorderedButton from "@/components/BorderedButton";
-import FormInputField from "@/components/FormInputField";
+import FormInputField from "@/components/ControlledInputField";
 import { saveToken } from "@/data/local/storage";
 import { setToken } from "@/data/redux/tokenSlice/slice";
 import { registerUser } from "@/data/remote/apiHandler";

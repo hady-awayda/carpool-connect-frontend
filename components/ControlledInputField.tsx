@@ -1,137 +1,58 @@
-import { useState, useEffect, RefObject, useRef } from "react";
-import {
-  View,
-  TextInput,
-  Text,
-  StyleSheet,
-  Animated,
-  Easing,
-  TouchableOpacity,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import React from "react";
+import { Controller, Control } from "react-hook-form";
+import FloatingLabelInput from "@/components/FloatingLabelInput";
+import { Text, StyleSheet } from "react-native";
 
-interface FloatingLabelInputProps {
+interface ControlledInputFieldProps {
+  control: Control<any>;
+  name: string;
   placeholder: string;
-  value: string;
-  onChangeText: (text: string) => void;
-  onBlur?: () => void;
-  secureTextEntry: boolean;
-  setSecureTextEntry: (value: boolean) => void;
+  secureTextEntry?: boolean;
+  setSecureTextEntry?: (value: boolean) => void;
+  error?: string;
   keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
 }
 
-const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
+const ControlledInputField: React.FC<ControlledInputFieldProps> = ({
+  control,
+  name,
   placeholder,
-  value,
-  onChangeText,
-  secureTextEntry,
-  setSecureTextEntry,
+  secureTextEntry = false,
+  setSecureTextEntry = () => {},
+  error,
   keyboardType,
 }) => {
-  const [isFocused, setIsFocused] = useState<boolean>(false);
-  const animatedIsFocused = useRef(new Animated.Value(value ? 1 : 0)).current;
-
-  const handleFocus = () => setIsFocused(true);
-  const handleBlur = () => {
-    setIsFocused(value !== "");
-    setIsFocused(false);
-  };
-
-  useEffect(() => {
-    Animated.timing(animatedIsFocused, {
-      toValue: isFocused || value ? 1 : 0,
-      duration: 200,
-      easing: Easing.linear,
-      useNativeDriver: false,
-    }).start();
-  }, [isFocused, value]);
-
-  const labelStyle = {
-    position: "absolute" as const,
-    left: 20,
-    top: animatedIsFocused.interpolate({
-      inputRange: [0, 1],
-      outputRange: [16.25, -10],
-    }),
-    fontSize: animatedIsFocused.interpolate({
-      inputRange: [0, 1],
-      outputRange: [16, 12],
-    }),
-    color: animatedIsFocused.interpolate({
-      inputRange: [0, 1],
-      outputRange: ["#666", "#49E99C"],
-    }),
-    backgroundColor: "white",
-    paddingHorizontal: 4,
-    zIndex: animatedIsFocused.interpolate({
-      inputRange: [0, 1],
-      outputRange: [0, 1],
-    }),
-  };
-
   return (
-    <View style={styles.container}>
-      <View style={styles.inputWrapper}>
-        <Animated.Text style={labelStyle}>{placeholder}</Animated.Text>
-
-        <TextInput
-          style={styles.input}
-          value={value}
-          onChangeText={onChangeText}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          keyboardType={keyboardType}
-          secureTextEntry={
-            (placeholder == "Password" || placeholder == "Confirm Password") &&
-            secureTextEntry
-          }
-        />
-
-        {placeholder == "Password" && (
-          <TouchableOpacity
-            style={styles.eyeIcon}
-            onPress={() => setSecureTextEntry(!secureTextEntry)}
-          >
-            <Ionicons
-              name={secureTextEntry ? "eye-off" : "eye"}
-              size={24}
-              color="#999"
-            />
-          </TouchableOpacity>
+    <>
+      <Controller
+        control={control}
+        name={name}
+        render={({ field: { onChange, value, onBlur } }) => (
+          <FloatingLabelInput
+            placeholder={placeholder}
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            keyboardType={keyboardType}
+            secureTextEntry={secureTextEntry}
+            setSecureTextEntry={setSecureTextEntry}
+          />
         )}
-      </View>
-    </View>
+      />
+      {error && <Text style={styles.errorText}>{error}</Text>}
+    </>
   );
 };
 
-export default FloatingLabelInput;
+export default ControlledInputField;
 
 const styles = StyleSheet.create({
-  container: {
-    marginBottom: 0,
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    alignSelf: "flex-start",
+    marginBottom: 12,
     width: "100%",
-  },
-  inputWrapper: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    fontSize: 16,
-    marginBottom: 15,
-    width: "100%",
-    position: "relative",
-    height: 60,
-  },
-  input: {
-    height: 30,
-    fontSize: 16,
-    color: "#333",
-    paddingLeft: 0,
-  },
-  eyeIcon: {
-    position: "absolute",
-    right: 10,
-    top: 18,
+    textAlign: "center",
   },
 });

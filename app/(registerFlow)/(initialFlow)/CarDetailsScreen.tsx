@@ -1,12 +1,12 @@
 import BoldButton from "@/components/BoldButton";
 import BorderedButton from "@/components/BorderedButton";
-import FloatingLabelInput from "@/components/ControlledInputField";
+import ControlledInputField from "@/components/ControlledInputField";
 import { submitCarDetails } from "@/data/remote/apiHandler";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
 import React from "react";
-import { Controller, useForm } from "react-hook-form";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useForm } from "react-hook-form";
+import { StyleSheet, Text, View } from "react-native";
 import { z } from "zod";
 
 const schema = z.object({
@@ -17,11 +17,7 @@ const schema = z.object({
     .regex(/^[0-9]{4}$/, { message: "Year must be a 4-digit number" }),
 });
 
-type CarDetailsFormValues = {
-  manufacturer: string;
-  model: string;
-  year: string;
-};
+type CarDetailsFormValues = z.infer<typeof schema>;
 
 export default function CarDetailsScreen() {
   const router = useRouter();
@@ -49,57 +45,27 @@ export default function CarDetailsScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Car details</Text>
 
-      <Controller
+      <ControlledInputField
         control={control}
         name="manufacturer"
-        render={({ field: { onChange, value } }) => (
-          <FloatingLabelInput
-            placeholder="Manufacturer"
-            value={value}
-            onChangeText={onChange}
-            secureTextEntry={false}
-            setSecureTextEntry={() => {}}
-          />
-        )}
+        placeholder="Manufacturer"
+        error={errors.manufacturer?.message}
       />
-      {errors.manufacturer && (
-        <Text style={styles.errorText}>{errors.manufacturer.message}</Text>
-      )}
 
-      <Controller
+      <ControlledInputField
         control={control}
         name="model"
-        render={({ field: { onChange, value } }) => (
-          <FloatingLabelInput
-            placeholder="Model"
-            value={value}
-            onChangeText={onChange}
-            secureTextEntry={false}
-            setSecureTextEntry={() => {}}
-          />
-        )}
+        placeholder="Model"
+        error={errors.model?.message}
       />
-      {errors.model && (
-        <Text style={styles.errorText}>{errors.model.message}</Text>
-      )}
 
-      <Controller
+      <ControlledInputField
         control={control}
         name="year"
-        render={({ field: { onChange, value } }) => (
-          <FloatingLabelInput
-            placeholder="Year"
-            value={value}
-            onChangeText={onChange}
-            secureTextEntry={false}
-            setSecureTextEntry={() => {}}
-            keyboardType="numeric"
-          />
-        )}
+        placeholder="Year"
+        keyboardType="numeric"
+        error={errors.year?.message}
       />
-      {errors.year && (
-        <Text style={styles.errorText}>{errors.year.message}</Text>
-      )}
 
       <BoldButton buttonText="Submit" onPress={handleSubmit(onSubmit)} />
 
@@ -120,43 +86,6 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     marginBottom: 100,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    fontSize: 16,
-    marginBottom: 20,
-    width: "100%",
-  },
-  button: {
-    backgroundColor: "#333",
-    paddingVertical: 15,
-    paddingHorizontal: 40,
-    borderRadius: 5,
-    width: "100%",
-    marginBottom: 15,
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
-    textAlign: "center",
-  },
-  backButton: {
-    borderColor: "#333",
-    borderWidth: 1,
-    paddingVertical: 15,
-    paddingHorizontal: 40,
-    borderRadius: 5,
-    width: "100%",
-    marginTop: 20,
-  },
-  backButtonText: {
-    color: "#333",
-    fontSize: 16,
-    textAlign: "center",
   },
   errorText: {
     color: "red",

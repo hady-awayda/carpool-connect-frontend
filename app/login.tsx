@@ -1,6 +1,6 @@
 import BoldButton from "@/components/BoldButton";
 import BorderedButton from "@/components/BorderedButton";
-import FormInputField from "@/components/FormInputField";
+import FormInputField from "@/components/ControlledInputField";
 import { saveToken } from "@/data/local/storage";
 import { setToken } from "@/data/redux/tokenSlice/slice";
 import { loginUser } from "@/data/remote/apiHandler";
@@ -52,7 +52,7 @@ export default function LoginScreen() {
 
       dispatch(setToken(token));
       await saveToken(token);
-      
+
       router.replace("/Home");
     }
   };
