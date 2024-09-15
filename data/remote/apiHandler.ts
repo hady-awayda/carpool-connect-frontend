@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, Method } from "axios";
-import Config from "react-native-config";
+import store from "@/data/redux/store";
 
 const API_BASE_URL =
   "http://carpool-dev-load-balancer-854327849.eu-central-1.elb.amazonaws.com/api/";
@@ -11,6 +11,19 @@ const api = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+api.interceptors.request.use(
+  async (config) => {
+    const token = store.getState().token.token;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 export const apiRequest = async (
   endpoint: string,
@@ -28,7 +41,7 @@ export const apiRequest = async (
     return response.data;
   } catch (error: any) {
     console.log(error);
-    if (error.response.data.message) {
+    if (error.response?.data?.message) {
       return {
         error:
           error.response.data.message || "An error occurred during the request",
