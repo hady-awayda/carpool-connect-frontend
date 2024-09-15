@@ -7,6 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import DestinationField from "./DestinationField";
 
 type SheetComponentProps = {
   isSheetVisible: boolean;
@@ -50,20 +51,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
           </View>
         </>
       ) : (
-        <>
-          <TouchableOpacity
-            onPress={showRouteSheet}
-            style={styles.searchContainer}
-          >
-            <Ionicons name="search" size={24} />
-            <TextInput
-              style={styles.input}
-              placeholder="Where to?"
-              value={destination}
-              onChangeText={setDestination}
-            />
-          </TouchableOpacity>
-        </>
+        <DestinationField {...{ destination, setDestination }} />
       )}
     </View>
   );
