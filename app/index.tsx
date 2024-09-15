@@ -32,7 +32,7 @@ export default function WelcomeScreen() {
   }
 
   const handleLogin = () => router.push("/login");
-  const handleRegister = () => router.push("/register");
+  const handleRegister = () => router.push("/CarDetailsScreen");
 
   return (
     <View style={styles.container}>

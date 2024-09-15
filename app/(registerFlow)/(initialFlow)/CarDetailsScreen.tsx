@@ -1,17 +1,13 @@
-import React from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-} from "react-native";
-import { useRouter } from "expo-router";
-import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import BoldButton from "@/components/BoldButton";
+import BorderedButton from "@/components/BorderedButton";
+import FloatingLabelInput from "@/components/ControlledInputField";
 import { submitCarDetails } from "@/data/remote/apiHandler";
-import FloatingLabelInput from "@/components/FloatingLabelInput";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "expo-router";
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { z } from "zod";
 
 const schema = z.object({
   manufacturer: z.string().min(2, { message: "Manufacturer is required" }),
@@ -105,13 +101,9 @@ export default function CarDetailsScreen() {
         <Text style={styles.errorText}>{errors.year.message}</Text>
       )}
 
-      <TouchableOpacity style={styles.button} onPress={handleSubmit(onSubmit)}>
-        <Text style={styles.buttonText}>Confirm</Text>
-      </TouchableOpacity>
+      <BoldButton buttonText="Submit" onPress={handleSubmit(onSubmit)} />
 
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <Text style={styles.backButtonText}>Back</Text>
-      </TouchableOpacity>
+      <BorderedButton buttonText="Back" onPress={() => router.back()} />
     </View>
   );
 }

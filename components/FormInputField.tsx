@@ -1,6 +1,6 @@
 import React from "react";
 import { Controller, Control } from "react-hook-form";
-import FloatingLabelInput from "@/components/FloatingLabelInput";
+import FloatingLabelInput from "@/components/ControlledInputField";
 import { Text, StyleSheet } from "react-native";
 
 interface FormInputFieldProps {
