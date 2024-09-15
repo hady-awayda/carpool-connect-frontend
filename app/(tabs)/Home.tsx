@@ -5,14 +5,7 @@ import SheetComponent from "@/components/homeScreenComponents/SheetComponent";
 import * as Location from "expo-location";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef, useState } from "react";
-import {
-  Animated,
-  Keyboard,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  View,
-  Easing,
-} from "react-native";
+import { Animated, Easing, StyleSheet, View } from "react-native";
 
 type LocationCoords = {
   latitude: number;
@@ -76,7 +69,7 @@ const HomeScreen = () => {
   });
 
   return (
-    <View style={styles.inner}>
+    <View style={styles.container}>
       <StatusBar style="auto" />
       {location && <MapComponent location={location} />}
 
@@ -114,9 +107,6 @@ const HomeScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
-  inner: {
     flex: 1,
   },
   bottomSheet: {
