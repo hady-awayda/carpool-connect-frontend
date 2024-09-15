@@ -1,18 +1,17 @@
 import BoldButton from "@/components/BoldButton";
 import BorderedButton from "@/components/BorderedButton";
-import FloatingLabelInput from "@/components/FloatingLabelInput";
+import FormInputField from "@/components/FormInputField";
 import { saveToken } from "@/data/local/storage";
 import { setToken } from "@/data/redux/tokenSlice/slice";
 import { loginUser } from "@/data/remote/apiHandler";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
-import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import {
   Keyboard,
   StyleSheet,
   Text,
-  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
@@ -24,10 +23,7 @@ const schema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-type FormValues = {
-  email: string;
-  password: string;
-};
+type FormValues = z.infer<typeof schema>;
 
 export default function LoginScreen() {
   const dispatch = useDispatch();
@@ -69,39 +65,21 @@ export default function LoginScreen() {
 
         {serverError && <Text style={styles.errorText}>{serverError}</Text>}
 
-        <Controller
+        <FormInputField
           control={control}
           name="email"
-          render={({ field: { onChange, value } }) => (
-            <FloatingLabelInput
-              placeholder="Email"
-              value={value}
-              onChangeText={onChange}
-              secureTextEntry={false}
-              setSecureTextEntry={() => {}}
-            />
-          )}
+          placeholder="Email"
+          error={errors.email?.message}
         />
-        {errors.email && (
-          <Text style={styles.errorText}>{errors.email.message}</Text>
-        )}
 
-        <Controller
+        <FormInputField
           control={control}
           name="password"
-          render={({ field: { onChange, value } }) => (
-            <FloatingLabelInput
-              placeholder="Password"
-              value={value}
-              onChangeText={onChange}
-              secureTextEntry={secureTextEntry}
-              setSecureTextEntry={setSecureTextEntry}
-            />
-          )}
+          placeholder="Password"
+          secureTextEntry={secureTextEntry}
+          setSecureTextEntry={setSecureTextEntry}
+          error={errors.password?.message}
         />
-        {errors.password && (
-          <Text style={styles.errorText}>{errors.password.message}</Text>
-        )}
 
         <BoldButton buttonText="Login" onPress={handleSubmit(onSubmit)} />
 
@@ -130,16 +108,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 80,
     marginTop: 60,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    fontSize: 16,
-    marginBottom: 15,
-    width: "100%",
   },
   orText: {
     fontFamily: "Urbanist_400Regular",

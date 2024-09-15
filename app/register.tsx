@@ -1,16 +1,18 @@
-import FloatingLabelInput from "@/components/FloatingLabelInput";
+// SignupScreen.tsx
+import BoldButton from "@/components/BoldButton";
+import BorderedButton from "@/components/BorderedButton";
+import FormInputField from "@/components/FormInputField";
 import { saveToken } from "@/data/local/storage";
 import { setToken } from "@/data/redux/tokenSlice/slice";
 import { registerUser } from "@/data/remote/apiHandler";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
-import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import {
   Keyboard,
   StyleSheet,
   Text,
-  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
@@ -33,18 +35,12 @@ const schema = z
       .string()
       .min(6, { message: "Confirm password must be at least 6 characters" }),
   })
-  .refine((data: FormValues) => data.password === data.confirmPassword, {
+  .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
   });
 
-type FormValues = {
-  name: string;
-  email: string;
-  phoneNumber: string;
-  password: string;
-  confirmPassword: string;
-};
+type FormValues = z.infer<typeof schema>;
 
 export default function SignupScreen() {
   const dispatch = useDispatch();
@@ -65,7 +61,6 @@ export default function SignupScreen() {
 
   const onSubmit = async (data: FormValues) => {
     setServerError(null);
-
     const result = await registerUser({
       name: data.name,
       email: data.email,
@@ -78,7 +73,6 @@ export default function SignupScreen() {
     } else {
       const token = result.token;
       dispatch(setToken(token));
-
       saveToken(token);
       router.push("/CarOwnerScreen");
     }
@@ -91,106 +85,52 @@ export default function SignupScreen() {
 
         {serverError && <Text style={styles.errorText}>{serverError}</Text>}
 
-        <Controller
+        <FormInputField
           control={control}
           name="name"
-          render={({ field: { onChange, value } }) => (
-            <FloatingLabelInput
-              placeholder="Full Name"
-              value={value}
-              onChangeText={onChange}
-              secureTextEntry={false}
-              setSecureTextEntry={() => {}}
-            />
-          )}
+          placeholder="Full Name"
+          error={errors.name?.message}
         />
-        {errors.name && (
-          <Text style={styles.errorText}>{errors.name.message}</Text>
-        )}
 
-        <Controller
+        <FormInputField
           control={control}
           name="email"
-          render={({ field: { onChange, value } }) => (
-            <FloatingLabelInput
-              placeholder="Email"
-              value={value}
-              onChangeText={onChange}
-              secureTextEntry={false}
-              setSecureTextEntry={() => {}}
-            />
-          )}
+          placeholder="Email"
+          error={errors.email?.message}
         />
-        {errors.email && (
-          <Text style={styles.errorText}>{errors.email.message}</Text>
-        )}
 
-        <Controller
+        <FormInputField
           control={control}
           name="phoneNumber"
-          render={({ field: { onChange, value } }) => (
-            <FloatingLabelInput
-              placeholder="Phone Number"
-              value={value}
-              onChangeText={onChange}
-              secureTextEntry={false}
-              setSecureTextEntry={() => {}}
-            />
-          )}
+          placeholder="Phone Number"
+          error={errors.phoneNumber?.message}
         />
-        {errors.phoneNumber && (
-          <Text style={styles.errorText}>{errors.phoneNumber.message}</Text>
-        )}
 
-        <Controller
+        <FormInputField
           control={control}
           name="password"
-          render={({ field: { onChange, value } }) => (
-            <FloatingLabelInput
-              placeholder="Password"
-              value={value}
-              onChangeText={onChange}
-              secureTextEntry={secureTextEntry}
-              setSecureTextEntry={setSecureTextEntry}
-            />
-          )}
+          placeholder="Password"
+          secureTextEntry={secureTextEntry}
+          setSecureTextEntry={setSecureTextEntry}
+          error={errors.password?.message}
         />
-        {errors.password && (
-          <Text style={styles.errorText}>{errors.password.message}</Text>
-        )}
 
-        <Controller
+        <FormInputField
           control={control}
           name="confirmPassword"
-          render={({ field: { onChange, value } }) => (
-            <FloatingLabelInput
-              placeholder="Confirm Password"
-              value={value}
-              onChangeText={onChange}
-              secureTextEntry={true}
-              setSecureTextEntry={() => {}}
-            />
-          )}
+          placeholder="Confirm Password"
+          secureTextEntry
+          error={errors.confirmPassword?.message}
         />
-        {errors.confirmPassword && (
-          <Text style={styles.errorText}>{errors.confirmPassword.message}</Text>
-        )}
 
-        <TouchableOpacity
-          style={styles.registerButton}
-          onPress={handleSubmit(onSubmit)}
-        >
-          <Text style={styles.registerButtonText}>Register</Text>
-        </TouchableOpacity>
+        <BoldButton buttonText="Register" onPress={handleSubmit(onSubmit)} />
 
         <Text style={styles.orText}>or</Text>
 
-        <TouchableOpacity
-          style={styles.loginButton}
+        <BorderedButton
+          buttonText="Login"
           onPress={() => router.push("/login")}
-        >
-          <Text style={styles.loginButtonText}>Login</Text>
-        </TouchableOpacity>
+        />
       </View>
     </TouchableWithoutFeedback>
   );
@@ -209,36 +149,6 @@ const styles = StyleSheet.create({
     fontSize: 28,
     textAlign: "center",
     marginBottom: 100,
-  },
-  registerButton: {
-    backgroundColor: "#333",
-    paddingVertical: 15,
-    paddingHorizontal: 40,
-    borderRadius: 5,
-    width: "100%",
-    marginBottom: 10,
-    marginTop: 16,
-  },
-  loginButton: {
-    borderColor: "#333",
-    borderWidth: 1,
-    paddingVertical: 15,
-    paddingHorizontal: 40,
-    borderRadius: 5,
-    width: "100%",
-    marginBottom: 20,
-  },
-  registerButtonText: {
-    fontFamily: "Urbanist_700Bold",
-    color: "#fff",
-    fontSize: 16,
-    textAlign: "center",
-  },
-  loginButtonText: {
-    fontFamily: "Urbanist_700Bold",
-    color: "#000",
-    fontSize: 16,
-    textAlign: "center",
   },
   orText: {
     fontFamily: "Urbanist_400Regular",
