@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Colors } from "react-native/Libraries/NewAppScreen";
+import { Colors } from "@/constants/Variables";
 import { useEffect, useRef, useState } from "react";
 import {
   Animated,
@@ -16,7 +16,6 @@ type SheetComponentProps = {
   setDestination: (text: string) => void;
   departure: string;
   setDeparture: (text: string) => void;
-  destinationInputRef: React.RefObject<TextInput>;
 };
 
 const SheetComponent: React.FC<SheetComponentProps> = ({
@@ -25,7 +24,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   setDestination,
   departure,
   setDeparture,
-  destinationInputRef,
 }) => {
   const [focusedField, setFocusedField] = useState<
     "departure" | "destination" | null
@@ -69,12 +67,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
     outputRange: ["#ccc", Colors.light.primary],
   });
 
-  useEffect(() => {
-    if (focusedField === "destination" && destinationInputRef.current) {
-      destinationInputRef.current.focus();
-    }
-  }, [focusedField, destinationInputRef]);
-
   return (
     <View style={styles.sheetContainer}>
       <View style={styles.routeHeader}>
@@ -111,7 +103,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
           ]}
         >
           <TextInput
-            ref={destinationInputRef}
             placeholder="Destination"
             value={destination}
             onChangeText={setDestination}

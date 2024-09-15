@@ -8,9 +8,9 @@ import {
   Animated,
   Keyboard,
   StyleSheet,
-  TextInput,
   TouchableWithoutFeedback,
   View,
+  Easing,
 } from "react-native";
 
 type LocationCoords = {
@@ -26,7 +26,6 @@ const HomeScreen = () => {
   const [destination, setDestination] = useState<string>("");
   const [isSheetVisible, setIsSheetVisible] = useState(false);
   const animatedValue = useRef(new Animated.Value(0)).current;
-  const destinationInputRef = useRef<TextInput>(null);
 
   useEffect(() => {
     (async () => {
@@ -52,6 +51,7 @@ const HomeScreen = () => {
     Animated.timing(animatedValue, {
       toValue: 1,
       duration: 500,
+      easing: Easing.bezier(0.42, 0, 0.58, 1),
       useNativeDriver: false,
     }).start();
   };
@@ -61,6 +61,7 @@ const HomeScreen = () => {
     Animated.timing(animatedValue, {
       toValue: 0,
       duration: 500,
+      easing: Easing.bezier(0.42, 0, 0.58, 1),
       useNativeDriver: false,
     }).start();
   };
@@ -69,23 +70,34 @@ const HomeScreen = () => {
     Keyboard.dismiss();
   };
 
+  const sheetTranslateY = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [400, 0],
+  });
+
   return (
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
       <View style={styles.container}>
         {location && <MapComponent location={location} />}
 
-        <Animated.View style={[styles.bottomSheet]}>
+        <Animated.View
+          style={[
+            styles.bottomSheet,
+            {
+              transform: [{ translateY: sheetTranslateY }],
+            },
+          ]}
+        >
           {isSheetVisible ? (
-            <>
-              <SheetComponent
-                closeRouteSheet={closeRouteSheet}
-                destination={destination}
-                setDestination={setDestination}
-                departure={departure}
-                setDeparture={setDeparture}
-                destinationInputRef={destinationInputRef}
-              />
-            </>
+            <SheetComponent
+              {...{
+                closeRouteSheet,
+                destination,
+                setDestination,
+                departure,
+                setDeparture,
+              }}
+            />
           ) : (
             <DestinationField
               {...{ destination, setDestination, showRouteSheet }}
