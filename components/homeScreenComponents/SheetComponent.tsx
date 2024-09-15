@@ -1,5 +1,5 @@
-import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Variables";
+import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
 import {
   Animated,
@@ -16,6 +16,7 @@ type SheetComponentProps = {
   setDestination: (text: string) => void;
   departure: string;
   setDeparture: (text: string) => void;
+  isAnimationComplete: boolean;
 };
 
 const SheetComponent: React.FC<SheetComponentProps> = ({
@@ -24,6 +25,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   setDestination,
   departure,
   setDeparture,
+  isAnimationComplete,
 }) => {
   const [focusedField, setFocusedField] = useState<
     "departure" | "destination" | null
@@ -31,6 +33,13 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
 
   const departureBorderColor = useRef(new Animated.Value(0)).current;
   const destinationBorderColor = useRef(new Animated.Value(0)).current;
+  const destinationInputRef = useRef<TextInput>(null);
+
+  useEffect(() => {
+    if (isAnimationComplete) {
+      destinationInputRef.current?.focus();
+    }
+  }, [isAnimationComplete]);
 
   const animateBorderColor = (
     field: "departure" | "destination",
@@ -109,7 +118,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
             onFocus={() => handleFocus("destination")}
             onBlur={() => handleBlur("destination")}
             style={styles.textInput}
-            autoFocus
+            // autoFocus
           />
         </Animated.View>
       </View>

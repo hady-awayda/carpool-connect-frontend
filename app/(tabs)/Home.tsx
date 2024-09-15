@@ -51,7 +51,7 @@ const HomeScreen = () => {
     setIsSheetVisible(true);
     Animated.timing(animatedValue, {
       toValue: 1,
-      duration: 2500,
+      duration: 500,
       easing: Easing.bezier(0.42, 0, 0.58, 1),
       useNativeDriver: false,
     }).start(() => {
@@ -63,7 +63,7 @@ const HomeScreen = () => {
     setIsSheetVisible(false);
     Animated.timing(animatedValue, {
       toValue: 0,
-      duration: 2500,
+      duration: 500,
       easing: Easing.bezier(0.42, 0, 0.58, 1),
       useNativeDriver: false,
     }).start(() => setIsSheetVisible(false));
@@ -75,7 +75,7 @@ const HomeScreen = () => {
 
   const sheetTranslateY = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, 0],
+    outputRange: [0, -400],
   });
 
   return (
