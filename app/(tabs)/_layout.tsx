@@ -48,10 +48,14 @@ export default function TabLayout() {
           paddingBottom: insets.bottom > 0 ? insets.bottom + 25 : 25,
           paddingTop: insets.bottom > 0 ? insets.bottom + 5 : 5,
           height: insets.bottom > 0 ? insets.bottom + 80 : 65,
-          elevation: -100,
+          borderTopColor: "rgba(0, 0, 0, 0.1)",
+          borderTopWidth: 0,
+        },
+        tabBarIconStyle: {
+          color: "red",
         },
         tabBarActiveTintColor: Colors.light.primary,
-        tabBarInactiveTintColor: "#999",
+        tabBarInactiveTintColor: "#555",
       }}
     >
       <Tabs.Screen
