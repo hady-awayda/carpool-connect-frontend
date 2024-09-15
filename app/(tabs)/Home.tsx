@@ -1,9 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Animated,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
-import { Typography, Spacing, Colors } from "@/constants/Variables";
-import FloatingLabelInput from "@/components/FloatingLabelInput";
+import { Ionicons } from "@expo/vector-icons"; // Icons for search and location
 
 type LocationCoords = {
   latitude: number;
@@ -14,9 +20,10 @@ type LocationCoords = {
 
 const HomeScreen = () => {
   const [location, setLocation] = useState<LocationCoords | null>(null);
+  const [departure, setDeparture] = useState<string>("Fetching...");
   const [destination, setDestination] = useState<string>("");
-  const [departure, setDeparture] =
-    useState<Location.LocationObjectCoords | null>(null);
+  const [isSheetVisible, setIsSheetVisible] = useState(false);
+  const animatedValue = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     (async () => {
@@ -30,49 +37,109 @@ const HomeScreen = () => {
       setLocation({
         latitude: loc.coords.latitude,
         longitude: loc.coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+        latitudeDelta: 0.004,
+        longitudeDelta: 0.004,
       });
-      setDeparture(loc.coords);
+      setDeparture("Your City"); // Set your city or fetched city name
     })();
   }, []);
 
-  const handleDestinationChange = (text: string) => {
-    setDestination(text);
+  const showRouteSheet = () => {
+    setIsSheetVisible(true);
+    Animated.timing(animatedValue, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: false,
+    }).start();
   };
 
-  const handleFormSubmit = async () => {
-    const scheduleData = {
-      departure: departure,
-      destination: destination,
-    };
+  const closeRouteSheet = () => {
+    setIsSheetVisible(false);
+    Animated.timing(animatedValue, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: false,
+    }).start();
   };
+
+  const routeSheetHeight = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["30%", "80%"],
+  });
 
   return (
     <View style={styles.container}>
       {location ? (
         <MapView style={styles.map} initialRegion={location}>
-          <Marker coordinate={location} title="Your Location" />
-          {departure && <Marker coordinate={departure} title="Departure" />}
+          <Marker coordinate={location} title="Your Location">
+            <View style={styles.pin}>
+              <View style={styles.circle} />
+              <View style={styles.cone} />
+            </View>
+          </Marker>
         </MapView>
       ) : (
         <Text>Loading Map...</Text>
       )}
 
-      <View style={styles.inputContainer}>
-        <FloatingLabelInput
-          placeholder="Where to?"
-          value={destination}
-          onChangeText={setDestination}
-        />
-      </View>
+      <Animated.View style={[styles.bottomSheet, { height: routeSheetHeight }]}>
+        {isSheetVisible ? (
+          <>
+            <View style={styles.routeHeader}>
+              <TouchableOpacity onPress={closeRouteSheet}>
+                <Ionicons name="close" size={24} />
+              </TouchableOpacity>
+              <Text style={styles.routeTitle}>Your route</Text>
+              <TouchableOpacity>
+                <Ionicons name="add" size={24} />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.routeDetails}>
+              <Text>{departure}</Text>
+              <TextInput
+                style={[styles.destinationInput, { borderColor: "#49E99C" }]}
+                placeholder="Destination"
+                value={destination}
+                onChangeText={setDestination}
+                autoFocus
+              />
+            </View>
+          </>
+        ) : (
+          <>
+            <TouchableOpacity
+              onPress={showRouteSheet}
+              style={styles.searchContainer}
+            >
+              <Ionicons name="search" size={24} />
+              <TextInput
+                style={styles.input}
+                placeholder="Where to?"
+                value={destination}
+                onChangeText={setDestination}
+              />
+            </TouchableOpacity>
 
-      {/* <Button title="Submit" onPress={handleFormSubmit} /> */}
+            <View style={styles.suggestions}>
+              <View style={styles.suggestionItem}>
+                <Ionicons name="airplane-outline" size={24} />
+                <Text>Beirut Rafic Hariri Airport (BEY)</Text>
+              </View>
+              <View style={styles.suggestionItem}>
+                <Ionicons name="location-outline" size={24} />
+                <Text>Hamra</Text>
+              </View>
+              <View style={styles.suggestionItem}>
+                <Ionicons name="bag-outline" size={24} />
+                <Text>City Centre Beirut</Text>
+              </View>
+            </View>
+          </>
+        )}
+      </Animated.View>
     </View>
   );
 };
-
-export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -81,20 +148,67 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
-  inputContainer: {
-    padding: 10,
-    backgroundColor: "#fff",
+  pin: {
+    alignItems: "center",
+  },
+  circle: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: "blue",
+  },
+  cone: {
+    width: 5,
+    height: 10,
+    backgroundColor: "rgba(0, 0, 255, 0.5)",
+    transform: [{ rotate: "45deg" }],
+  },
+  bottomSheet: {
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+    backgroundColor: "white",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 20,
+  },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F5F5F5",
     borderRadius: 16,
-    height: 250,
-    marginTop: -80,
-    marginBottom: -10,
-    marginHorizontal: 0,
+    padding: 10,
   },
   input: {
-    padding: 10,
-    backgroundColor: "#EFEFEF",
-    borderRadius: 10,
+    marginLeft: 10,
     fontSize: 16,
-    marginHorizontal: 10,
+  },
+  suggestions: {
+    marginTop: 20,
+  },
+  suggestionItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  routeHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  routeTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  routeDetails: {
+    marginTop: 20,
+  },
+  destinationInput: {
+    borderWidth: 2,
+    borderRadius: 10,
+    padding: 10,
+    marginTop: 10,
   },
 });
+
+export default HomeScreen;

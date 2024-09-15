@@ -1,13 +1,6 @@
-import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
-import {
-  Animated,
-  Easing,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Animated, Easing, StyleSheet, TextInput, View } from "react-native";
+import { Colors } from "@/constants/Variables";
 
 interface InputFieldProps {
   placeholder: string;
@@ -54,7 +47,7 @@ const InputField: React.FC<InputFieldProps> = ({
     }),
     color: animatedIsFocused.interpolate({
       inputRange: [0, 1],
-      outputRange: ["#666", "#49E99C"],
+      outputRange: ["#333", "#49E99C"],
     }),
     backgroundColor: "white",
     paddingHorizontal: 4,
@@ -88,15 +81,14 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 0,
     width: "100%",
+    paddingHorizontal: 10,
   },
   inputWrapper: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 5,
+    backgroundColor: "#eee",
+    borderRadius: 10,
     fontSize: 16,
     marginBottom: 15,
+    marginTop: 8,
     width: "100%",
     position: "relative",
     height: 60,
