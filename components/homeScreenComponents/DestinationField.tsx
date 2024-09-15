@@ -1,26 +1,30 @@
 import React from "react";
-import { View, TextInput, StyleSheet } from "react-native";
+import { View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 type DestinationFieldProps = {
   destination: string;
   setDestination: (text: string) => void;
+  showRouteSheet: () => void;
 };
 
 const DestinationField: React.FC<DestinationFieldProps> = ({
   destination,
   setDestination,
+  showRouteSheet,
 }) => {
   return (
-    <View style={styles.searchContainer}>
-      <Ionicons name="search" size={24} />
-      <TextInput
-        style={styles.input}
-        placeholder="Where to?"
-        value={destination}
-        onChangeText={setDestination}
-      />
-    </View>
+    <TouchableOpacity onPress={showRouteSheet}>
+      <View style={styles.searchContainer}>
+        <Ionicons name="search" size={24} />
+        <TextInput
+          style={styles.input}
+          placeholder="Where to?"
+          value={destination}
+          onChangeText={setDestination}
+        />
+      </View>
+    </TouchableOpacity>
   );
 };
 

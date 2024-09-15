@@ -51,7 +51,9 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
           </View>
         </>
       ) : (
-        <DestinationField {...{ destination, setDestination }} />
+        <DestinationField
+          {...{ destination, setDestination, showRouteSheet }}
+        />
       )}
     </View>
   );
