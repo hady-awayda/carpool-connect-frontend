@@ -8,6 +8,7 @@ import {
   Animated,
   Keyboard,
   StyleSheet,
+  TextInput,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
@@ -25,6 +26,7 @@ const HomeScreen = () => {
   const [destination, setDestination] = useState<string>("");
   const [isSheetVisible, setIsSheetVisible] = useState(false);
   const animatedValue = useRef(new Animated.Value(0)).current;
+  const destinationInputRef = useRef<TextInput>(null);
 
   useEffect(() => {
     (async () => {
@@ -76,13 +78,12 @@ const HomeScreen = () => {
           {isSheetVisible ? (
             <>
               <SheetComponent
-                isSheetVisible={isSheetVisible}
-                showRouteSheet={showRouteSheet}
                 closeRouteSheet={closeRouteSheet}
                 destination={destination}
                 setDestination={setDestination}
                 departure={departure}
                 setDeparture={setDeparture}
+                destinationInputRef={destinationInputRef}
               />
             </>
           ) : (

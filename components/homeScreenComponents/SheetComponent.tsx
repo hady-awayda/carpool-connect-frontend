@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -9,24 +9,28 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 
 type SheetComponentProps = {
-  isSheetVisible: boolean;
-  showRouteSheet: () => void;
   closeRouteSheet: () => void;
   destination: string;
   setDestination: (text: string) => void;
   departure: string;
   setDeparture: (text: string) => void;
+  destinationInputRef: React.RefObject<TextInput>;
 };
 
 const SheetComponent: React.FC<SheetComponentProps> = ({
-  isSheetVisible,
-  showRouteSheet,
   closeRouteSheet,
   destination,
   setDestination,
   departure,
   setDeparture,
+  destinationInputRef,
 }) => {
+  useEffect(() => {
+    if (destinationInputRef && destinationInputRef.current) {
+      destinationInputRef.current.focus();
+    }
+  }, []);
+
   return (
     <View style={styles.sheetContainer}>
       <View style={styles.routeHeader}>
@@ -46,11 +50,12 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
           onChangeText={setDeparture}
         />
         <TextInput
+          ref={destinationInputRef}
           style={[styles.destinationInput, { borderColor: "#49E99C" }]}
           placeholder="Destination"
           value={destination}
           onChangeText={setDestination}
-          autoFocus
+          autoFocus={false}
         />
       </View>
     </View>
@@ -81,17 +86,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     marginTop: 10,
-  },
-  searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#F5F5F5",
-    borderRadius: 16,
-    padding: 10,
-  },
-  input: {
-    marginLeft: 10,
-    fontSize: 16,
   },
 });
 
