@@ -1,13 +1,12 @@
+import { Colors } from "@/constants/Variables";
 import React, { useState } from "react";
 import {
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  ViewStyle,
-  TextStyle,
   Animated,
+  StyleSheet,
+  TextStyle,
+  ViewStyle,
+  Pressable,
 } from "react-native";
-import { Colors } from "@/constants/Variables";
 
 type BorderedButtonProps = {
   buttonText: string;
@@ -62,21 +61,21 @@ const BorderedButton: React.FC<BorderedButtonProps> = ({
   });
 
   return (
-    <Animated.View
-      style={[styles.button, buttonStyle, { borderColor: animatedBorderColor }]}
+    <Pressable
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      style={[styles.button, buttonStyle]}
     >
-      <TouchableOpacity
-        activeOpacity={1}
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
+      <Animated.View
+        style={[styles.animationStyle, { borderColor: animatedBorderColor }]}
       >
         <Animated.Text
           style={[styles.buttonText, textStyle, { color: animatedTextColor }]}
         >
           {buttonText}
         </Animated.Text>
-      </TouchableOpacity>
-    </Animated.View>
+      </Animated.View>
+    </Pressable>
   );
 };
 
@@ -84,19 +83,27 @@ export default BorderedButton;
 
 const styles = StyleSheet.create({
   button: {
-    borderColor: "#333",
-    borderWidth: 1,
-    paddingVertical: 15,
-    paddingHorizontal: 40,
     borderRadius: 5,
     width: "100%",
-    marginTop: 10,
-    marginBottom: 30,
+    height: 54,
+    marginBottom: 15,
+    marginTop: 15,
+    justifyContent: "center",
+    alignItems: "center",
   },
   buttonText: {
     fontFamily: "Urbanist_700Bold",
-    color: "#333",
     fontSize: 16,
     textAlign: "center",
+    width: "100%",
+  },
+  animationStyle: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+    borderWidth: 1, // Added borderWidth here
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 5,
   },
 });
