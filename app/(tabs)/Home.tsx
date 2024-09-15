@@ -11,10 +11,17 @@ import MapComponent from "@/components/homeScreenComponents/MapComponent";
 import SheetComponent from "@/components/homeScreenComponents/SheetComponent";
 import LastDestinations from "@/components/homeScreenComponents/LastThreeDestinations";
 
+type LocationCoords = {
+  latitude: number;
+  longitude: number;
+  latitudeDelta: number;
+  longitudeDelta: number;
+};
+
 const HomeScreen = () => {
-  const [location, setLocation] = useState(null);
-  const [destination, setDestination] = useState("");
-  const [departure, setDeparture] = useState("Fetching...");
+  const [location, setLocation] = useState<LocationCoords | null>(null);
+  const [departure, setDeparture] = useState<string>("Fetching...");
+  const [destination, setDestination] = useState<string>("");
   const [isSheetVisible, setIsSheetVisible] = useState(false);
   const animatedValue = useRef(new Animated.Value(0)).current;
 
@@ -62,7 +69,7 @@ const HomeScreen = () => {
   return (
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
       <View style={styles.container}>
-        <MapComponent location={location} />
+        {location && <MapComponent location={location} />}
 
         <Animated.View style={[styles.bottomSheet]}>
           <SheetComponent
