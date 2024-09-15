@@ -6,10 +6,13 @@ import {
   Animated,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
-import { Ionicons } from "@expo/vector-icons"; // Icons for search and location
+import { Ionicons } from "@expo/vector-icons";
+import * as NavigationBar from "expo-navigation-bar";
 
 type LocationCoords = {
   latitude: number;
@@ -40,7 +43,7 @@ const HomeScreen = () => {
         latitudeDelta: 0.004,
         longitudeDelta: 0.004,
       });
-      setDeparture("Your City"); // Set your city or fetched city name
+      setDeparture("Your City");
     })();
   }, []);
 
@@ -68,76 +71,80 @@ const HomeScreen = () => {
   });
 
   return (
-    <View style={styles.container}>
-      {location ? (
-        <MapView style={styles.map} initialRegion={location}>
-          <Marker coordinate={location} title="Your Location">
-            <View style={styles.pin}>
-              <View style={styles.circle} />
-              <View style={styles.cone} />
-            </View>
-          </Marker>
-        </MapView>
-      ) : (
-        <Text>Loading Map...</Text>
-      )}
-
-      <Animated.View style={[styles.bottomSheet, { height: routeSheetHeight }]}>
-        {isSheetVisible ? (
-          <>
-            <View style={styles.routeHeader}>
-              <TouchableOpacity onPress={closeRouteSheet}>
-                <Ionicons name="close" size={24} />
-              </TouchableOpacity>
-              <Text style={styles.routeTitle}>Your route</Text>
-              <TouchableOpacity>
-                <Ionicons name="add" size={24} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.routeDetails}>
-              <Text>{departure}</Text>
-              <TextInput
-                style={[styles.destinationInput, { borderColor: "#49E99C" }]}
-                placeholder="Destination"
-                value={destination}
-                onChangeText={setDestination}
-                autoFocus
-              />
-            </View>
-          </>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        {location ? (
+          <MapView style={styles.map} initialRegion={location}>
+            <Marker coordinate={location} title="Your Location">
+              <View style={styles.pin}>
+                <View style={styles.circle} />
+                <View style={styles.cone} />
+              </View>
+            </Marker>
+          </MapView>
         ) : (
-          <>
-            <TouchableOpacity
-              onPress={showRouteSheet}
-              style={styles.searchContainer}
-            >
-              <Ionicons name="search" size={24} />
-              <TextInput
-                style={styles.input}
-                placeholder="Where to?"
-                value={destination}
-                onChangeText={setDestination}
-              />
-            </TouchableOpacity>
-
-            <View style={styles.suggestions}>
-              <View style={styles.suggestionItem}>
-                <Ionicons name="airplane-outline" size={24} />
-                <Text>Beirut Rafic Hariri Airport (BEY)</Text>
-              </View>
-              <View style={styles.suggestionItem}>
-                <Ionicons name="location-outline" size={24} />
-                <Text>Hamra</Text>
-              </View>
-              <View style={styles.suggestionItem}>
-                <Ionicons name="bag-outline" size={24} />
-                <Text>City Centre Beirut</Text>
-              </View>
-            </View>
-          </>
+          <Text>Loading Map...</Text>
         )}
-      </Animated.View>
-    </View>
+
+        <Animated.View
+          style={[styles.bottomSheet, { height: routeSheetHeight }]}
+        >
+          {isSheetVisible ? (
+            <>
+              <View style={styles.routeHeader}>
+                <TouchableOpacity onPress={closeRouteSheet}>
+                  <Ionicons name="close" size={24} />
+                </TouchableOpacity>
+                <Text style={styles.routeTitle}>Your route</Text>
+                <TouchableOpacity>
+                  <Ionicons name="add" size={24} />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.routeDetails}>
+                <Text>{departure}</Text>
+                <TextInput
+                  style={[styles.destinationInput, { borderColor: "#49E99C" }]}
+                  placeholder="Destination"
+                  value={destination}
+                  onChangeText={setDestination}
+                  autoFocus
+                />
+              </View>
+            </>
+          ) : (
+            <>
+              <TouchableOpacity
+                onPress={showRouteSheet}
+                style={styles.searchContainer}
+              >
+                <Ionicons name="search" size={24} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Where to?"
+                  value={destination}
+                  onChangeText={setDestination}
+                />
+              </TouchableOpacity>
+
+              <View style={styles.suggestions}>
+                <View style={styles.suggestionItem}>
+                  <Ionicons name="airplane-outline" size={24} />
+                  <Text>Beirut Rafic Hariri Airport (BEY)</Text>
+                </View>
+                <View style={styles.suggestionItem}>
+                  <Ionicons name="location-outline" size={24} />
+                  <Text>Hamra</Text>
+                </View>
+                <View style={styles.suggestionItem}>
+                  <Ionicons name="bag-outline" size={24} />
+                  <Text>City Centre Beirut</Text>
+                </View>
+              </View>
+            </>
+          )}
+        </Animated.View>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
