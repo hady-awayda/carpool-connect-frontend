@@ -37,8 +37,8 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
     "departure" | "destination" | null
   >(null);
 
-  const departureBorderColor = useRef(new Animated.Value(0)).current;
-  const destinationBorderColor = useRef(new Animated.Value(0)).current;
+  const departureBorderOpacity = useRef(new Animated.Value(0)).current;
+  const destinationBorderOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     if (isAnimationComplete) {
@@ -50,13 +50,13 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
     field: "departure" | "destination",
     focused: boolean
   ) => {
-    const borderColorAnim =
-      field === "departure" ? departureBorderColor : destinationBorderColor;
+    const opacityAnim =
+      field === "departure" ? departureBorderOpacity : destinationBorderOpacity;
 
-    Animated.timing(borderColorAnim, {
+    Animated.timing(opacityAnim, {
       toValue: focused ? 1 : 0,
-      duration: 300,
-      easing: Easing.inOut(Easing.ease),
+      duration: 500,
+      easing: Easing.bezier(0.42, 0, 0.58, 1),
       useNativeDriver: false,
     }).start();
   };
@@ -73,16 +73,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
     animateFocus(field, false);
   };
 
-  const departureBorderColorAnim = departureBorderColor.interpolate({
-    inputRange: [0, 1],
-    outputRange: ["#ccc", Colors.light.primary],
-  });
-
-  const destinationBorderColorAnim = destinationBorderColor.interpolate({
-    inputRange: [0, 1],
-    outputRange: ["#ccc", Colors.light.primary],
-  });
-
   return (
     <View style={styles.sheetContainer}>
       <View style={styles.routeHeader}>
@@ -96,42 +86,50 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
       </View>
 
       <View style={styles.routeDetails}>
-        <Animated.View
-          style={[
-            styles.inputContainer,
-            {
-              borderColor: departureBorderColorAnim,
-            },
-          ]}
-        >
-          <TextInput
-            placeholder="Departure"
-            value={departure}
-            onChangeText={setDeparture}
-            onFocus={() => handleFocus("departure")}
-            onBlur={() => handleBlur("departure")}
-            style={styles.textInput}
+        <View style={styles.inputWrapper}>
+          <View style={styles.inputContainer}>
+            <TextInput
+              placeholder="Departure"
+              value={departure}
+              onChangeText={setDeparture}
+              onFocus={() => handleFocus("departure")}
+              onBlur={() => handleBlur("departure")}
+              style={styles.textInput}
+            />
+          </View>
+          <Animated.View
+            style={[
+              styles.overlayBorder,
+              {
+                opacity: departureBorderOpacity,
+              },
+            ]}
+            pointerEvents="box-none"
           />
-        </Animated.View>
+        </View>
 
-        <Animated.View
-          style={[
-            styles.inputContainer,
-            {
-              borderColor: destinationBorderColorAnim,
-            },
-          ]}
-        >
-          <TextInput
-            ref={destinationInputRef}
-            placeholder="Destination"
-            value={destination}
-            onChangeText={setDestination}
-            onFocus={() => handleFocus("destination")}
-            onBlur={() => handleBlur("destination")}
-            style={styles.textInput}
+        <View style={styles.inputWrapper}>
+          <View style={styles.inputContainer}>
+            <TextInput
+              ref={destinationInputRef}
+              placeholder="Destination"
+              value={destination}
+              onChangeText={setDestination}
+              onFocus={() => handleFocus("destination")}
+              onBlur={() => handleBlur("destination")}
+              style={styles.textInput}
+            />
+          </View>
+          <Animated.View
+            style={[
+              styles.overlayBorder,
+              {
+                opacity: destinationBorderOpacity,
+              },
+            ]}
+            pointerEvents="box-none"
           />
-        </Animated.View>
+        </View>
       </View>
     </View>
   );
@@ -160,13 +158,27 @@ const styles = StyleSheet.create({
   routeDetails: {
     marginTop: 10,
   },
+  inputWrapper: {
+    position: "relative",
+    marginTop: 4,
+  },
   inputContainer: {
     borderWidth: 1.5,
+    borderColor: "#ccc",
     borderRadius: 8,
     paddingVertical: 10,
     paddingLeft: 32,
-    marginTop: 4,
     justifyContent: "center",
+  },
+  overlayBorder: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderWidth: 2,
+    borderColor: Colors.light.primary,
+    borderRadius: 8,
   },
   textInput: {
     fontSize: 16,
