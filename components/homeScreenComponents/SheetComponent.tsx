@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   Animated,
   Dimensions,
+  Easing,
   StyleSheet,
   Text,
   TextInput,
@@ -54,6 +55,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
     Animated.timing(animatedValue, {
       toValue: focused ? 1 : 0,
       duration: 300,
+      easing: Easing.inOut(Easing.ease),
       useNativeDriver: false,
     }).start();
   };
