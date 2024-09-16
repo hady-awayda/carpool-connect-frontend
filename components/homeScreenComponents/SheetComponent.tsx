@@ -32,9 +32,9 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   isAnimationComplete,
   destinationInputRef,
 }) => {
-  const [focusedField, setFocusedField] = useState<
-    "departure" | "destination" | null
-  >(null);
+  const [focusedField, setFocusedField] = useState<"departure" | "destination">(
+    "destination"
+  );
 
   const departureBorderOpacity = useRef(new Animated.Value(0)).current;
   const destinationBorderOpacity = useRef(new Animated.Value(0)).current;
@@ -66,9 +66,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   };
 
   const handleBlur = (field: "departure" | "destination") => {
-    if (focusedField === field) {
-      setFocusedField(null);
-    }
+    if (focusedField === field) setFocusedField("destination");
     animateFocus(field, false);
   };
 
