@@ -78,12 +78,12 @@ const HomeScreen = () => {
 
   const sheetTranslateY = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [-230, 0],
+    outputRange: [-height, -height + 260],
   });
 
   const bottomContentTranslateY = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [height - 540, 120],
+    outputRange: [height - 480, -40],
   });
 
   return (
@@ -97,8 +97,10 @@ const HomeScreen = () => {
       {location && <MapComponent location={location} />}
 
       <Animated.View
-        style={[styles.bottomContentContainer]}
-        pointerEvents="box-none"
+        style={[
+          styles.sheetContainer,
+          { transform: [{ translateY: sheetTranslateY }] },
+        ]}
       >
         <SheetComponent
           {...{
@@ -112,10 +114,15 @@ const HomeScreen = () => {
             translateY: sheetTranslateY,
           }}
         />
-        <BottomContent
-          showRouteSheet={showRouteSheet}
-          translateY={bottomContentTranslateY}
-        />
+      </Animated.View>
+
+      <Animated.View
+        style={[
+          styles.bottomContentContainer,
+          { transform: [{ translateY: bottomContentTranslateY }] },
+        ]}
+      >
+        <BottomContent showRouteSheet={showRouteSheet} />
       </Animated.View>
     </KeyboardAvoidingView>
   );
@@ -126,13 +133,26 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
   },
-  mapWrapper: {
+  map: {
     flex: 1,
+  },
+  sheetContainer: {
+    position: "absolute",
+    width: "100%",
+    bottom: 0,
+    backgroundColor: "white",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    zIndex: 2,
   },
   bottomContentContainer: {
     position: "absolute",
     width: "100%",
-    borderRadius: 20,
+    bottom: 0,
+    backgroundColor: "white",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    zIndex: 1,
   },
 });
 

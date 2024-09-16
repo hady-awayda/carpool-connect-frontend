@@ -10,22 +10,11 @@ import LastDestinations from "./LastThreeDestinations";
 
 type BottomContentProps = {
   showRouteSheet: () => void;
-  translateY: Animated.AnimatedInterpolation<number>;
 };
 
-const BottomContent: React.FC<BottomContentProps> = ({
-  showRouteSheet,
-  translateY,
-}) => {
+const BottomContent: React.FC<BottomContentProps> = ({ showRouteSheet }) => {
   return (
-    <Animated.View
-      style={[
-        styles.container,
-        {
-          transform: [{ translateY }],
-        },
-      ]}
-    >
+    <Animated.View style={[styles.container]}>
       <TouchableOpacity style={styles.slider}></TouchableOpacity>
       <DestinationField showRouteSheet={showRouteSheet} />
       <LastDestinations />

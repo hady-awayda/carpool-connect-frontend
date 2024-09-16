@@ -21,7 +21,6 @@ type SheetComponentProps = {
   setDeparture: (text: string) => void;
   isAnimationComplete: boolean;
   destinationInputRef: React.RefObject<TextInput>;
-  translateY: Animated.AnimatedInterpolation<number>;
 };
 
 const SheetComponent: React.FC<SheetComponentProps> = ({
@@ -32,7 +31,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   setDeparture,
   isAnimationComplete,
   destinationInputRef,
-  translateY,
 }) => {
   const [focusedField, setFocusedField] = useState<
     "departure" | "destination" | null
@@ -87,58 +85,52 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   };
 
   return (
-    <Animated.View
-      style={{
-        transform: [{ translateY }],
-      }}
-    >
-      <View style={styles.sheetContainer}>
-        <View style={styles.routeHeader}>
-          <TouchableOpacity onPress={closeRouteSheet}>
-            <Ionicons name="close" size={28} />
-          </TouchableOpacity>
-          <Text style={styles.routeTitle}>Your route</Text>
-          <TouchableOpacity onPress={handleAddStop}>
-            <Ionicons name="add" size={28} />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.routeDetails}>
-          <Animated.View
-            style={[
-              styles.inputContainer,
-              { borderColor: departureBorderColorAnim },
-            ]}
-          >
-            <TextInput
-              placeholder="Departure"
-              value={departure}
-              onChangeText={setDeparture}
-              onFocus={() => handleFocus("departure")}
-              onBlur={() => handleBlur("departure")}
-              style={styles.textInput}
-            />
-          </Animated.View>
-
-          <Animated.View
-            style={[
-              styles.inputContainer,
-              { borderColor: destinationBorderColorAnim },
-            ]}
-          >
-            <TextInput
-              ref={destinationInputRef}
-              placeholder="Destination"
-              value={destination}
-              onChangeText={setDestination}
-              onFocus={() => handleFocus("destination")}
-              onBlur={() => handleBlur("destination")}
-              style={styles.textInput}
-            />
-          </Animated.View>
-        </View>
+    <View style={styles.sheetContainer}>
+      <View style={styles.routeHeader}>
+        <TouchableOpacity onPress={closeRouteSheet}>
+          <Ionicons name="close" size={28} />
+        </TouchableOpacity>
+        <Text style={styles.routeTitle}>Your route</Text>
+        <TouchableOpacity onPress={handleAddStop}>
+          <Ionicons name="add" size={28} />
+        </TouchableOpacity>
       </View>
-    </Animated.View>
+
+      <View style={styles.routeDetails}>
+        <Animated.View
+          style={[
+            styles.inputContainer,
+            { borderColor: departureBorderColorAnim },
+          ]}
+        >
+          <TextInput
+            placeholder="Departure"
+            value={departure}
+            onChangeText={setDeparture}
+            onFocus={() => handleFocus("departure")}
+            onBlur={() => handleBlur("departure")}
+            style={styles.textInput}
+          />
+        </Animated.View>
+
+        <Animated.View
+          style={[
+            styles.inputContainer,
+            { borderColor: destinationBorderColorAnim },
+          ]}
+        >
+          <TextInput
+            ref={destinationInputRef}
+            placeholder="Destination"
+            value={destination}
+            onChangeText={setDestination}
+            onFocus={() => handleFocus("destination")}
+            onBlur={() => handleBlur("destination")}
+            style={styles.textInput}
+          />
+        </Animated.View>
+      </View>
+    </View>
   );
 };
 
