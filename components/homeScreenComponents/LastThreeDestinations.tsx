@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Colors, Typography } from "@/constants/Variables";
 
 const LastDestinations = () => {
@@ -7,11 +7,7 @@ const LastDestinations = () => {
     <View style={styles.suggestions}>
       <View style={styles.suggestionItem}>
         <View style={styles.iconContainer}>
-          <Ionicons
-            name="airplane-outline"
-            size={24}
-            color={Colors.light.text}
-          />
+          <MaterialCommunityIcons name="airplane" size={24} />
         </View>
         <Text style={styles.suggestionText}>
           Beirut Rafic Hariri Airport (BEY)
@@ -19,17 +15,13 @@ const LastDestinations = () => {
       </View>
       <View style={styles.suggestionItem}>
         <View style={styles.iconContainer}>
-          <Ionicons
-            name="location-outline"
-            size={24}
-            color={Colors.light.text}
-          />
+          <MaterialCommunityIcons name="coffee-outline" size={24} />
         </View>
         <Text style={styles.suggestionText}>Hamra</Text>
       </View>
       <View style={styles.suggestionItem}>
         <View style={styles.iconContainer}>
-          <Ionicons name="bag-outline" size={24} color={Colors.light.text} />
+          <MaterialCommunityIcons name="shopping-outline" size={24} />
         </View>
         <Text style={styles.suggestionText}>City Centre Beirut</Text>
       </View>

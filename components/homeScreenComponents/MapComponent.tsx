@@ -1,3 +1,5 @@
+import { Colors } from "@/constants/Variables";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import MapView, { Marker } from "react-native-maps";
@@ -17,10 +19,11 @@ const MapComponent: React.FC<MapComponentProps> = ({ location }) => {
       {location && (
         <MapView style={styles.map} initialRegion={location}>
           <Marker coordinate={location} title="Your Location">
-            <View style={styles.pin}>
-              <View style={styles.circle} />
-              <View style={styles.cone} />
-            </View>
+            <MaterialCommunityIcons
+              name="map-marker"
+              size={44}
+              color={Colors.light.secondary}
+            />
           </Marker>
         </MapView>
       )}
@@ -34,9 +37,6 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
-  },
-  pin: {
-    alignItems: "center",
   },
   circle: {
     width: 20,

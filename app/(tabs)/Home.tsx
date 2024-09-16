@@ -35,7 +35,9 @@ const HomeScreen = () => {
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
+
       if (status !== "granted") {
+        setDeparture("Permission denied");
         return;
       }
 
@@ -46,7 +48,24 @@ const HomeScreen = () => {
         latitudeDelta: 0.004,
         longitudeDelta: 0.004,
       });
-      setDeparture("Your City");
+
+      try {
+        let [address] = await Location.reverseGeocodeAsync({
+          latitude: loc.coords.latitude,
+          longitude: loc.coords.longitude,
+        });
+
+        if (address && address.city) {
+          setDeparture(address.city);
+        } else if (address && address.region) {
+          setDeparture(address.region);
+        } else {
+          setDeparture("Unknown Location");
+        }
+      } catch (error) {
+        console.error("Error in reverse geocoding:", error);
+        setDeparture("Unknown Location");
+      }
     })();
   }, []);
 
@@ -85,7 +104,11 @@ const HomeScreen = () => {
   });
 
   return (
-    <TouchableOpacity onPress={closeRouteSheet} style={styles.container}>
+    <TouchableOpacity
+      onPress={closeRouteSheet}
+      activeOpacity={1}
+      style={styles.container}
+    >
       <StatusBar style="auto" />
 
       {location && <MapComponent location={location} />}

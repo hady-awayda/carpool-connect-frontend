@@ -8,6 +8,7 @@ export const Colors = {
     backgroundIcon: "#eaeaec",
     backgroundIcons: "#f5f6f8",
     accent: "#95999e",
+    blue: "#4782f8",
     error: "#d9534f",
     text: "rgb(49 48 64)",
   },
