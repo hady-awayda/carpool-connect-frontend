@@ -54,7 +54,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
 
     Animated.timing(opacityAnim, {
       toValue: focused ? 1 : 0,
-      duration: 400,
+      duration: 200,
       easing: Easing.bezier(0.42, 0, 0.58, 1),
       useNativeDriver: false,
     }).start();
@@ -117,7 +117,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
             <MaterialCommunityIcons
               name="map-marker"
               size={20}
-              color="black"
+              color={Colors.light.primary}
               style={styles.rightIcon}
             />
           )}
@@ -166,7 +166,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
             <MaterialCommunityIcons
               name="map-marker"
               size={20}
-              color="black"
+              color="indigo"
               style={styles.rightIcon}
             />
           )}
