@@ -2,12 +2,11 @@ import { TextStyle } from "react-native";
 
 export const Colors = {
   light: {
-    primary: "#49E99C",
-    secondary: "#A8FFD5",
+    primary: "#40c784",
+    secondary: "#5c6afa",
     background: "#f4f4f6",
     backgroundIcon: "#eaeaec",
     backgroundIcons: "#f5f6f8",
-    indigo: "#5c6afa",
     accent: "#00bfa5",
     error: "#d9534f",
     text: "#333",

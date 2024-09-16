@@ -92,7 +92,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
             <MaterialCommunityIcons
               name="radiobox-marked"
               size={20}
-              color={Colors.light.indigo}
+              color={Colors.light.secondary}
               style={styles.leftIcon}
             />
           )}
@@ -109,18 +109,29 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
               onChangeText={setDeparture}
               onFocus={() => handleFocus("departure")}
               onBlur={() => handleBlur("departure")}
-              cursorColor={Colors.light.primary}
               style={styles.textInput}
+              cursorColor={Colors.light.primary}
+              selectionColor={Colors.light.primary}
             />
           </View>
 
           {focusedField === "departure" && (
-            <MaterialCommunityIcons
-              name="map-marker-radius"
-              size={20}
-              color={Colors.light.primary}
-              style={styles.rightIcon}
-            />
+            <>
+              {departure !== "" && (
+                <TouchableOpacity
+                  onPress={() => setDeparture("")}
+                  style={styles.rightIconButton}
+                >
+                  <Ionicons name="close-circle" size={28} color="#bbb" />
+                </TouchableOpacity>
+              )}
+              <MaterialCommunityIcons
+                name="map-marker-radius"
+                size={24}
+                color={Colors.light.primary}
+                style={styles.rightIcon}
+              />
+            </>
           )}
 
           <Animated.View
@@ -161,16 +172,27 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
               onBlur={() => handleBlur("destination")}
               style={styles.textInput}
               cursorColor={Colors.light.primary}
+              selectionColor={Colors.light.primary}
             />
           </View>
 
           {focusedField === "destination" && (
-            <MaterialCommunityIcons
-              name="map-marker-radius"
-              size={20}
-              color={Colors.light.indigo}
-              style={styles.rightIcon}
-            />
+            <>
+              {destination !== "" && (
+                <TouchableOpacity
+                  onPress={() => setDestination("")}
+                  style={styles.rightIconButton}
+                >
+                  <Ionicons name="close-circle" size={28} color="#bbb" />
+                </TouchableOpacity>
+              )}
+              <MaterialCommunityIcons
+                name="map-marker-radius"
+                size={24}
+                color={Colors.light.secondary}
+                style={styles.rightIcon}
+              />
+            </>
           )}
 
           <Animated.View
@@ -258,10 +280,17 @@ const styles = StyleSheet.create({
   },
   rightIcon: {
     position: "absolute",
-    right: 10,
-    top: "50%",
-    transform: [{ translateY: -10 }],
+    right: 12,
+    top: "44%",
+    transform: [{ translateY: -9.5 }],
     zIndex: 1,
+  },
+  rightIconButton: {
+    position: "absolute",
+    right: 44,
+    top: "50%",
+    transform: [{ translateY: -14 }],
+    zIndex: 0,
   },
 });
 
