@@ -36,11 +36,10 @@ const BottomContent: React.FC<BottomContentProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: Dimensions.get("window").height,
+    height: Dimensions.get("window").height - 200,
     width: "100%",
     backgroundColor: "white",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderRadius: 20,
     padding: 10,
     paddingHorizontal: 16,
   },

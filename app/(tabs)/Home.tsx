@@ -78,12 +78,12 @@ const HomeScreen = () => {
 
   const sheetTranslateY = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [200, 0],
+    outputRange: [-230, 0],
   });
 
   const bottomContentTranslateY = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [200, 0],
+    outputRange: [height - 540, 120],
   });
 
   return (
@@ -96,7 +96,10 @@ const HomeScreen = () => {
 
       {location && <MapComponent location={location} />}
 
-      <Animated.View style={[styles.bottomContentContainer]}>
+      <Animated.View
+        style={[styles.bottomContentContainer]}
+        pointerEvents="box-none"
+      >
         <SheetComponent
           {...{
             closeRouteSheet,
@@ -106,6 +109,7 @@ const HomeScreen = () => {
             setDeparture,
             isAnimationComplete,
             destinationInputRef,
+            translateY: sheetTranslateY,
           }}
         />
         <BottomContent
@@ -119,14 +123,15 @@ const HomeScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     width: "100%",
   },
   mapWrapper: {
     flex: 1,
   },
   bottomContentContainer: {
+    position: "absolute",
     width: "100%",
-    backgroundColor: "white",
     borderRadius: 20,
   },
 });
