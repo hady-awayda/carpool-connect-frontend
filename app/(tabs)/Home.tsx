@@ -81,7 +81,7 @@ const HomeScreen = () => {
 
   const bottomContentTranslateY = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [height * 0.66, height * 0.175],
+    outputRange: [height * 0.66, height * 0.194],
   });
 
   return (

@@ -214,9 +214,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     flex: 1,
   },
-  routeDetails: {
-    marginTop: 8,
-  },
   inputContainer: {
     borderWidth: 1.5,
     borderColor: "transparent",
@@ -232,7 +229,7 @@ const styles = StyleSheet.create({
   inputWrapper: {
     backgroundColor: Colors.light.background,
     borderRadius: 8,
-    marginTop: 20,
+    marginTop: 16,
   },
   textInput: {
     fontSize: 16,
