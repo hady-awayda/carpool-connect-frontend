@@ -1,7 +1,13 @@
 import DestinationField from "@/components/homeScreenComponents/DestinationField";
 import LastDestinations from "@/components/homeScreenComponents/LastThreeDestinations";
+import { Colors } from "@/constants/Variables";
 import React from "react";
-import { Animated, Dimensions, StyleSheet } from "react-native";
+import {
+  Animated,
+  Dimensions,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 
 type BottomContentProps = {
   destination: string;
@@ -25,6 +31,7 @@ const BottomContent: React.FC<BottomContentProps> = ({
         },
       ]}
     >
+      <TouchableOpacity style={styles.slider}></TouchableOpacity>
       <DestinationField
         destination={destination}
         setDestination={setDestination}
@@ -41,7 +48,16 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    padding: 12,
+    padding: 10,
+    paddingHorizontal: 16,
+  },
+  slider: {
+    height: 5,
+    width: 48,
+    backgroundColor: Colors.light.background,
+    borderRadius: 5,
+    alignSelf: "center",
+    marginBottom: 8,
   },
 });
 

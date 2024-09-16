@@ -1,6 +1,13 @@
 import React from "react";
-import { View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { Colors, Typography } from "@/constants/Variables";
 
 type DestinationFieldProps = {
   destination: string;
@@ -9,20 +16,13 @@ type DestinationFieldProps = {
 };
 
 const DestinationField: React.FC<DestinationFieldProps> = ({
-  destination,
-  setDestination,
   showRouteSheet,
 }) => {
   return (
     <TouchableOpacity onPress={showRouteSheet}>
       <View style={styles.searchContainer}>
-        <Ionicons name="search" size={24} />
-        <TextInput
-          style={styles.input}
-          placeholder="Where to?"
-          value={destination}
-          onChangeText={setDestination}
-        />
+        <Ionicons name="search" size={24} color={Colors.light.text} />
+        <Text style={styles.placeholderText}>{"Where to?"}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -32,13 +32,14 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#F5F5F5",
-    borderRadius: 16,
-    padding: 10,
+    backgroundColor: Colors.light.background,
+    borderRadius: 8,
+    padding: 12,
   },
-  input: {
+  placeholderText: {
     marginLeft: 10,
-    fontSize: 16,
+    color: Colors.light.text,
+    ...Typography.subheading,
   },
 });
 

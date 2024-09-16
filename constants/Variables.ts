@@ -2,7 +2,9 @@ export const Colors = {
   light: {
     primary: "#49E99C",
     secondary: "#A8FFD5",
-    background: "#E7FFF3",
+    background: "#f4f4f6",
+    backgroundIcon: "#f5f6f8",
+    backgroundIcons: "#eaeaec",
     accent: "#00bfa5",
     error: "#d9534f",
     text: "#333",
