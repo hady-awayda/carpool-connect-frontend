@@ -39,8 +39,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
 
   const departureBorderColor = useRef(new Animated.Value(0)).current;
   const destinationBorderColor = useRef(new Animated.Value(0)).current;
-  const departureOpacity = useRef(new Animated.Value(0)).current;
-  const destinationOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     if (isAnimationComplete) {
@@ -54,23 +52,13 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   ) => {
     const borderColorAnim =
       field === "departure" ? departureBorderColor : destinationBorderColor;
-    const opacityAnim =
-      field === "departure" ? departureOpacity : destinationOpacity;
 
-    Animated.parallel([
-      Animated.timing(borderColorAnim, {
-        toValue: focused ? 1 : 0,
-        duration: 300,
-        easing: Easing.inOut(Easing.ease),
-        useNativeDriver: false,
-      }),
-      Animated.timing(opacityAnim, {
-        toValue: focused ? 1 : 0,
-        duration: 300,
-        easing: Easing.inOut(Easing.ease),
-        useNativeDriver: false,
-      }),
-    ]).start();
+    Animated.timing(borderColorAnim, {
+      toValue: focused ? 1 : 0,
+      duration: 300,
+      easing: Easing.inOut(Easing.ease),
+      useNativeDriver: false,
+    }).start();
   };
 
   const handleFocus = (field: "departure" | "destination") => {
@@ -95,16 +83,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
     outputRange: ["#ccc", Colors.light.primary],
   });
 
-  const departureOpacityAnim = departureOpacity.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, 1],
-  });
-
-  const destinationOpacityAnim = destinationOpacity.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, 1],
-  });
-
   return (
     <View style={styles.sheetContainer}>
       <View style={styles.routeHeader}>
@@ -123,7 +101,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
             styles.inputContainer,
             {
               borderColor: departureBorderColorAnim,
-              opacity: departureOpacityAnim,
             },
           ]}
         >
@@ -142,7 +119,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
             styles.inputContainer,
             {
               borderColor: destinationBorderColorAnim,
-              opacity: destinationOpacityAnim,
             },
           ]}
         >
@@ -163,7 +139,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
 
 const styles = StyleSheet.create({
   sheetContainer: {
-    height: height - 620,
+    height: height * 0.25,
     backgroundColor: "#fff",
     paddingTop: 40,
     paddingHorizontal: 16,
@@ -190,9 +166,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingLeft: 32,
     marginTop: 4,
+    justifyContent: "center",
   },
   textInput: {
     fontSize: 16,
+    height: 28,
   },
 });
 
