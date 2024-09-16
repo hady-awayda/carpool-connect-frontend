@@ -1,3 +1,5 @@
+import { Colors } from "@/constants/Variables";
+import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import {
   Dimensions,
@@ -6,9 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import AnimatedTextInput from "./AnimatedTextInput";
-import { Colors } from "@/constants/Variables";
 import { SheetComponentProps } from "./interfaces";
 
 const SheetComponent: React.FC<SheetComponentProps> = ({
@@ -20,9 +20,9 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   isAnimationComplete,
   destinationInputRef,
 }) => {
-  const [focusedField, setFocusedField] = useState<
-    "departure" | "destination" | null
-  >(null);
+  const [focusedField, setFocusedField] = useState<"departure" | "destination">(
+    "destination"
+  );
 
   useEffect(() => {
     if (isAnimationComplete) {
@@ -31,13 +31,8 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   }, [isAnimationComplete, destinationInputRef]);
 
   const handleFocus = (field: "departure" | "destination") => {
+    if (focusedField === field) setFocusedField("destination");
     setFocusedField(field);
-  };
-
-  const handleBlur = (field: "departure" | "destination") => {
-    if (focusedField === field) {
-      setFocusedField(null);
-    }
   };
 
   return (
@@ -59,7 +54,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
           placeholder="Departure"
           isFocused={focusedField === "departure"}
           onFocus={() => handleFocus("departure")}
-          onBlur={() => handleBlur("departure")}
           leftIcon1="search"
           leftIcon1Color="black"
           leftIcon2="radiobox-marked"
@@ -76,7 +70,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
           placeholder="Destination"
           isFocused={focusedField === "destination"}
           onFocus={() => handleFocus("destination")}
-          onBlur={() => handleBlur("destination")}
           inputRef={destinationInputRef}
           leftIcon1="search"
           leftIcon1Color="black"

@@ -7,7 +7,6 @@ export type AnimatedTextInputProps = {
   placeholder: string;
   isFocused: boolean;
   onFocus: () => void;
-  onBlur: () => void;
   inputRef?: React.RefObject<TextInput>;
   leftIcon1?: IoniconsName;
   leftIcon1Color?: string;

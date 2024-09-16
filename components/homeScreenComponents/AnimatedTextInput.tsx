@@ -1,4 +1,6 @@
-import { useRef, useEffect } from "react";
+import { Colors } from "@/constants/Variables";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useEffect, useRef } from "react";
 import {
   Animated,
   Easing,
@@ -7,8 +9,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { Colors } from "@/constants/Variables";
 import { AnimatedTextInputProps } from "./interfaces";
 
 export type IoniconsName = React.ComponentProps<typeof Ionicons>["name"];
@@ -22,7 +22,6 @@ const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
   placeholder,
   isFocused,
   onFocus,
-  onBlur,
   inputRef,
   leftIcon1,
   leftIcon1Color,
@@ -74,7 +73,7 @@ const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
           value={value}
           onChangeText={onChangeText}
           onFocus={onFocus}
-          onBlur={onBlur}
+          onBlur={onFocus}
           style={styles.textInput}
           cursorColor={Colors.light.primary}
           selectionColor={Colors.light.primary}
