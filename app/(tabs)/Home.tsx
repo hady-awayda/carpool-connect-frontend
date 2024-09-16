@@ -5,7 +5,15 @@ import SheetComponent from "@/components/homeScreenComponents/SheetComponent";
 import * as Location from "expo-location";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef, useState } from "react";
-import { Animated, Easing, StyleSheet, TextInput, View } from "react-native";
+import {
+  Animated,
+  Easing,
+  Platform,
+  StyleSheet,
+  TextInput,
+  View,
+} from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 type LocationCoords = {
   latitude: number;
@@ -76,35 +84,42 @@ const HomeScreen = () => {
       <StatusBar style="auto" />
       {location && <MapComponent location={location} />}
 
-      <Animated.View
-        style={[
-          styles.bottomSheet,
-          {
-            transform: [{ translateY: sheetTranslateY }],
-          },
-        ]}
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.contentContainer}
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid={true}
+        enableAutomaticScroll={Platform.OS === "ios"}
       >
-        {isSheetVisible ? (
-          <SheetComponent
-            {...{
-              closeRouteSheet,
-              destination,
-              setDestination,
-              departure,
-              setDeparture,
-              isAnimationComplete,
-              destinationInputRef,
-            }}
-          />
-        ) : (
-          <>
-            <DestinationField
-              {...{ destination, setDestination, showRouteSheet }}
+        <Animated.View
+          style={[
+            styles.bottomSheet,
+            {
+              transform: [{ translateY: sheetTranslateY }],
+            },
+          ]}
+        >
+          {isSheetVisible ? (
+            <SheetComponent
+              {...{
+                closeRouteSheet,
+                destination,
+                setDestination,
+                departure,
+                setDeparture,
+                isAnimationComplete,
+                destinationInputRef,
+              }}
             />
-            <LastDestinations />
-          </>
-        )}
-      </Animated.View>
+          ) : (
+            <>
+              <DestinationField
+                {...{ destination, setDestination, showRouteSheet }}
+              />
+              <LastDestinations />
+            </>
+          )}
+        </Animated.View>
+      </KeyboardAwareScrollView>
     </View>
   );
 };
@@ -112,6 +127,10 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  contentContainer: {
+    flexGrow: 1,
+    justifyContent: "flex-end",
   },
   bottomSheet: {
     position: "absolute",
