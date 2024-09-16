@@ -78,12 +78,12 @@ const HomeScreen = () => {
 
   const sheetTranslateY = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [-height, -height + 260],
+    outputRange: [-height, -height + 240],
   });
 
   const bottomContentTranslateY = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [height - 480, -40],
+    outputRange: [height - 380, height - 780],
   });
 
   return (
@@ -140,18 +140,12 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "100%",
     bottom: 0,
-    backgroundColor: "white",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
     zIndex: 2,
   },
   bottomContentContainer: {
     position: "absolute",
     width: "100%",
     bottom: 0,
-    backgroundColor: "white",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
     zIndex: 1,
   },
 });

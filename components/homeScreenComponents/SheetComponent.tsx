@@ -136,10 +136,8 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
 
 const styles = StyleSheet.create({
   sheetContainer: {
-    height: height - 600,
+    height: height - 620,
     backgroundColor: "#fff",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
     paddingTop: 40,
     paddingHorizontal: 20,
   },
