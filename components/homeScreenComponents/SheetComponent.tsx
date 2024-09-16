@@ -3,12 +3,16 @@ import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
 import {
   Animated,
+  Dimensions,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+
+const { height } = Dimensions.get("window");
+const MEETING_POINT = 200;
 
 type SheetComponentProps = {
   closeRouteSheet: () => void;
@@ -117,7 +121,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
           ]}
         >
           <TextInput
-            // ref={destinationInputRef}
+            ref={destinationInputRef}
             placeholder="Destination"
             value={destination}
             onChangeText={setDestination}
@@ -136,26 +140,30 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    padding: 20,
+    paddingTop: 40,
+    paddingHorizontal: 20,
   },
   routeHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 4,
   },
   routeTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    width: "60%",
+    textAlign: "center",
+    flex: 1,
   },
   routeDetails: {
-    marginTop: 20,
+    marginTop: 10,
   },
   inputContainer: {
-    borderWidth: 2,
-    borderRadius: 10,
-    padding: 10,
-    marginTop: 10,
+    borderWidth: 1.5,
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingLeft: 32,
+    marginTop: 4,
   },
   textInput: {
     fontSize: 16,
