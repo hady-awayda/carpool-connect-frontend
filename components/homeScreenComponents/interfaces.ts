@@ -3,12 +3,12 @@ import { IoniconsName, MaterialCommunityIconsName } from "./AnimatedTextInput";
 
 export type AnimatedTextInputProps = {
   value: string;
+  placeholder: string;
+  inputRef?: React.RefObject<TextInput>;
   onChangeText: (text: string) => void;
   onMapLocationSelect: () => void;
   onFocus: () => void;
-  placeholder: string;
   isFocused: boolean;
-  inputRef?: React.RefObject<TextInput>;
   leftIcon1?: IoniconsName;
   leftIcon1Color?: string;
   leftIcon2?: MaterialCommunityIconsName;

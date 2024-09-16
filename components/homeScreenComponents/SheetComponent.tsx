@@ -51,10 +51,10 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
       <View style={styles.inputWrapper}>
         <AnimatedTextInput
           value={departure}
+          placeholder="Departure"
           onChangeText={setDeparture}
           onMapLocationSelect={setMapLocation}
           onFocus={() => handleFocus("departure")}
-          placeholder="Departure"
           isFocused={focusedField === "departure"}
           leftIcon1="search"
           leftIcon1Color="black"
@@ -68,12 +68,12 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
 
         <AnimatedTextInput
           value={destination}
+          placeholder="Destination"
+          inputRef={destinationInputRef}
           onChangeText={setDestination}
           onMapLocationSelect={setMapLocation}
           onFocus={() => handleFocus("destination")}
-          placeholder="Destination"
           isFocused={focusedField === "destination"}
-          inputRef={destinationInputRef}
           leftIcon1="search"
           leftIcon1Color="black"
           leftIcon2="radiobox-marked"

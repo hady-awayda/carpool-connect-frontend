@@ -18,12 +18,12 @@ export type MaterialCommunityIconsName = React.ComponentProps<
 
 const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
   value,
+  placeholder,
+  inputRef,
   onChangeText,
   onMapLocationSelect,
   onFocus,
-  placeholder,
   isFocused,
-  inputRef,
   leftIcon1,
   leftIcon1Color,
   leftIcon2,
@@ -91,12 +91,14 @@ const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
               <Ionicons name={rightIcon1} size={28} color={rightIcon1Color} />
             </TouchableOpacity>
           )}
-          <MaterialCommunityIcons
-            name={rightIcon2}
-            size={24}
-            color={rightIcon2Color}
-            style={styles.rightIcon}
-          />
+          <TouchableOpacity onPress={onMapLocationSelect}>
+            <MaterialCommunityIcons
+              name={rightIcon2}
+              size={24}
+              color={rightIcon2Color}
+              style={styles.rightIcon}
+            />
+          </TouchableOpacity>
         </>
       )}
 
