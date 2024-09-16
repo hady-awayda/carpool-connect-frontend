@@ -90,9 +90,9 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
             <Ionicons name="search" size={20} style={styles.leftIcon} />
           ) : (
             <MaterialCommunityIcons
-              name="circle"
+              name="radiobox-marked"
               size={20}
-              color="lightblue"
+              color={Colors.light.indigo}
               style={styles.leftIcon}
             />
           )}
@@ -109,13 +109,14 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
               onChangeText={setDeparture}
               onFocus={() => handleFocus("departure")}
               onBlur={() => handleBlur("departure")}
+              cursorColor={Colors.light.primary}
               style={styles.textInput}
             />
           </View>
 
           {focusedField === "departure" && (
             <MaterialCommunityIcons
-              name="map-marker"
+              name="map-marker-radius"
               size={20}
               color={Colors.light.primary}
               style={styles.rightIcon}
@@ -138,9 +139,9 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
             <Ionicons name="search" size={20} style={styles.leftIcon} />
           ) : (
             <MaterialCommunityIcons
-              name="circle"
+              name="radiobox-marked"
               size={20}
-              color="#ddd"
+              color="#bbb"
               style={styles.leftIcon}
             />
           )}
@@ -159,14 +160,15 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
               onFocus={() => handleFocus("destination")}
               onBlur={() => handleBlur("destination")}
               style={styles.textInput}
+              cursorColor={Colors.light.primary}
             />
           </View>
 
           {focusedField === "destination" && (
             <MaterialCommunityIcons
-              name="map-marker"
+              name="map-marker-radius"
               size={20}
-              color="indigo"
+              color={Colors.light.indigo}
               style={styles.rightIcon}
             />
           )}
