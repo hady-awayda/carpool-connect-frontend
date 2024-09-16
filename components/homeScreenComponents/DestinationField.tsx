@@ -21,7 +21,9 @@ const DestinationField: React.FC<DestinationFieldProps> = ({
   return (
     <TouchableOpacity onPress={showRouteSheet}>
       <View style={styles.searchContainer}>
-        <Ionicons name="search" size={24} color={Colors.light.text} />
+        <View style={styles.iconContainer}>
+          <Ionicons name="search" size={22} color={Colors.light.text} />
+        </View>
         <Text style={styles.placeholderText}>{"Where to?"}</Text>
       </View>
     </TouchableOpacity>
@@ -35,6 +37,14 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light.background,
     borderRadius: 8,
     padding: 12,
+  },
+  iconContainer: {
+    width: 36,
+    height: 36,
+    borderRadius: 20,
+    backgroundColor: Colors.light.backgroundIcon,
+    justifyContent: "center",
+    alignItems: "center",
   },
   placeholderText: {
     marginLeft: 10,

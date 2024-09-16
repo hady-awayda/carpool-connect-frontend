@@ -1,10 +1,12 @@
+import { TextStyle } from "react-native";
+
 export const Colors = {
   light: {
     primary: "#49E99C",
     secondary: "#A8FFD5",
     background: "#f4f4f6",
-    backgroundIcon: "#f5f6f8",
-    backgroundIcons: "#eaeaec",
+    backgroundIcon: "#eaeaec",
+    backgroundIcons: "#f5f6f8",
     accent: "#00bfa5",
     error: "#d9534f",
     text: "#333",
@@ -19,7 +21,7 @@ export const Colors = {
   },
 };
 
-export const Typography = {
+export const Typography: { [key: string]: TextStyle } = {
   heading: {
     fontSize: 24,
     fontWeight: "bold",
