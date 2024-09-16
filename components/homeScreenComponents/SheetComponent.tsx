@@ -17,6 +17,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   setDestination,
   departure,
   setDeparture,
+  setMapLocation,
   isAnimationComplete,
   destinationInputRef,
 }) => {
@@ -51,9 +52,10 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
         <AnimatedTextInput
           value={departure}
           onChangeText={setDeparture}
+          onMapLocationSelect={setMapLocation}
+          onFocus={() => handleFocus("departure")}
           placeholder="Departure"
           isFocused={focusedField === "departure"}
-          onFocus={() => handleFocus("departure")}
           leftIcon1="search"
           leftIcon1Color="black"
           leftIcon2="radiobox-marked"
@@ -67,9 +69,10 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
         <AnimatedTextInput
           value={destination}
           onChangeText={setDestination}
+          onMapLocationSelect={setMapLocation}
+          onFocus={() => handleFocus("destination")}
           placeholder="Destination"
           isFocused={focusedField === "destination"}
-          onFocus={() => handleFocus("destination")}
           inputRef={destinationInputRef}
           leftIcon1="search"
           leftIcon1Color="black"

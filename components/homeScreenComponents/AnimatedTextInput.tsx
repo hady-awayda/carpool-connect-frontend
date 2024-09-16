@@ -19,9 +19,10 @@ export type MaterialCommunityIconsName = React.ComponentProps<
 const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
   value,
   onChangeText,
+  onMapLocationSelect,
+  onFocus,
   placeholder,
   isFocused,
-  onFocus,
   inputRef,
   leftIcon1,
   leftIcon1Color,

@@ -4,9 +4,10 @@ import { IoniconsName, MaterialCommunityIconsName } from "./AnimatedTextInput";
 export type AnimatedTextInputProps = {
   value: string;
   onChangeText: (text: string) => void;
+  onMapLocationSelect: () => void;
+  onFocus: () => void;
   placeholder: string;
   isFocused: boolean;
-  onFocus: () => void;
   inputRef?: React.RefObject<TextInput>;
   leftIcon1?: IoniconsName;
   leftIcon1Color?: string;
@@ -24,6 +25,7 @@ export type SheetComponentProps = {
   setDestination: (text: string) => void;
   departure: string;
   setDeparture: (text: string) => void;
+  setMapLocation: () => void;
   isAnimationComplete: boolean;
   destinationInputRef: React.RefObject<TextInput>;
 };

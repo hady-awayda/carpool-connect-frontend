@@ -12,7 +12,6 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  View,
 } from "react-native";
 
 type LocationCoords = {
@@ -103,6 +102,8 @@ const HomeScreen = () => {
     outputRange: [height * 0.66, height * 0.194],
   });
 
+  const setMapLocation = () => {};
+
   return (
     <TouchableOpacity
       onPress={closeRouteSheet}
@@ -126,6 +127,7 @@ const HomeScreen = () => {
             setDestination,
             departure,
             setDeparture,
+            setMapLocation,
             isAnimationComplete,
             destinationInputRef,
             translateY: sheetTranslateY,
