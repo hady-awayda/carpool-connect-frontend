@@ -92,7 +92,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
             <MaterialCommunityIcons
               name="circle"
               size={20}
-              color="blue"
+              color="lightblue"
               style={styles.leftIcon}
             />
           )}
@@ -192,6 +192,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingTop: 40,
     paddingHorizontal: 16,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   routeHeader: {
     flexDirection: "row",
@@ -222,8 +230,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   inputWrapper: {
-    backgroundColor: "#eee",
+    backgroundColor: Colors.light.background,
     borderRadius: 8,
+    marginTop: 20,
   },
   textInput: {
     fontSize: 16,
