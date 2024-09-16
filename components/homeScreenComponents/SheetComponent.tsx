@@ -11,8 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
-const { height } = Dimensions.get("window");
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 type SheetComponentProps = {
   closeRouteSheet: () => void;
@@ -55,7 +54,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
 
     Animated.timing(opacityAnim, {
       toValue: focused ? 1 : 0,
-      duration: 500,
+      duration: 400,
       easing: Easing.bezier(0.42, 0, 0.58, 1),
       useNativeDriver: false,
     }).start();
@@ -85,9 +84,25 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
         </TouchableOpacity>
       </View>
 
-      <View style={styles.routeDetails}>
-        <View style={styles.inputWrapper}>
-          <View style={styles.inputContainer}>
+      <View style={styles.inputWrapper}>
+        <View>
+          {focusedField === "departure" ? (
+            <Ionicons name="search" size={20} style={styles.leftIcon} />
+          ) : (
+            <MaterialCommunityIcons
+              name="circle"
+              size={20}
+              color="blue"
+              style={styles.leftIcon}
+            />
+          )}
+
+          <View
+            style={[
+              styles.inputContainer,
+              focusedField === "departure" && styles.focusedInputContainer,
+            ]}
+          >
             <TextInput
               placeholder="Departure"
               value={departure}
@@ -97,6 +112,16 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
               style={styles.textInput}
             />
           </View>
+
+          {focusedField === "departure" && (
+            <MaterialCommunityIcons
+              name="map-marker"
+              size={20}
+              color="black"
+              style={styles.rightIcon}
+            />
+          )}
+
           <Animated.View
             style={[
               styles.overlayBorder,
@@ -108,8 +133,24 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
           />
         </View>
 
-        <View style={styles.inputWrapper}>
-          <View style={styles.inputContainer}>
+        <View>
+          {focusedField === "destination" ? (
+            <Ionicons name="search" size={20} style={styles.leftIcon} />
+          ) : (
+            <MaterialCommunityIcons
+              name="circle"
+              size={20}
+              color="#ddd"
+              style={styles.leftIcon}
+            />
+          )}
+
+          <View
+            style={[
+              styles.inputContainer,
+              focusedField === "destination" && styles.focusedInputContainer,
+            ]}
+          >
             <TextInput
               ref={destinationInputRef}
               placeholder="Destination"
@@ -120,6 +161,16 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
               style={styles.textInput}
             />
           </View>
+
+          {focusedField === "destination" && (
+            <MaterialCommunityIcons
+              name="map-marker"
+              size={20}
+              color="black"
+              style={styles.rightIcon}
+            />
+          )}
+
           <Animated.View
             style={[
               styles.overlayBorder,
@@ -137,7 +188,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
 
 const styles = StyleSheet.create({
   sheetContainer: {
-    height: height * 0.25,
+    height: Dimensions.get("window").height * 0.25,
     backgroundColor: "#fff",
     paddingTop: 40,
     paddingHorizontal: 16,
@@ -156,19 +207,29 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   routeDetails: {
-    marginTop: 10,
-  },
-  inputWrapper: {
-    position: "relative",
-    marginTop: 4,
+    marginTop: 8,
   },
   inputContainer: {
     borderWidth: 1.5,
-    borderColor: "#ccc",
+    borderColor: "transparent",
     borderRadius: 8,
-    paddingVertical: 10,
-    paddingLeft: 32,
+    paddingLeft: 36,
+    paddingRight: 36,
     justifyContent: "center",
+    backgroundColor: "transparent",
+  },
+  focusedInputContainer: {
+    backgroundColor: "#fff",
+  },
+  inputWrapper: {
+    backgroundColor: "#eee",
+    borderRadius: 8,
+  },
+  textInput: {
+    fontSize: 16,
+    paddingVertical: 0,
+    color: "#000",
+    height: 48,
   },
   overlayBorder: {
     position: "absolute",
@@ -180,9 +241,19 @@ const styles = StyleSheet.create({
     borderColor: Colors.light.primary,
     borderRadius: 8,
   },
-  textInput: {
-    fontSize: 16,
-    height: 28,
+  leftIcon: {
+    position: "absolute",
+    left: 10,
+    top: "50%",
+    transform: [{ translateY: -10 }],
+    zIndex: 1,
+  },
+  rightIcon: {
+    position: "absolute",
+    right: 10,
+    top: "50%",
+    transform: [{ translateY: -10 }],
+    zIndex: 1,
   },
 });
 
