@@ -46,7 +46,7 @@ export default function TabLayout() {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: {
-          display: isTabBarVisible ? "flex" : "none",
+          display: isTabBarVisible ? "flex" : "flex",
           paddingBottom: insets.bottom > 0 ? insets.bottom + 25 : 25,
           paddingTop: insets.bottom > 0 ? insets.bottom + 5 : 5,
           height: insets.bottom > 0 ? insets.bottom + 80 : 65,

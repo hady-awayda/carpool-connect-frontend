@@ -28,8 +28,6 @@ const HomeScreen = () => {
   const [location, setLocation] = useState<LocationCoords | null>(null);
   const [departure, setDeparture] = useState<string>("Fetching...");
   const [destination, setDestination] = useState<string>("");
-
-  const [isSheetVisible, setIsSheetVisible] = useState(false);
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
   const animatedValue = useRef(new Animated.Value(0)).current;
   const destinationInputRef = useRef<TextInput>(null);
@@ -53,7 +51,6 @@ const HomeScreen = () => {
   }, []);
 
   const showRouteSheet = () => {
-    setIsSheetVisible(true);
     setIsAnimationComplete(false);
     Animated.timing(animatedValue, {
       toValue: 1,
@@ -66,7 +63,6 @@ const HomeScreen = () => {
   };
 
   const closeRouteSheet = () => {
-    setIsSheetVisible(false);
     setIsAnimationComplete(false);
     Animated.timing(animatedValue, {
       toValue: 0,
@@ -74,19 +70,18 @@ const HomeScreen = () => {
       easing: Easing.bezier(0.42, 0, 0.58, 1),
       useNativeDriver: true,
     }).start(() => {
-      setIsSheetVisible(false);
       Keyboard.dismiss();
     });
   };
 
   const sheetTranslateY = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [-height, -height + 180],
+    outputRange: [-height, -height * 0.704],
   });
 
   const bottomContentTranslateY = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [height - 380, height - 840],
+    outputRange: [height * 0.66, height * 0.175],
   });
 
   return (

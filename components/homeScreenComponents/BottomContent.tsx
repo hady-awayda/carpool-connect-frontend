@@ -25,7 +25,7 @@ const BottomContent: React.FC<BottomContentProps> = ({ showRouteSheet }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: Dimensions.get("window").height - 100,
+    height: Dimensions.get("window").height,
     width: "100%",
     backgroundColor: "white",
     borderRadius: 20,
