@@ -9,14 +9,10 @@ export type AnimatedTextInputProps = {
   onMapLocationSelect: () => void;
   onFocus: () => void;
   isFocused: boolean;
-  leftIcon1?: IoniconsName;
-  leftIcon1Color?: string;
-  leftIcon2?: MaterialCommunityIconsName;
-  leftIcon2Color?: string;
-  rightIcon1?: IoniconsName;
-  rightIcon1Color?: string;
-  rightIcon2?: MaterialCommunityIconsName;
-  rightIcon2Color?: string;
+  leftIcon1?: { name: IoniconsName; color: string };
+  leftIcon2?: { name: MaterialCommunityIconsName; color: string };
+  rightIcon1?: { name: IoniconsName; color: string };
+  rightIcon2?: { name: MaterialCommunityIconsName; color: string };
 };
 
 export type SheetComponentProps = {

@@ -102,7 +102,9 @@ const HomeScreen = () => {
     outputRange: [height * 0.66, height * 0.194],
   });
 
-  const setMapLocation = () => {};
+  const setMapLocation = () => {
+    console.log("setting map location");
+  };
 
   return (
     <TouchableOpacity

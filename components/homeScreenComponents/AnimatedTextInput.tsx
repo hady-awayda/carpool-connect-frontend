@@ -25,13 +25,9 @@ const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
   onFocus,
   isFocused,
   leftIcon1,
-  leftIcon1Color,
   leftIcon2,
-  leftIcon2Color,
   rightIcon1,
-  rightIcon1Color,
   rightIcon2,
-  rightIcon2Color,
 }) => {
   const borderOpacity = useRef(new Animated.Value(0)).current;
 
@@ -48,16 +44,16 @@ const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
     <View style={styles.inputFieldWrapper}>
       {isFocused ? (
         <Ionicons
-          name={leftIcon1}
-          color={leftIcon1Color}
+          name={leftIcon1?.name}
+          color={leftIcon1?.color}
           size={20}
           style={styles.leftIcon}
         />
       ) : (
         <MaterialCommunityIcons
-          name={leftIcon2}
+          name={leftIcon2?.name}
           size={20}
-          color={leftIcon2Color}
+          color={leftIcon2?.color}
           style={styles.leftIcon}
         />
       )}
@@ -88,15 +84,21 @@ const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
               onPress={() => onChangeText("")}
               style={styles.rightIconButton}
             >
-              <Ionicons name={rightIcon1} size={28} color={rightIcon1Color} />
+              <Ionicons
+                name={rightIcon1?.name}
+                size={28}
+                color={rightIcon1?.color}
+              />
             </TouchableOpacity>
           )}
-          <TouchableOpacity onPress={onMapLocationSelect}>
+          <TouchableOpacity
+            onPress={onMapLocationSelect}
+            style={styles.rightIcon}
+          >
             <MaterialCommunityIcons
-              name={rightIcon2}
+              name={rightIcon2?.name}
               size={24}
-              color={rightIcon2Color}
-              style={styles.rightIcon}
+              color={rightIcon2?.color}
             />
           </TouchableOpacity>
         </>

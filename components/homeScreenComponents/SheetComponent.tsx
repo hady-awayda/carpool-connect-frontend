@@ -56,14 +56,13 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
           onMapLocationSelect={setMapLocation}
           onFocus={() => handleFocus("departure")}
           isFocused={focusedField === "departure"}
-          leftIcon1="search"
-          leftIcon1Color="black"
-          leftIcon2="radiobox-marked"
-          leftIcon2Color={Colors.light.secondary}
-          rightIcon1="close-circle"
-          rightIcon1Color="#bbb"
-          rightIcon2="map-marker-radius"
-          rightIcon2Color={Colors.light.primary}
+          leftIcon1={{ name: "search", color: "black" }}
+          leftIcon2={{ name: "radiobox-marked", color: Colors.light.secondary }}
+          rightIcon1={{ name: "close-circle", color: "#bbb" }}
+          rightIcon2={{
+            name: "map-marker-radius",
+            color: Colors.light.primary,
+          }}
         />
 
         <AnimatedTextInput
@@ -74,14 +73,13 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
           onMapLocationSelect={setMapLocation}
           onFocus={() => handleFocus("destination")}
           isFocused={focusedField === "destination"}
-          leftIcon1="search"
-          leftIcon1Color="black"
-          leftIcon2="radiobox-marked"
-          leftIcon2Color="#bbb"
-          rightIcon1="close-circle"
-          rightIcon1Color="#bbb"
-          rightIcon2="map-marker-radius"
-          rightIcon2Color={Colors.light.secondary}
+          leftIcon1={{ name: "search", color: "black" }}
+          leftIcon2={{ name: "radiobox-marked", color: "#bbb" }}
+          rightIcon1={{ name: "close-circle", color: "#bbb" }}
+          rightIcon2={{
+            name: "map-marker-radius",
+            color: Colors.light.secondary,
+          }}
         />
       </View>
     </View>
