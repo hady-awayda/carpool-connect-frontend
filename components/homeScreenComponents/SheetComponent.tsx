@@ -36,7 +36,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   const departureBorderColor = useRef(new Animated.Value(0)).current;
   const destinationBorderColor = useRef(new Animated.Value(0)).current;
 
-  // Auto-focus on the destination input after animation completion
   useEffect(() => {
     if (isAnimationComplete) {
       destinationInputRef.current?.focus();
@@ -79,7 +78,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   });
 
   const handleAddStop = () => {
-    // Placeholder for adding more stops or additional functionality
     console.log("Add stop functionality triggered");
   };
 
