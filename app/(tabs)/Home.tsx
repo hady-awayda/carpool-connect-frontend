@@ -8,10 +8,10 @@ import {
   Animated,
   Dimensions,
   Easing,
-  KeyboardAvoidingView,
-  Platform,
+  Keyboard,
   StyleSheet,
   TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
 
@@ -73,25 +73,24 @@ const HomeScreen = () => {
       duration: 300,
       easing: Easing.bezier(0.42, 0, 0.58, 1),
       useNativeDriver: true,
-    }).start(() => setIsSheetVisible(false));
+    }).start(() => {
+      setIsSheetVisible(false);
+      Keyboard.dismiss();
+    });
   };
 
   const sheetTranslateY = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [-height, -height + 240],
+    outputRange: [-height, -height + 180],
   });
 
   const bottomContentTranslateY = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [height - 380, height - 780],
+    outputRange: [height - 380, height - 840],
   });
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
-    >
+    <TouchableOpacity onPress={closeRouteSheet} style={styles.container}>
       <StatusBar style="auto" />
 
       {location && <MapComponent location={location} />}
@@ -124,7 +123,7 @@ const HomeScreen = () => {
       >
         <BottomContent showRouteSheet={showRouteSheet} />
       </Animated.View>
-    </KeyboardAvoidingView>
+    </TouchableOpacity>
   );
 };
 
