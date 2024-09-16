@@ -5,7 +5,7 @@ import SheetComponent from "@/components/homeScreenComponents/SheetComponent";
 import * as Location from "expo-location";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef, useState } from "react";
-import { Animated, Easing, StyleSheet, View } from "react-native";
+import { Animated, Easing, StyleSheet, TextInput, View } from "react-native";
 
 type LocationCoords = {
   latitude: number;
@@ -21,6 +21,7 @@ const HomeScreen = () => {
   const [isSheetVisible, setIsSheetVisible] = useState(false);
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
   const animatedValue = useRef(new Animated.Value(0)).current;
+  const destinationInputRef = useRef<TextInput>(null);
 
   useEffect(() => {
     (async () => {
@@ -43,6 +44,7 @@ const HomeScreen = () => {
 
   const showRouteSheet = () => {
     setIsSheetVisible(true);
+    setIsAnimationComplete(false);
     Animated.timing(animatedValue, {
       toValue: 1,
       duration: 300,
@@ -55,6 +57,7 @@ const HomeScreen = () => {
 
   const closeRouteSheet = () => {
     setIsSheetVisible(false);
+    setIsAnimationComplete(false);
     Animated.timing(animatedValue, {
       toValue: 0,
       duration: 300,
@@ -65,7 +68,7 @@ const HomeScreen = () => {
 
   const sheetTranslateY = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, -200],
+    outputRange: [0, -280],
   });
 
   return (
@@ -90,6 +93,7 @@ const HomeScreen = () => {
               departure,
               setDeparture,
               isAnimationComplete,
+              destinationInputRef,
             }}
           />
         ) : (

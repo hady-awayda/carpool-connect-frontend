@@ -17,6 +17,7 @@ type SheetComponentProps = {
   departure: string;
   setDeparture: (text: string) => void;
   isAnimationComplete: boolean;
+  destinationInputRef: React.RefObject<TextInput>;
 };
 
 const SheetComponent: React.FC<SheetComponentProps> = ({
@@ -26,6 +27,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   departure,
   setDeparture,
   isAnimationComplete,
+  destinationInputRef,
 }) => {
   const [focusedField, setFocusedField] = useState<
     "departure" | "destination" | null
@@ -33,8 +35,8 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
 
   const departureBorderColor = useRef(new Animated.Value(0)).current;
   const destinationBorderColor = useRef(new Animated.Value(0)).current;
-  const destinationInputRef = useRef<TextInput>(null);
 
+  // Auto-focus on the destination input after animation completion
   useEffect(() => {
     if (isAnimationComplete) {
       destinationInputRef.current?.focus();
@@ -76,6 +78,11 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
     outputRange: ["#ccc", Colors.light.primary],
   });
 
+  const handleAddStop = () => {
+    // Placeholder for adding more stops or additional functionality
+    console.log("Add stop functionality triggered");
+  };
+
   return (
     <View style={styles.sheetContainer}>
       <View style={styles.routeHeader}>
@@ -83,7 +90,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
           <Ionicons name="close" size={28} />
         </TouchableOpacity>
         <Text style={styles.routeTitle}>Your route</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleAddStop}>
           <Ionicons name="add" size={28} />
         </TouchableOpacity>
       </View>
@@ -112,13 +119,13 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
           ]}
         >
           <TextInput
+            ref={destinationInputRef}
             placeholder="Destination"
             value={destination}
             onChangeText={setDestination}
             onFocus={() => handleFocus("destination")}
             onBlur={() => handleBlur("destination")}
             style={styles.textInput}
-            autoFocus
           />
         </Animated.View>
       </View>
