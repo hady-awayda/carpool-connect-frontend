@@ -39,6 +39,8 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
 
   const departureBorderColor = useRef(new Animated.Value(0)).current;
   const destinationBorderColor = useRef(new Animated.Value(0)).current;
+  const departureOpacity = useRef(new Animated.Value(0)).current;
+  const destinationOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     if (isAnimationComplete) {
@@ -46,30 +48,41 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
     }
   }, [isAnimationComplete]);
 
-  const animateBorderColor = (
+  const animateFocus = (
     field: "departure" | "destination",
     focused: boolean
   ) => {
-    const animatedValue =
+    const borderColorAnim =
       field === "departure" ? departureBorderColor : destinationBorderColor;
-    Animated.timing(animatedValue, {
-      toValue: focused ? 1 : 0,
-      duration: 300,
-      easing: Easing.inOut(Easing.ease),
-      useNativeDriver: false,
-    }).start();
+    const opacityAnim =
+      field === "departure" ? departureOpacity : destinationOpacity;
+
+    Animated.parallel([
+      Animated.timing(borderColorAnim, {
+        toValue: focused ? 1 : 0,
+        duration: 300,
+        easing: Easing.inOut(Easing.ease),
+        useNativeDriver: false,
+      }),
+      Animated.timing(opacityAnim, {
+        toValue: focused ? 1 : 0,
+        duration: 300,
+        easing: Easing.inOut(Easing.ease),
+        useNativeDriver: false,
+      }),
+    ]).start();
   };
 
   const handleFocus = (field: "departure" | "destination") => {
     setFocusedField(field);
-    animateBorderColor(field, true);
+    animateFocus(field, true);
   };
 
   const handleBlur = (field: "departure" | "destination") => {
     if (focusedField === field) {
       setFocusedField(null);
     }
-    animateBorderColor(field, false);
+    animateFocus(field, false);
   };
 
   const departureBorderColorAnim = departureBorderColor.interpolate({
@@ -82,9 +95,15 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
     outputRange: ["#ccc", Colors.light.primary],
   });
 
-  const handleAddStop = () => {
-    console.log("Add stop functionality triggered");
-  };
+  const departureOpacityAnim = departureOpacity.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  });
+
+  const destinationOpacityAnim = destinationOpacity.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  });
 
   return (
     <View style={styles.sheetContainer}>
@@ -93,7 +112,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
           <Ionicons name="close" size={28} />
         </TouchableOpacity>
         <Text style={styles.routeTitle}>Your route</Text>
-        <TouchableOpacity onPress={handleAddStop}>
+        <TouchableOpacity>
           <Ionicons name="add" size={28} />
         </TouchableOpacity>
       </View>
@@ -102,7 +121,10 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
         <Animated.View
           style={[
             styles.inputContainer,
-            { borderColor: departureBorderColorAnim },
+            {
+              borderColor: departureBorderColorAnim,
+              opacity: departureOpacityAnim,
+            },
           ]}
         >
           <TextInput
@@ -118,7 +140,10 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
         <Animated.View
           style={[
             styles.inputContainer,
-            { borderColor: destinationBorderColorAnim },
+            {
+              borderColor: destinationBorderColorAnim,
+              opacity: destinationOpacityAnim,
+            },
           ]}
         >
           <TextInput
