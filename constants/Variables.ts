@@ -7,7 +7,7 @@ export const Colors = {
     background: "#f4f4f6",
     backgroundIcon: "#eaeaec",
     backgroundIcons: "#f5f6f8",
-    accent: "#00bfa5",
+    accent: "#40c784",
     error: "#d9534f",
     text: "#333",
   },

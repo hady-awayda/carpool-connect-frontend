@@ -1,17 +1,15 @@
-import { Colors } from "@/constants/Variables";
-import { Ionicons } from "@expo/vector-icons";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  Animated,
   Dimensions,
-  Easing,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
+  TextInput,
 } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
+import AnimatedTextInput from "./AnimatedTextInput";
+import { Colors } from "@/constants/Variables";
 
 type SheetComponentProps = {
   closeRouteSheet: () => void;
@@ -32,42 +30,24 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   isAnimationComplete,
   destinationInputRef,
 }) => {
-  const [focusedField, setFocusedField] = useState<"departure" | "destination">(
-    "destination"
-  );
-
-  const departureBorderOpacity = useRef(new Animated.Value(0)).current;
-  const destinationBorderOpacity = useRef(new Animated.Value(0)).current;
+  const [focusedField, setFocusedField] = useState<
+    "departure" | "destination" | null
+  >(null);
 
   useEffect(() => {
     if (isAnimationComplete) {
       destinationInputRef.current?.focus();
     }
-  }, [isAnimationComplete]);
-
-  const animateFocus = (
-    field: "departure" | "destination",
-    focused: boolean
-  ) => {
-    const opacityAnim =
-      field === "departure" ? departureBorderOpacity : destinationBorderOpacity;
-
-    Animated.timing(opacityAnim, {
-      toValue: focused ? 1 : 0,
-      duration: 200,
-      easing: Easing.bezier(0.42, 0, 0.58, 1),
-      useNativeDriver: false,
-    }).start();
-  };
+  }, [isAnimationComplete, destinationInputRef]);
 
   const handleFocus = (field: "departure" | "destination") => {
     setFocusedField(field);
-    animateFocus(field, true);
   };
 
   const handleBlur = (field: "departure" | "destination") => {
-    if (focusedField === field) setFocusedField("destination");
-    animateFocus(field, false);
+    if (focusedField === field) {
+      setFocusedField(null);
+    }
   };
 
   return (
@@ -83,126 +63,26 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
       </View>
 
       <View style={styles.inputWrapper}>
-        <View>
-          {focusedField === "departure" ? (
-            <Ionicons name="search" size={20} style={styles.leftIcon} />
-          ) : (
-            <MaterialCommunityIcons
-              name="radiobox-marked"
-              size={20}
-              color={Colors.light.secondary}
-              style={styles.leftIcon}
-            />
-          )}
+        <AnimatedTextInput
+          value={departure}
+          onChangeText={setDeparture}
+          placeholder="Departure"
+          field="departure"
+          isFocused={focusedField === "departure"}
+          onFocus={() => handleFocus("departure")}
+          onBlur={() => handleBlur("departure")}
+        />
 
-          <View
-            style={[
-              styles.inputContainer,
-              focusedField === "departure" && styles.focusedInputContainer,
-            ]}
-          >
-            <TextInput
-              placeholder="Departure"
-              value={departure}
-              onChangeText={setDeparture}
-              onFocus={() => handleFocus("departure")}
-              onBlur={() => handleBlur("departure")}
-              style={styles.textInput}
-              cursorColor={Colors.light.primary}
-              selectionColor={Colors.light.primary}
-            />
-          </View>
-
-          {focusedField === "departure" && (
-            <>
-              {departure !== "" && (
-                <TouchableOpacity
-                  onPress={() => setDeparture("")}
-                  style={styles.rightIconButton}
-                >
-                  <Ionicons name="close-circle" size={28} color="#bbb" />
-                </TouchableOpacity>
-              )}
-              <MaterialCommunityIcons
-                name="map-marker-radius"
-                size={24}
-                color={Colors.light.primary}
-                style={styles.rightIcon}
-              />
-            </>
-          )}
-
-          <Animated.View
-            style={[
-              styles.overlayBorder,
-              {
-                opacity: departureBorderOpacity,
-              },
-            ]}
-            pointerEvents="box-none"
-          />
-        </View>
-
-        <View>
-          {focusedField === "destination" ? (
-            <Ionicons name="search" size={20} style={styles.leftIcon} />
-          ) : (
-            <MaterialCommunityIcons
-              name="radiobox-marked"
-              size={20}
-              color="#bbb"
-              style={styles.leftIcon}
-            />
-          )}
-
-          <View
-            style={[
-              styles.inputContainer,
-              focusedField === "destination" && styles.focusedInputContainer,
-            ]}
-          >
-            <TextInput
-              ref={destinationInputRef}
-              placeholder="Destination"
-              value={destination}
-              onChangeText={setDestination}
-              onFocus={() => handleFocus("destination")}
-              onBlur={() => handleBlur("destination")}
-              style={styles.textInput}
-              cursorColor={Colors.light.primary}
-              selectionColor={Colors.light.primary}
-            />
-          </View>
-
-          {focusedField === "destination" && (
-            <>
-              {destination !== "" && (
-                <TouchableOpacity
-                  onPress={() => setDestination("")}
-                  style={styles.rightIconButton}
-                >
-                  <Ionicons name="close-circle" size={28} color="#bbb" />
-                </TouchableOpacity>
-              )}
-              <MaterialCommunityIcons
-                name="map-marker-radius"
-                size={24}
-                color={Colors.light.secondary}
-                style={styles.rightIcon}
-              />
-            </>
-          )}
-
-          <Animated.View
-            style={[
-              styles.overlayBorder,
-              {
-                opacity: destinationBorderOpacity,
-              },
-            ]}
-            pointerEvents="box-none"
-          />
-        </View>
+        <AnimatedTextInput
+          value={destination}
+          onChangeText={setDestination}
+          placeholder="Destination"
+          field="destination"
+          isFocused={focusedField === "destination"}
+          onFocus={() => handleFocus("destination")}
+          onBlur={() => handleBlur("destination")}
+          inputRef={destinationInputRef}
+        />
       </View>
     </View>
   );
@@ -236,59 +116,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     flex: 1,
   },
-  inputContainer: {
-    borderWidth: 1.5,
-    borderColor: "transparent",
-    borderRadius: 8,
-    paddingLeft: 36,
-    paddingRight: 36,
-    justifyContent: "center",
-    backgroundColor: "transparent",
-  },
-  focusedInputContainer: {
-    backgroundColor: "#fff",
-  },
   inputWrapper: {
     backgroundColor: Colors.light.background,
     borderRadius: 8,
     marginTop: 16,
-  },
-  textInput: {
-    fontSize: 16,
-    paddingVertical: 0,
-    color: "#000",
-    height: 48,
-  },
-  overlayBorder: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    borderWidth: 2,
-    borderColor: Colors.light.primary,
-    borderRadius: 8,
-  },
-  leftIcon: {
-    position: "absolute",
-    left: 10,
-    top: "50%",
-    transform: [{ translateY: -10 }],
-    zIndex: 1,
-  },
-  rightIcon: {
-    position: "absolute",
-    right: 12,
-    top: "44%",
-    transform: [{ translateY: -9.5 }],
-    zIndex: 1,
-  },
-  rightIconButton: {
-    position: "absolute",
-    right: 44,
-    top: "50%",
-    transform: [{ translateY: -14 }],
-    zIndex: 0,
   },
 });
 

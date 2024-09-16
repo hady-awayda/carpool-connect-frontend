@@ -53,7 +53,7 @@ export default function TabLayout() {
           borderTopWidth: 0,
         },
         tabBarActiveTintColor: Colors.light.primary,
-        tabBarInactiveTintColor: "#555",
+        tabBarInactiveTintColor: Colors.light.accent,
       }}
     >
       <Tabs.Screen
