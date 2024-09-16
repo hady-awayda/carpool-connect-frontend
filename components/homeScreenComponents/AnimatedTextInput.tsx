@@ -19,6 +19,14 @@ type AnimatedTextInputProps = {
   onFocus: () => void;
   onBlur: () => void;
   inputRef?: React.RefObject<TextInput>;
+  leftIcon1: string;
+  leftIcon1Color: string;
+  leftIcon2: string;
+  leftIcon2Color: string;
+  rightIcon1: string;
+  rightIcon1Color: string;
+  rightIcon2: string;
+  rightIcon2Color: string;
 };
 
 const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
@@ -30,6 +38,14 @@ const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
   onFocus,
   onBlur,
   inputRef,
+  leftIcon1,
+  leftIcon1Color,
+  leftIcon2,
+  leftIcon2Color,
+  rightIcon1,
+  rightIcon1Color,
+  rightIcon2,
+  rightIcon2Color,
 }) => {
   const borderOpacity = useRef(new Animated.Value(0)).current;
 
@@ -45,12 +61,17 @@ const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
   return (
     <View style={styles.inputFieldWrapper}>
       {isFocused ? (
-        <Ionicons name="search" size={20} style={styles.leftIcon} />
+        <Ionicons
+          name={leftIcon1}
+          color={leftIcon1Color}
+          size={20}
+          style={styles.leftIcon}
+        />
       ) : (
         <MaterialCommunityIcons
-          name="radiobox-marked"
+          name={leftIcon2}
           size={20}
-          color={field === "departure" ? Colors.light.secondary : "#bbb"}
+          color={leftIcon2Color}
           style={styles.leftIcon}
         />
       )}
@@ -81,17 +102,13 @@ const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
               onPress={() => onChangeText("")}
               style={styles.rightIconButton}
             >
-              <Ionicons name="close-circle" size={28} color="#bbb" />
+              <Ionicons name={rightIcon1} size={28} color={rightIcon1Color} />
             </TouchableOpacity>
           )}
           <MaterialCommunityIcons
-            name="map-marker-radius"
+            name={rightIcon2}
             size={24}
-            color={
-              field === "departure"
-                ? Colors.light.primary
-                : Colors.light.secondary
-            }
+            color={rightIcon2Color}
             style={styles.rightIcon}
           />
         </>

@@ -52,7 +52,7 @@ export default function TabLayout() {
           height: insets.bottom > 0 ? insets.bottom + 80 : 65,
           borderTopWidth: 0,
         },
-        tabBarActiveTintColor: Colors.light.primary,
+        tabBarActiveTintColor: Colors.light.text,
         tabBarInactiveTintColor: Colors.light.accent,
       }}
     >

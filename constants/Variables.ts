@@ -7,9 +7,9 @@ export const Colors = {
     background: "#f4f4f6",
     backgroundIcon: "#eaeaec",
     backgroundIcons: "#f5f6f8",
-    accent: "#40c784",
+    accent: "#95999e",
     error: "#d9534f",
-    text: "#333",
+    text: "rgb(49 48 64)",
   },
   dark: {
     primary: "#fff",

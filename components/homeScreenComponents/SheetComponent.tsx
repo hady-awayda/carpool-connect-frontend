@@ -71,6 +71,14 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
           isFocused={focusedField === "departure"}
           onFocus={() => handleFocus("departure")}
           onBlur={() => handleBlur("departure")}
+          leftIcon1="search"
+          leftIcon1Color="black"
+          leftIcon2="radiobox-marked"
+          leftIcon2Color={Colors.light.secondary}
+          rightIcon1="close-circle"
+          rightIcon1Color="#bbb"
+          rightIcon2="map-marker-radius"
+          rightIcon2Color={Colors.light.primary}
         />
 
         <AnimatedTextInput
@@ -82,6 +90,14 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
           onFocus={() => handleFocus("destination")}
           onBlur={() => handleBlur("destination")}
           inputRef={destinationInputRef}
+          leftIcon1="search"
+          leftIcon1Color="black"
+          leftIcon2="radiobox-marked"
+          leftIcon2Color="#bbb"
+          rightIcon1="close-circle"
+          rightIcon1Color="#bbb"
+          rightIcon2="map-marker-radius"
+          rightIcon2Color={Colors.light.secondary}
         />
       </View>
     </View>
