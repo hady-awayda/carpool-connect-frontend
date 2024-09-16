@@ -1,6 +1,4 @@
 import BottomContent from "@/components/homeScreenComponents/BottomContent";
-import DestinationField from "@/components/homeScreenComponents/DestinationField";
-import LastDestinations from "@/components/homeScreenComponents/LastThreeDestinations";
 import MapComponent from "@/components/homeScreenComponents/MapComponent";
 import SheetComponent from "@/components/homeScreenComponents/SheetComponent";
 import * as Location from "expo-location";
@@ -12,7 +10,6 @@ import {
   Easing,
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
   StyleSheet,
   TextInput,
   View,
@@ -31,6 +28,7 @@ const HomeScreen = () => {
   const [location, setLocation] = useState<LocationCoords | null>(null);
   const [departure, setDeparture] = useState<string>("Fetching...");
   const [destination, setDestination] = useState<string>("");
+
   const [isSheetVisible, setIsSheetVisible] = useState(false);
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
   const animatedValue = useRef(new Animated.Value(0)).current;
@@ -40,7 +38,6 @@ const HomeScreen = () => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        console.log("Permission to access location was denied");
         return;
       }
 
@@ -81,12 +78,12 @@ const HomeScreen = () => {
 
   const sheetTranslateY = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [-height, 0],
+    outputRange: [200, 0],
   });
 
   const bottomContentTranslateY = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [height + 300, 0],
+    outputRange: [200, 0],
   });
 
   return (
@@ -96,57 +93,41 @@ const HomeScreen = () => {
       keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
     >
       <StatusBar style="auto" />
+
       {location && <MapComponent location={location} />}
 
-      <ScrollView
-        contentContainerStyle={styles.contentContainer}
-        keyboardShouldPersistTaps="handled"
-      >
-        <Animated.View
-          style={[
-            styles.sheetContainer,
-            {
-              transform: [{ translateY: sheetTranslateY }],
-            },
-          ]}
-        >
-          <SheetComponent
-            {...{
-              closeRouteSheet,
-              destination,
-              setDestination,
-              departure,
-              setDeparture,
-              isAnimationComplete,
-              destinationInputRef,
-            }}
-          />
-          <BottomContent
-            destination={destination}
-            setDestination={setDestination}
-            showRouteSheet={showRouteSheet}
-            translateY={bottomContentTranslateY}
-          />
-        </Animated.View>
-      </ScrollView>
+      <Animated.View style={[styles.bottomContentContainer]}>
+        <SheetComponent
+          {...{
+            closeRouteSheet,
+            destination,
+            setDestination,
+            departure,
+            setDeparture,
+            isAnimationComplete,
+            destinationInputRef,
+          }}
+        />
+        <BottomContent
+          showRouteSheet={showRouteSheet}
+          translateY={bottomContentTranslateY}
+        />
+      </Animated.View>
     </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    width: "100%",
+  },
+  mapWrapper: {
     flex: 1,
   },
-  contentContainer: {
-    flexGrow: 1,
-  },
-  sheetContainer: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    height,
+  bottomContentContainer: {
+    width: "100%",
     backgroundColor: "white",
+    borderRadius: 20,
   },
 });
 

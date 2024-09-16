@@ -12,7 +12,6 @@ import {
 } from "react-native";
 
 const { height } = Dimensions.get("window");
-const MEETING_POINT = 200;
 
 type SheetComponentProps = {
   closeRouteSheet: () => void;
@@ -137,6 +136,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
 
 const styles = StyleSheet.create({
   sheetContainer: {
+    height: height - 400,
     backgroundColor: "#fff",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,

@@ -10,8 +10,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { Colors, Typography } from "@/constants/Variables";
 
 type DestinationFieldProps = {
-  destination: string;
-  setDestination: (text: string) => void;
   showRouteSheet: () => void;
 };
 

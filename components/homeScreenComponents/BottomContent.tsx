@@ -1,5 +1,3 @@
-import DestinationField from "@/components/homeScreenComponents/DestinationField";
-import LastDestinations from "@/components/homeScreenComponents/LastThreeDestinations";
 import { Colors } from "@/constants/Variables";
 import {
   Animated,
@@ -7,17 +5,15 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
+import DestinationField from "./DestinationField";
+import LastDestinations from "./LastThreeDestinations";
 
 type BottomContentProps = {
-  destination: string;
-  setDestination: (text: string) => void;
   showRouteSheet: () => void;
   translateY: Animated.AnimatedInterpolation<number>;
 };
 
 const BottomContent: React.FC<BottomContentProps> = ({
-  destination,
-  setDestination,
   showRouteSheet,
   translateY,
 }) => {
@@ -31,11 +27,7 @@ const BottomContent: React.FC<BottomContentProps> = ({
       ]}
     >
       <TouchableOpacity style={styles.slider}></TouchableOpacity>
-      <DestinationField
-        destination={destination}
-        setDestination={setDestination}
-        showRouteSheet={showRouteSheet}
-      />
+      <DestinationField showRouteSheet={showRouteSheet} />
       <LastDestinations />
     </Animated.View>
   );
@@ -43,7 +35,9 @@ const BottomContent: React.FC<BottomContentProps> = ({
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     height: Dimensions.get("window").height,
+    width: "100%",
     backgroundColor: "white",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
