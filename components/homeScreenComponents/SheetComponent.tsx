@@ -139,12 +139,13 @@ const styles = StyleSheet.create({
     height: height - 620,
     backgroundColor: "#fff",
     paddingTop: 40,
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
   },
   routeHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    paddingHorizontal: 8,
     marginBottom: 4,
   },
   routeTitle: {
