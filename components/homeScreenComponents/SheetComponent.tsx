@@ -117,7 +117,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
           ]}
         >
           <TextInput
-            ref={destinationInputRef}
+            // ref={destinationInputRef}
             placeholder="Destination"
             value={destination}
             onChangeText={setDestination}

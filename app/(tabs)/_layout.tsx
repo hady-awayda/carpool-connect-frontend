@@ -2,7 +2,7 @@ import { Colors } from "@/constants/Variables";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { useEffect, useState } from "react";
-import { BackHandler, Keyboard, Platform } from "react-native";
+import { BackHandler, Keyboard } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function TabLayout() {
@@ -48,11 +48,7 @@ export default function TabLayout() {
           paddingBottom: insets.bottom > 0 ? insets.bottom + 25 : 25,
           paddingTop: insets.bottom > 0 ? insets.bottom + 5 : 5,
           height: insets.bottom > 0 ? insets.bottom + 80 : 65,
-          borderTopColor: "rgba(0, 0, 0, 0.1)",
           borderTopWidth: 0,
-        },
-        tabBarIconStyle: {
-          color: "red",
         },
         tabBarActiveTintColor: Colors.light.primary,
         tabBarInactiveTintColor: "#555",

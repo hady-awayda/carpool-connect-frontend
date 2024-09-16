@@ -5,15 +5,7 @@ import SheetComponent from "@/components/homeScreenComponents/SheetComponent";
 import * as Location from "expo-location";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef, useState } from "react";
-import {
-  Animated,
-  Easing,
-  Platform,
-  StyleSheet,
-  TextInput,
-  View,
-} from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Animated, Easing, StyleSheet, TextInput, View } from "react-native";
 
 type LocationCoords = {
   latitude: number;
@@ -84,42 +76,35 @@ const HomeScreen = () => {
       <StatusBar style="auto" />
       {location && <MapComponent location={location} />}
 
-      <KeyboardAwareScrollView
-        contentContainerStyle={styles.contentContainer}
-        keyboardShouldPersistTaps="handled"
-        enableOnAndroid={true}
-        enableAutomaticScroll={Platform.OS === "ios"}
+      <Animated.View
+        style={[
+          styles.bottomSheet,
+          {
+            transform: [{ translateY: sheetTranslateY }],
+          },
+        ]}
       >
-        <Animated.View
-          style={[
-            styles.bottomSheet,
-            {
-              transform: [{ translateY: sheetTranslateY }],
-            },
-          ]}
-        >
-          {isSheetVisible ? (
-            <SheetComponent
-              {...{
-                closeRouteSheet,
-                destination,
-                setDestination,
-                departure,
-                setDeparture,
-                isAnimationComplete,
-                destinationInputRef,
-              }}
+        {isSheetVisible ? (
+          <SheetComponent
+            {...{
+              closeRouteSheet,
+              destination,
+              setDestination,
+              departure,
+              setDeparture,
+              isAnimationComplete,
+              destinationInputRef,
+            }}
+          />
+        ) : (
+          <>
+            <DestinationField
+              {...{ destination, setDestination, showRouteSheet }}
             />
-          ) : (
-            <>
-              <DestinationField
-                {...{ destination, setDestination, showRouteSheet }}
-              />
-              <LastDestinations />
-            </>
-          )}
-        </Animated.View>
-      </KeyboardAwareScrollView>
+            <LastDestinations />
+          </>
+        )}
+      </Animated.View>
     </View>
   );
 };
