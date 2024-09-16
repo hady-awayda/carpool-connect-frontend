@@ -2,7 +2,7 @@ import { Colors } from "@/constants/Variables";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { useEffect, useState } from "react";
-import { BackHandler, Keyboard } from "react-native";
+import { BackHandler, Keyboard, Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function TabLayout() {
@@ -13,7 +13,9 @@ export default function TabLayout() {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
       () => {
-        setIsTabBarVisible(false);
+        if (Platform.OS === "android") {
+          setIsTabBarVisible(false);
+        }
       }
     );
     const keyboardDidHideListener = Keyboard.addListener(

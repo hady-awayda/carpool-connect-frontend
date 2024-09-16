@@ -1,3 +1,4 @@
+import BottomContent from "@/components/homeScreenComponents/BottomContent";
 import DestinationField from "@/components/homeScreenComponents/DestinationField";
 import LastDestinations from "@/components/homeScreenComponents/LastThreeDestinations";
 import MapComponent from "@/components/homeScreenComponents/MapComponent";
@@ -5,7 +6,17 @@ import SheetComponent from "@/components/homeScreenComponents/SheetComponent";
 import * as Location from "expo-location";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef, useState } from "react";
-import { Animated, Easing, StyleSheet, TextInput, View } from "react-native";
+import {
+  Animated,
+  Dimensions,
+  Easing,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  View,
+} from "react-native";
 
 type LocationCoords = {
   latitude: number;
@@ -13,6 +24,8 @@ type LocationCoords = {
   latitudeDelta: number;
   longitudeDelta: number;
 };
+
+const { height } = Dimensions.get("window");
 
 const HomeScreen = () => {
   const [location, setLocation] = useState<LocationCoords | null>(null);
@@ -49,7 +62,7 @@ const HomeScreen = () => {
       toValue: 1,
       duration: 300,
       easing: Easing.bezier(0.42, 0, 0.58, 1),
-      useNativeDriver: false,
+      useNativeDriver: true,
     }).start(() => {
       setIsAnimationComplete(true);
     });
@@ -62,29 +75,41 @@ const HomeScreen = () => {
       toValue: 0,
       duration: 300,
       easing: Easing.bezier(0.42, 0, 0.58, 1),
-      useNativeDriver: false,
+      useNativeDriver: true,
     }).start(() => setIsSheetVisible(false));
   };
 
   const sheetTranslateY = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, -280],
+    outputRange: [-height, 0],
+  });
+
+  const bottomContentTranslateY = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [height + 300, 0],
   });
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
+    >
       <StatusBar style="auto" />
       {location && <MapComponent location={location} />}
 
-      <Animated.View
-        style={[
-          styles.bottomSheet,
-          {
-            transform: [{ translateY: sheetTranslateY }],
-          },
-        ]}
+      <ScrollView
+        contentContainerStyle={styles.contentContainer}
+        keyboardShouldPersistTaps="handled"
       >
-        {isSheetVisible ? (
+        <Animated.View
+          style={[
+            styles.sheetContainer,
+            {
+              transform: [{ translateY: sheetTranslateY }],
+            },
+          ]}
+        >
           <SheetComponent
             {...{
               closeRouteSheet,
@@ -96,16 +121,15 @@ const HomeScreen = () => {
               destinationInputRef,
             }}
           />
-        ) : (
-          <>
-            <DestinationField
-              {...{ destination, setDestination, showRouteSheet }}
-            />
-            <LastDestinations />
-          </>
-        )}
-      </Animated.View>
-    </View>
+          <BottomContent
+            destination={destination}
+            setDestination={setDestination}
+            showRouteSheet={showRouteSheet}
+            translateY={bottomContentTranslateY}
+          />
+        </Animated.View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -115,17 +139,14 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flexGrow: 1,
-    justifyContent: "flex-end",
   },
-  bottomSheet: {
+  sheetContainer: {
     position: "absolute",
-    bottom: 0,
+    top: 0,
     left: 0,
     right: 0,
+    height,
     backgroundColor: "white",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    padding: 20,
   },
 });
 
