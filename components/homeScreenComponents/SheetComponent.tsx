@@ -5,21 +5,11 @@ import {
   Text,
   TouchableOpacity,
   View,
-  TextInput,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import AnimatedTextInput from "./AnimatedTextInput";
 import { Colors } from "@/constants/Variables";
-
-type SheetComponentProps = {
-  closeRouteSheet: () => void;
-  destination: string;
-  setDestination: (text: string) => void;
-  departure: string;
-  setDeparture: (text: string) => void;
-  isAnimationComplete: boolean;
-  destinationInputRef: React.RefObject<TextInput>;
-};
+import { SheetComponentProps } from "./interfaces";
 
 const SheetComponent: React.FC<SheetComponentProps> = ({
   closeRouteSheet,
@@ -67,7 +57,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
           value={departure}
           onChangeText={setDeparture}
           placeholder="Departure"
-          field="departure"
           isFocused={focusedField === "departure"}
           onFocus={() => handleFocus("departure")}
           onBlur={() => handleBlur("departure")}
@@ -85,7 +74,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
           value={destination}
           onChangeText={setDestination}
           placeholder="Destination"
-          field="destination"
           isFocused={focusedField === "destination"}
           onFocus={() => handleFocus("destination")}
           onBlur={() => handleBlur("destination")}

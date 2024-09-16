@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import {
   Animated,
   Easing,
@@ -9,31 +9,17 @@ import {
 } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Variables";
+import { AnimatedTextInputProps } from "./interfaces";
 
-type AnimatedTextInputProps = {
-  value: string;
-  onChangeText: (text: string) => void;
-  placeholder: string;
-  field: "departure" | "destination";
-  isFocused: boolean;
-  onFocus: () => void;
-  onBlur: () => void;
-  inputRef?: React.RefObject<TextInput>;
-  leftIcon1: string;
-  leftIcon1Color: string;
-  leftIcon2: string;
-  leftIcon2Color: string;
-  rightIcon1: string;
-  rightIcon1Color: string;
-  rightIcon2: string;
-  rightIcon2Color: string;
-};
+export type IoniconsName = React.ComponentProps<typeof Ionicons>["name"];
+export type MaterialCommunityIconsName = React.ComponentProps<
+  typeof MaterialCommunityIcons
+>["name"];
 
 const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
   value,
   onChangeText,
   placeholder,
-  field,
   isFocused,
   onFocus,
   onBlur,
