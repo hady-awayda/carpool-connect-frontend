@@ -1,7 +1,6 @@
 import DestinationField from "@/components/homeScreenComponents/DestinationField";
 import LastDestinations from "@/components/homeScreenComponents/LastThreeDestinations";
 import { Colors } from "@/constants/Variables";
-import React from "react";
 import {
   Animated,
   Dimensions,
