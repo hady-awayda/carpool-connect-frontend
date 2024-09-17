@@ -26,11 +26,9 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   destinationInputRef,
 }) => {
   const dispatch = useDispatch();
-  const departure = useSelector(
-    (state: RootState) => state.address.departure.name
-  );
+  const departure = useSelector((state: RootState) => state.address.departure);
   const destination = useSelector(
-    (state: RootState) => state.address.destination.name
+    (state: RootState) => state.address.destination
   );
 
   const [focusedField, setFocusedField] = useState<"departure" | "destination">(
@@ -96,16 +94,12 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   );
 
   const handleSettingDeparture = (text: string) => {
-    setDeparture(
-      (prev: LocationProps): LocationProps => ({ ...prev, name: text })
-    );
+    dispatch(setDeparture({ ...departure, name: text }));
     debouncedFindAddresses(text);
   };
 
   const handleSettingDestination = (text: string) => {
-    setDestination(
-      (prev: LocationProps): LocationProps => ({ ...prev, name: text })
-    );
+    dispatch(setDestination({ ...destination, name: text }));
     debouncedFindAddresses(text);
   };
 
@@ -123,7 +117,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
 
       <View style={styles.inputWrapper}>
         <AnimatedTextInput
-          value={departure}
+          value={departure.name}
           placeholder="Departure"
           onChangeText={(text) => handleSettingDeparture(text)}
           onMapLocationSelect={handleSettingMapLocation}
@@ -139,7 +133,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
         />
 
         <AnimatedTextInput
-          value={destination}
+          value={destination.name}
           placeholder="Destination"
           inputRef={destinationInputRef}
           onChangeText={(text) => handleSettingDestination(text)}
