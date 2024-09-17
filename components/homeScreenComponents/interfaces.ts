@@ -35,3 +35,13 @@ export type LocationProps = {
   name: string;
   coords: LocationCoords | null;
 };
+export type Address = {
+  name: string;
+  icon?: string;
+  coords?: {
+    latitude: number;
+    longitude: number;
+    latitudeDelta?: number;
+    longitudeDelta?: number;
+  };
+};

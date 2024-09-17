@@ -4,17 +4,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet, Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import { MaterialCommunityIconsName } from "./AnimatedTextInput";
-
-type Address = {
-  name: string;
-  icon?: string;
-  coords?: {
-    latitude: number;
-    longitude: number;
-    latitudeDelta?: number;
-    longitudeDelta?: number;
-  };
-};
+import { Address } from "./interfaces";
 
 const defaultAddresses: Address[] = [
   {
@@ -31,6 +21,17 @@ const defaultAddresses: Address[] = [
   },
 ];
 
+const getIconName = (name: string) => {
+  if (name.toLowerCase().includes("airport")) {
+    return "airplane";
+  } else if (name.toLowerCase().includes("coffee")) {
+    return "coffee-outline";
+  } else if (name.toLowerCase().includes("shopping")) {
+    return "shopping-outline";
+  }
+  return "map-marker";
+};
+
 const LastDestinations = () => {
   const addresses: Address[] = useSelector(
     (state: RootState) => state.address.addressList
@@ -45,7 +46,10 @@ const LastDestinations = () => {
         <View key={index} style={styles.suggestionItem}>
           <View style={styles.iconContainer}>
             <MaterialCommunityIcons
-              name={(item.icon as MaterialCommunityIconsName) || "map-marker"}
+              name={
+                (item.icon as MaterialCommunityIconsName) ||
+                getIconName(item.name)
+              }
               size={24}
               color={Colors.light.text}
             />
