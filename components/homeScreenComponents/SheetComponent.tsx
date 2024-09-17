@@ -58,6 +58,8 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
         const coords = {
           latitude: parseFloat(firstResult.lat),
           longitude: parseFloat(firstResult.lon),
+          latitudeDelta: 0.004,
+          longitudeDelta: 0.004,
         };
         return coords;
       } else return null;
@@ -70,8 +72,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   const debouncedfindCoords = useCallback(
     debounce(async (text: string) => {
       const coords = await findCoordsByName(text);
-      if (coords) return coords;
-      else return null;
+      return coords;
     }, 1000),
     []
   );

@@ -33,5 +33,5 @@ export type LocationCoords = {
 };
 export type LocationProps = {
   name: string;
-  coords: LocationCoords | null;
+  coords: LocationCoords | null | undefined;
 };
