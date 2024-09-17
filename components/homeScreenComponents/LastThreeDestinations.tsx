@@ -1,30 +1,46 @@
 import { Colors, Typography } from "@/constants/Variables";
+import { RootState } from "@/data/redux/store";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet, Text, View } from "react-native";
+import { useSelector } from "react-redux";
+
+const defaultAddresses = [
+  {
+    name: "Beirut Rafic Hariri Airport (BEY)",
+    icon: "airplane",
+  },
+  {
+    name: "Hamra",
+    icon: "coffee-outline",
+  },
+  {
+    name: "City Centre Beirut",
+    icon: "shopping-outline",
+  },
+];
 
 const LastDestinations = () => {
+  const addresses = useSelector(
+    (state: RootState) => state.address.addressList
+  );
+
+  const dataToRender =
+    addresses && addresses.length > 0 ? addresses : defaultAddresses;
+
   return (
     <View style={styles.suggestions}>
-      <View style={styles.suggestionItem}>
-        <View style={styles.iconContainer}>
-          <MaterialCommunityIcons name="airplane" size={24} />
+      {dataToRender.map((item, index) => (
+        <View key={index} style={styles.suggestionItem}>
+          <View style={styles.iconContainer}>
+            <MaterialCommunityIcons
+              name={item.icon || "map-marker"}
+              size={24}
+              color={Colors.light.text}
+            />
+          </View>
+          <Text style={styles.suggestionText}>{item.name}</Text>
         </View>
-        <Text style={styles.suggestionText}>
-          Beirut Rafic Hariri Airport (BEY)
-        </Text>
-      </View>
-      <View style={styles.suggestionItem}>
-        <View style={styles.iconContainer}>
-          <MaterialCommunityIcons name="coffee-outline" size={24} />
-        </View>
-        <Text style={styles.suggestionText}>Hamra</Text>
-      </View>
-      <View style={styles.suggestionItem}>
-        <View style={styles.iconContainer}>
-          <MaterialCommunityIcons name="shopping-outline" size={24} />
-        </View>
-        <Text style={styles.suggestionText}>City Centre Beirut</Text>
-      </View>
+      ))}
     </View>
   );
 };
