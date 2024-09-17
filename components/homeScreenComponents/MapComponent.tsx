@@ -1,19 +1,18 @@
 import { Colors } from "@/constants/Variables";
+import { RootState } from "@/data/redux/store";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import MapView, { Marker } from "react-native-maps";
+import { useSelector } from "react-redux";
 
-type MapComponentProps = {
-  location: {
-    latitude: number;
-    longitude: number;
-    latitudeDelta: number;
-    longitudeDelta: number;
-  };
-};
+const MapComponent = () => {
+  const location = useSelector(
+    (state: RootState) => state.address.location.coords
+  );
 
-const MapComponent: React.FC<MapComponentProps> = ({ location }) => {
+  console.log(location);
+
   return (
     <View style={styles.mapContainer}>
       {location && (

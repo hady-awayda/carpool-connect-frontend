@@ -60,11 +60,11 @@ const HomeScreen = () => {
         console.error("Error in reverse geocoding:", error);
       }
 
-      setLocation({ name, coords });
+      dispatch(setLocation({ name, coords }));
 
-      !departure.name && setDeparture({ name, coords });
+      !departure.name && dispatch(setDeparture({ name, coords }));
     })();
-  }, [dispatch, departure.name]);
+  }, [dispatch, departure.name, departure.coords]);
 
   const showRouteSheet = () => {
     setIsAnimationComplete(false);
@@ -118,7 +118,7 @@ const HomeScreen = () => {
     <TouchableOpacity activeOpacity={1} style={styles.container}>
       <StatusBar style="auto" />
 
-      {location.coords && <MapComponent location={location.coords} />}
+      <MapComponent />
 
       <Animated.View
         style={[

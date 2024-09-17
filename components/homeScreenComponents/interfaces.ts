@@ -34,10 +34,10 @@ export type LocationProps = {
 export type Address = {
   name: string;
   icon?: string;
-  coords?: {
+  coords: {
     latitude: number;
     longitude: number;
-    latitudeDelta?: number;
-    longitudeDelta?: number;
+    latitudeDelta: number;
+    longitudeDelta: number;
   };
 };
