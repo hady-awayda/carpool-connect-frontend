@@ -70,7 +70,6 @@ const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
           value={value}
           onChangeText={onChangeText}
           onFocus={onFocus}
-          onBlur={onFocus}
           style={styles.textInput}
           cursorColor={Colors.light.primary}
           selectionColor={Colors.light.primary}

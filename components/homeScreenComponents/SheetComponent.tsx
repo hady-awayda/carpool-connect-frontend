@@ -6,11 +6,12 @@ import {
 } from "@/data/redux/addressListSlice/slice";
 import { Ionicons } from "@expo/vector-icons";
 import debounce from "lodash.debounce";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -23,13 +24,14 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   closeRouteSheet,
   setMapLocation,
   isAnimationComplete,
-  destinationInputRef,
 }) => {
   const dispatch = useDispatch();
   const departure = useSelector((state: RootState) => state.address.departure);
   const destination = useSelector(
     (state: RootState) => state.address.destination
   );
+  const departureInputRef = useRef<TextInput>(null);
+  const destinationInputRef = useRef<TextInput>(null);
 
   const [focusedField, setFocusedField] = useState<"departure" | "destination">(
     "destination"
@@ -37,12 +39,20 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
 
   useEffect(() => {
     if (isAnimationComplete) {
-      destinationInputRef.current?.focus();
+      if (focusedField === "departure") {
+        departureInputRef.current?.focus();
+      } else if (focusedField === "destination") {
+        destinationInputRef.current?.focus();
+      }
     }
-  }, [isAnimationComplete, destinationInputRef]);
+  }, [
+    isAnimationComplete,
+    focusedField,
+    departureInputRef,
+    destinationInputRef,
+  ]);
 
   const handleFocus = (field: "departure" | "destination") => {
-    if (focusedField === field) setFocusedField("destination");
     setFocusedField(field);
   };
 
@@ -119,6 +129,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
         <AnimatedTextInput
           value={departure.name}
           placeholder="Departure"
+          inputRef={departureInputRef}
           onChangeText={(text) => handleSettingDeparture(text)}
           onMapLocationSelect={handleSettingMapLocation}
           onFocus={() => handleFocus("departure")}

@@ -26,7 +26,6 @@ const HomeScreen = () => {
   const dispatch = useDispatch();
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
   const animatedValue = useRef(new Animated.Value(0)).current;
-  const destinationInputRef = useRef<TextInput>(null);
   const [isSelectingLocation, setIsSelectingLocation] = useState(false);
 
   useEffect(() => {
@@ -64,7 +63,7 @@ const HomeScreen = () => {
 
       !departure.name && dispatch(setDeparture({ name, coords }));
     })();
-  }, [dispatch, departure.name, departure.coords]);
+  }, [dispatch]);
 
   const showRouteSheet = () => {
     setIsAnimationComplete(false);
@@ -131,8 +130,6 @@ const HomeScreen = () => {
             closeRouteSheet,
             setMapLocation,
             isAnimationComplete,
-            destinationInputRef,
-            translateY: sheetTranslateY,
           }}
         />
       </Animated.View>

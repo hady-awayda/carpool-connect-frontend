@@ -5,7 +5,7 @@ export type AnimatedTextInputProps = {
   value: string;
   placeholder: string;
   inputRef?: React.RefObject<TextInput>;
-  onChangeText: (text: string, coords: LocationCoords) => void;
+  onChangeText: (text: string) => void;
   onMapLocationSelect: () => void;
   onFocus: () => void;
   isFocused: boolean;
@@ -19,7 +19,6 @@ export type SheetComponentProps = {
   closeRouteSheet: () => void;
   setMapLocation: (focusedField: "departure" | "destination") => void;
   isAnimationComplete: boolean;
-  destinationInputRef: React.RefObject<TextInput>;
 };
 export type LocationCoords = {
   latitude: number;
