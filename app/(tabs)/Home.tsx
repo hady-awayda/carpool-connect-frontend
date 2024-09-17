@@ -179,7 +179,7 @@ const HomeScreen = () => {
     >
       <StatusBar style="auto" />
 
-      {location.coords && <MapComponent location={location.coords} />}
+      {location.coords?.latitude && <MapComponent location={location.coords} />}
 
       <Animated.View
         style={[
@@ -187,7 +187,7 @@ const HomeScreen = () => {
           { transform: [{ translateY: sheetTranslateY }] },
         ]}
       >
-        {/* <SheetComponent
+        <SheetComponent
           {...{
             closeRouteSheet,
             destination: destination.name,
@@ -200,7 +200,7 @@ const HomeScreen = () => {
             destinationInputRef,
             translateY: sheetTranslateY,
           }}
-        /> */}
+        />
       </Animated.View>
 
       <Animated.View
