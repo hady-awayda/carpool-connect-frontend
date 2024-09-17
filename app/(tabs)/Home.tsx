@@ -1,4 +1,5 @@
 import BottomContent from "@/components/homeScreenComponents/BottomContent";
+import { LocationProps } from "@/components/homeScreenComponents/interfaces";
 import MapComponent from "@/components/homeScreenComponents/MapComponent";
 import SheetComponent from "@/components/homeScreenComponents/SheetComponent";
 import * as Location from "expo-location";
@@ -14,28 +15,21 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-type LocationCoords = {
-  latitude: number;
-  longitude: number;
-  latitudeDelta: number;
-  longitudeDelta: number;
-};
-
 const { height } = Dimensions.get("window");
 
 const HomeScreen = () => {
-  const [location, setLocation] = useState<LocationCoords | null>(null);
-  const [currentLocationName, setCurrentLocationName] =
-    useState<string>("Fetching...");
-  const [currentLocationCoords, setCurrentLocationCoords] =
-    useState<LocationCoords | null>(null);
-  const [departureCoords, setDepartureCoords] = useState<LocationCoords | null>(
-    null
-  );
-  const [departureName, setDepartureName] = useState<string>("");
-  const [destinationCoords, setDestinationCoords] =
-    useState<LocationCoords | null>(null);
-  const [destinationName, setDestinationName] = useState<string>("");
+  const [location, setLocation] = useState<LocationProps>({
+    name: "Fetching...",
+    coords: null,
+  });
+  const [departure, setDeparture] = useState<LocationProps>({
+    name: "",
+    coords: null,
+  });
+  const [destination, setDestination] = useState<LocationProps>({
+    name: "",
+    coords: null,
+  });
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
   const animatedValue = useRef(new Animated.Value(0)).current;
   const destinationInputRef = useRef<TextInput>(null);
@@ -52,10 +46,13 @@ const HomeScreen = () => {
       let loc = await Location.getCurrentPositionAsync({});
 
       setLocation({
-        latitude: loc.coords.latitude,
-        longitude: loc.coords.longitude,
-        latitudeDelta: 0.004,
-        longitudeDelta: 0.004,
+        name: location.name,
+        coords: {
+          latitude: loc.coords.latitude,
+          longitude: loc.coords.longitude,
+          latitudeDelta: 0.004,
+          longitudeDelta: 0.004,
+        },
       });
 
       try {
@@ -65,53 +62,66 @@ const HomeScreen = () => {
         });
 
         if (address && address.city) {
-          setCurrentLocationName(address.city);
-          setCurrentLocationCoords;
+          setLocation({
+            name: address.city,
+            coords: location.coords,
+          });
         } else if (address && address.region) {
-          setCurrentLocationName(address.region);
+          setLocation({
+            name: address.region,
+            coords: location.coords,
+          });
         } else {
-          setCurrentLocationName("Unknown Location");
+          setLocation({
+            name: "Unknown Location",
+            coords: location.coords,
+          });
         }
       } catch (error) {
         console.error("Error in reverse geocoding:", error);
-        setCurrentLocationName("Unknown Location");
+        setLocation({
+          name: "Unknown Location",
+          coords: location.coords,
+        });
       }
 
-      currentLocationName &&
-        departureName === "" &&
-        setDepartureName(currentLocationName);
-      currentLocationCoords && setDepartureCoords(currentLocationCoords);
+      location.name &&
+        departure.name === "" &&
+        setDeparture({
+          name: location.name,
+          coords: location.coords,
+        });
     })();
   }, []);
 
-  useEffect(() => console.log(currentLocationName), [currentLocationName]);
+  // useEffect(() => console.log(currentLocationName), [currentLocationName]);
 
-  const handleLocationSelected = async (
-    location: LocationCoords,
-    focusedField: "departure" | "destination"
-  ) => {
-    console.log("Selected location:", location);
-    try {
-      let [address] = await Location.reverseGeocodeAsync(location);
+  // const handleLocationSelected = async (
+  //   location: LocationCoords,
+  //   focusedField: "departure" | "destination"
+  // ) => {
+  //   console.log("Selected location:", location);
+  //   try {
+  //     let [address] = await Location.reverseGeocodeAsync(location);
 
-      if (address && address.street) {
-        setDestinationName(`${address.street}, ${address.city}`);
-      } else if (address && address.name) {
-        setDestinationName(address.name);
-      } else {
-        setDestinationName(
-          `${location.latitude.toFixed(5)}, ${location.longitude.toFixed(5)}`
-        );
-      }
-    } catch (error) {
-      console.error("Error in reverse geocoding:", error);
-      setDestinationName(
-        `${location.latitude.toFixed(5)}, ${location.longitude.toFixed(5)}`
-      );
-    }
+  //     if (address && address.street) {
+  //       setDestinationName(`${address.street}, ${address.city}`);
+  //     } else if (address && address.name) {
+  //       setDestinationName(address.name);
+  //     } else {
+  //       setDestinationName(
+  //         `${location.latitude.toFixed(5)}, ${location.longitude.toFixed(5)}`
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.error("Error in reverse geocoding:", error);
+  //     setDestinationName(
+  //       `${location.latitude.toFixed(5)}, ${location.longitude.toFixed(5)}`
+  //     );
+  //   }
 
-    setIsSelectingLocation(false);
-  };
+  //   setIsSelectingLocation(false);
+  // };
 
   const showRouteSheet = () => {
     setIsAnimationComplete(false);
@@ -169,7 +179,7 @@ const HomeScreen = () => {
     >
       <StatusBar style="auto" />
 
-      {location && <MapComponent location={location} />}
+      {location.coords && <MapComponent location={location.coords} />}
 
       <Animated.View
         style={[
@@ -177,20 +187,20 @@ const HomeScreen = () => {
           { transform: [{ translateY: sheetTranslateY }] },
         ]}
       >
-        <SheetComponent
+        {/* <SheetComponent
           {...{
             closeRouteSheet,
-            destinationName,
-            setDestinationName,
-            departureName,
-            setDepartureName,
-            currentLocationName,
+            destination: destination.name,
+            setDestination,
+            departure: departure.name,
+            setDeparture,
+            location,
             setMapLocation,
             isAnimationComplete,
             destinationInputRef,
             translateY: sheetTranslateY,
           }}
-        />
+        /> */}
       </Animated.View>
 
       <Animated.View

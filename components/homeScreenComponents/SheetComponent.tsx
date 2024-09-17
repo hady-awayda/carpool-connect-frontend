@@ -13,10 +13,10 @@ import { SheetComponentProps } from "./interfaces";
 
 const SheetComponent: React.FC<SheetComponentProps> = ({
   closeRouteSheet,
-  destinationName,
-  setDestinationName,
-  departureName,
-  setDepartureName,
+  destination,
+  setDestination,
+  departure,
+  setDeparture,
   setMapLocation,
   isAnimationComplete,
   destinationInputRef,
@@ -58,9 +58,9 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
 
       <View style={styles.inputWrapper}>
         <AnimatedTextInput
-          value={departureName}
+          value={departure}
           placeholder="Departure"
-          onChangeText={setDepartureName}
+          onChangeText={setDeparture}
           onMapLocationSelect={handleSettingMapLocation}
           onFocus={() => handleFocus("departure")}
           isFocused={focusedField === "departure"}
@@ -74,10 +74,10 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
         />
 
         <AnimatedTextInput
-          value={destinationName}
+          value={destination}
           placeholder="Destination"
           inputRef={destinationInputRef}
-          onChangeText={setDestinationName}
+          onChangeText={setDestination}
           onMapLocationSelect={handleSettingMapLocation}
           onFocus={() => handleFocus("destination")}
           isFocused={focusedField === "destination"}
