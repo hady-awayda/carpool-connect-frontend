@@ -10,7 +10,7 @@ import {
   View,
 } from "react-native";
 import AnimatedTextInput from "./AnimatedTextInput";
-import { SheetComponentProps } from "./interfaces";
+import { LocationProps, SheetComponentProps } from "./interfaces";
 
 const SheetComponent: React.FC<SheetComponentProps> = ({
   closeRouteSheet,
@@ -45,34 +45,36 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
     }
   };
 
-  const findCoordsByName = async (name: string) => {
+  const findAddressesByName = async (name: string, limit = 5) => {
     const encodedName = encodeURIComponent(name);
-    const url = `https://nominatim.openstreetmap.org/search?q=${encodedName}&format=json&limit=1`;
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodedName}&format=json&limit=${limit}`;
 
     try {
       const response = await fetch(url);
       const data = await response.json();
 
       if (data && data.length > 0) {
-        const firstResult = data[0];
-        const coords = {
-          latitude: parseFloat(firstResult.lat),
-          longitude: parseFloat(firstResult.lon),
-          latitudeDelta: 0.004,
-          longitudeDelta: 0.004,
-        };
-        return coords;
-      } else return null;
+        const addresses = data.map((item: LocationProps) => ({
+          name: item.name,
+          coords: {
+            latitude: item.coords?.latitude,
+            longitude: item.coords?.longitude,
+            latitudeDelta: 0.004,
+            longitudeDelta: 0.004,
+          },
+        }));
+        return addresses;
+      } else return [];
     } catch (error) {
-      console.error("Error fetching coordinates:", error);
-      return null;
+      console.error("Error fetching addresses:", error);
+      return [];
     }
   };
 
   const debouncedfindCoords = useCallback(
     debounce(async (text: string) => {
-      const coords = await findCoordsByName(text);
-      return coords;
+      const coords = await findAddressesByName(text);
+      return coords as LocationProps[];
     }, 1000),
     []
   );
@@ -81,7 +83,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
     const coords = await debouncedfindCoords(text);
     setDeparture({
       name: text,
-      coords,
+      coords: coords[0]?.coords,
     });
   };
 
@@ -89,7 +91,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
     const coords = await debouncedfindCoords(text);
     setDestination({
       name: text,
-      coords,
+      coords: coords[0]?.coords,
     });
   };
 
