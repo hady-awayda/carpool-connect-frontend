@@ -45,15 +45,14 @@ const HomeScreen = () => {
 
       let loc = await Location.getCurrentPositionAsync({});
 
-      setLocation({
-        name: location.name,
-        coords: {
-          latitude: loc.coords.latitude,
-          longitude: loc.coords.longitude,
-          latitudeDelta: 0.004,
-          longitudeDelta: 0.004,
-        },
-      });
+      const coords = {
+        latitude: loc.coords.latitude,
+        longitude: loc.coords.longitude,
+        latitudeDelta: 0.004,
+        longitudeDelta: 0.004,
+      };
+
+      let name = "Unknown Location";
 
       try {
         let [address] = await Location.reverseGeocodeAsync({
@@ -61,36 +60,16 @@ const HomeScreen = () => {
           longitude: loc.coords.longitude,
         });
 
-        if (address && address.city) {
-          setLocation({
-            name: address.city,
-            coords: location.coords,
-          });
-        } else if (address && address.region) {
-          setLocation({
-            name: address.region,
-            coords: location.coords,
-          });
-        } else {
-          setLocation({
-            name: "Unknown Location",
-            coords: location.coords,
-          });
-        }
+        name =
+          address.city || address.region || address.name || "Unknown Location";
       } catch (error) {
         console.error("Error in reverse geocoding:", error);
-        setLocation({
-          name: "Unknown Location",
-          coords: location.coords,
-        });
       }
+      setLocation({ name, coords });
 
-      location.name &&
-        departure.name === "" &&
-        setDeparture({
-          name: location.name,
-          coords: location.coords,
-        });
+      console.log(location.name);
+
+      !departure.name && setDeparture({ name, coords });
     })();
   }, []);
 
@@ -179,7 +158,7 @@ const HomeScreen = () => {
     >
       <StatusBar style="auto" />
 
-      {location.coords?.latitude && <MapComponent location={location.coords} />}
+      {location.coords && <MapComponent location={location.coords} />}
 
       <Animated.View
         style={[

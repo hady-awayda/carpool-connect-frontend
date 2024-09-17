@@ -1,6 +1,6 @@
 import { Colors } from "@/constants/Variables";
 import { Ionicons } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import AnimatedTextInput from "./AnimatedTextInput";
 import { SheetComponentProps } from "./interfaces";
+import debounce from "lodash.debounce";
 
 const SheetComponent: React.FC<SheetComponentProps> = ({
   closeRouteSheet,
@@ -44,6 +45,63 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
     }
   };
 
+  const findCoordsByName = async (name: string) => {
+    const encodedName = encodeURIComponent(name);
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodedName}&format=json&limit=1`;
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data && data.length > 0) {
+        const firstResult = data[0];
+        const coords = {
+          latitude: parseFloat(firstResult.lat),
+          longitude: parseFloat(firstResult.lon),
+        };
+        return coords;
+      } else return null;
+    } catch (error) {
+      console.error("Error fetching coordinates:", error);
+      return null;
+    }
+  };
+
+  const debouncedHandleSettingDeparture = useCallback(
+    debounce(async (text: string) => {
+      const coords = await findCoordsByName(text);
+      if (coords) {
+        setDeparture({
+          name: text,
+          coords,
+        });
+      } else {
+        console.warn("Coordinates not found for departure location");
+        setDeparture({
+          name: text,
+          coords: null,
+        });
+      }
+    }, 1000),
+    []
+  );
+
+  const handleSettingDeparture = async (text: string) => {
+    const coords = await findCoordsByName(text);
+    setDeparture({
+      name: text,
+      coords,
+    });
+  };
+
+  const handleSettingDestination = async (text: string) => {
+    const coords = await findCoordsByName(text);
+    setDestination({
+      name: text,
+      coords,
+    });
+  };
+
   return (
     <View style={styles.sheetContainer}>
       <View style={styles.routeHeader}>
@@ -60,7 +118,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
         <AnimatedTextInput
           value={departure}
           placeholder="Departure"
-          onChangeText={setDeparture}
+          onChangeText={(text) => handleSettingDeparture(text)}
           onMapLocationSelect={handleSettingMapLocation}
           onFocus={() => handleFocus("departure")}
           isFocused={focusedField === "departure"}
@@ -77,7 +135,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
           value={destination}
           placeholder="Destination"
           inputRef={destinationInputRef}
-          onChangeText={setDestination}
+          onChangeText={(text) => handleSettingDestination(text)}
           onMapLocationSelect={handleSettingMapLocation}
           onFocus={() => handleFocus("destination")}
           isFocused={focusedField === "destination"}

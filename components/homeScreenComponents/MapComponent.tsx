@@ -14,7 +14,6 @@ type MapComponentProps = {
 };
 
 const MapComponent: React.FC<MapComponentProps> = ({ location }) => {
-  console.log(location);
   return (
     <View style={styles.mapContainer}>
       {location && (
