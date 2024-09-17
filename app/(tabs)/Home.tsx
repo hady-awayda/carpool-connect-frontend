@@ -25,10 +25,16 @@ const { height } = Dimensions.get("window");
 
 const HomeScreen = () => {
   const [location, setLocation] = useState<LocationCoords | null>(null);
-  const [currentLocation, setCurrentLocation] = useState<string>("Fetching...");
-  const [departureCoords, setDepartureCoords] = useState<string>("");
+  const [currentLocationName, setCurrentLocationName] =
+    useState<string>("Fetching...");
+  const [currentLocationCoords, setCurrentLocationCoords] =
+    useState<LocationCoords | null>(null);
+  const [departureCoords, setDepartureCoords] = useState<LocationCoords | null>(
+    null
+  );
   const [departureName, setDepartureName] = useState<string>("");
-  const [destinationCoords, setDestinationCoords] = useState<string>("");
+  const [destinationCoords, setDestinationCoords] =
+    useState<LocationCoords | null>(null);
   const [destinationName, setDestinationName] = useState<string>("");
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
   const animatedValue = useRef(new Animated.Value(0)).current;
@@ -40,7 +46,6 @@ const HomeScreen = () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
 
       if (status !== "granted") {
-        setDeparture("Permission denied");
         return;
       }
 
@@ -60,20 +65,26 @@ const HomeScreen = () => {
         });
 
         if (address && address.city) {
-          setCurrentLocation(address.city);
+          setCurrentLocationName(address.city);
+          setCurrentLocationCoords;
         } else if (address && address.region) {
-          setCurrentLocation(address.region);
+          setCurrentLocationName(address.region);
         } else {
-          setCurrentLocation("Unknown Location");
+          setCurrentLocationName("Unknown Location");
         }
       } catch (error) {
         console.error("Error in reverse geocoding:", error);
-        setCurrentLocation("Unknown Location");
+        setCurrentLocationName("Unknown Location");
       }
 
-      currentLocation && departure === "" && setDeparture(currentLocation);
+      currentLocationName &&
+        departureName === "" &&
+        setDepartureName(currentLocationName);
+      currentLocationCoords && setDepartureCoords(currentLocationCoords);
     })();
-  }, [currentLocation]);
+  }, []);
+
+  useEffect(() => console.log(currentLocationName), [currentLocationName]);
 
   const handleLocationSelected = async (
     location: LocationCoords,
@@ -84,17 +95,17 @@ const HomeScreen = () => {
       let [address] = await Location.reverseGeocodeAsync(location);
 
       if (address && address.street) {
-        setDestination(`${address.street}, ${address.city}`);
+        setDestinationName(`${address.street}, ${address.city}`);
       } else if (address && address.name) {
-        setDestination(address.name);
+        setDestinationName(address.name);
       } else {
-        setDestination(
+        setDestinationName(
           `${location.latitude.toFixed(5)}, ${location.longitude.toFixed(5)}`
         );
       }
     } catch (error) {
       console.error("Error in reverse geocoding:", error);
-      setDestination(
+      setDestinationName(
         `${location.latitude.toFixed(5)}, ${location.longitude.toFixed(5)}`
       );
     }
@@ -173,6 +184,7 @@ const HomeScreen = () => {
             setDestinationName,
             departureName,
             setDepartureName,
+            currentLocationName,
             setMapLocation,
             isAnimationComplete,
             destinationInputRef,
