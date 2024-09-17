@@ -12,14 +12,13 @@ import {
   Easing,
   Keyboard,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
 const { height } = Dimensions.get("window");
 
 const HomeScreen = () => {
-  const location = useSelector((state: RootState) => state.address.location);
   const departure = useSelector((state: RootState) => state.address.departure);
   const dispatch = useDispatch();
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
@@ -93,6 +92,11 @@ const HomeScreen = () => {
   });
 
   const bottomContentTranslateUp = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [height * 0.66, height * 0.194],
+  });
+
+  const bottomContentTranslateDown = animatedValue.interpolate({
     inputRange: [0, 1],
     outputRange: [height * 0.66, height * 0.194],
   });
