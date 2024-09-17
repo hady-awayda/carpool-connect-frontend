@@ -1,5 +1,4 @@
 import BottomContent from "@/components/homeScreenComponents/BottomContent";
-import { LocationProps } from "@/components/homeScreenComponents/interfaces";
 import MapComponent from "@/components/homeScreenComponents/MapComponent";
 import SheetComponent from "@/components/homeScreenComponents/SheetComponent";
 import { setDeparture, setLocation } from "@/data/redux/addressListSlice/slice";
@@ -13,8 +12,7 @@ import {
   Easing,
   Keyboard,
   StyleSheet,
-  TextInput,
-  TouchableOpacity,
+  TouchableOpacity
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
