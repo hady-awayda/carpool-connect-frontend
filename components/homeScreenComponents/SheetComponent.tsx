@@ -13,10 +13,11 @@ import { SheetComponentProps } from "./interfaces";
 
 const SheetComponent: React.FC<SheetComponentProps> = ({
   closeRouteSheet,
-  destination,
-  setDestination,
-  departure,
-  setDeparture,
+  destinationName,
+  setDestinationName,
+  departureName,
+  setDepartureName,
+  setMapLocation,
   isAnimationComplete,
   destinationInputRef,
 }) => {
@@ -35,11 +36,11 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
     setFocusedField(field);
   };
 
-  const setMapLocation = () => {
+  const handleSettingMapLocation = () => {
     if (focusedField === "departure") {
-      setDeparture("setting departure");
+      setMapLocation("departure");
     } else if (focusedField === "destination") {
-      setDestination("setting destination...");
+      setMapLocation("destination");
     }
   };
 
@@ -57,10 +58,10 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
 
       <View style={styles.inputWrapper}>
         <AnimatedTextInput
-          value={departure}
+          value={departureName}
           placeholder="Departure"
-          onChangeText={setDeparture}
-          onMapLocationSelect={setMapLocation}
+          onChangeText={setDepartureName}
+          onMapLocationSelect={handleSettingMapLocation}
           onFocus={() => handleFocus("departure")}
           isFocused={focusedField === "departure"}
           leftIcon1={{ name: "search", color: "black" }}
@@ -73,11 +74,11 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
         />
 
         <AnimatedTextInput
-          value={destination}
+          value={destinationName}
           placeholder="Destination"
           inputRef={destinationInputRef}
-          onChangeText={setDestination}
-          onMapLocationSelect={setMapLocation}
+          onChangeText={setDestinationName}
+          onMapLocationSelect={handleSettingMapLocation}
           onFocus={() => handleFocus("destination")}
           isFocused={focusedField === "destination"}
           leftIcon1={{ name: "search", color: "black" }}

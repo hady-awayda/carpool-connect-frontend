@@ -46,13 +46,13 @@ const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
         <Ionicons
           name={leftIcon1?.name}
           color={leftIcon1?.color}
-          size={20}
+          size={24}
           style={styles.leftIcon}
         />
       ) : (
         <MaterialCommunityIcons
           name={leftIcon2?.name}
-          size={20}
+          size={24}
           color={leftIcon2?.color}
           style={styles.leftIcon}
         />
@@ -150,8 +150,8 @@ const styles = StyleSheet.create({
   },
   leftIcon: {
     position: "absolute",
-    left: 18,
-    top: "50%",
+    left: 12,
+    top: "48%",
     transform: [{ translateY: -10 }],
     zIndex: 1,
   },
