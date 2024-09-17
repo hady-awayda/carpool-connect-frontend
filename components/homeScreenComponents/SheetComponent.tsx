@@ -17,7 +17,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   setDestination,
   departure,
   setDeparture,
-  setMapLocation,
   isAnimationComplete,
   destinationInputRef,
 }) => {
@@ -34,6 +33,14 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   const handleFocus = (field: "departure" | "destination") => {
     if (focusedField === field) setFocusedField("destination");
     setFocusedField(field);
+  };
+
+  const setMapLocation = () => {
+    if (focusedField === "departure") {
+      setDeparture("setting departure");
+    } else if (focusedField === "destination") {
+      setDestination("setting destination...");
+    }
   };
 
   return (

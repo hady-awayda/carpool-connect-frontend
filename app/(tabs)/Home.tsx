@@ -102,10 +102,6 @@ const HomeScreen = () => {
     outputRange: [height * 0.66, height * 0.194],
   });
 
-  const setMapLocation = () => {
-    console.log("setting map location");
-  };
-
   return (
     <TouchableOpacity
       onPress={closeRouteSheet}
@@ -129,7 +125,6 @@ const HomeScreen = () => {
             setDestination,
             departure,
             setDeparture,
-            setMapLocation,
             isAnimationComplete,
             destinationInputRef,
             translateY: sheetTranslateY,

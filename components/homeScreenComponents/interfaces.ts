@@ -21,7 +21,6 @@ export type SheetComponentProps = {
   setDestination: (text: string) => void;
   departure: string;
   setDeparture: (text: string) => void;
-  setMapLocation: () => void;
   isAnimationComplete: boolean;
   destinationInputRef: React.RefObject<TextInput>;
 };
