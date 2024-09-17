@@ -17,10 +17,6 @@ export type AnimatedTextInputProps = {
 
 export type SheetComponentProps = {
   closeRouteSheet: () => void;
-  destination: string;
-  setDestination: ({ name, coords }: LocationProps) => void;
-  departure: string;
-  setDeparture: ({ name, coords }: LocationProps) => void;
   setMapLocation: (focusedField: "departure" | "destination") => void;
   isAnimationComplete: boolean;
   destinationInputRef: React.RefObject<TextInput>;

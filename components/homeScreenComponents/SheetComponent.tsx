@@ -1,4 +1,9 @@
 import { Colors } from "@/constants/Variables";
+import {
+  setDeparture,
+  setDestination,
+  updateAddressList,
+} from "@/data/redux/addressListSlice/slice";
 import { Ionicons } from "@expo/vector-icons";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useState } from "react";
@@ -9,22 +14,24 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import AnimatedTextInput from "./AnimatedTextInput";
 import { LocationProps, SheetComponentProps } from "./interfaces";
-import { useDispatch } from "react-redux";
-import { updateAddressList } from "@/data/redux/addressListSlice/slice";
+import { RootState } from "@/data/redux/store";
 
 const SheetComponent: React.FC<SheetComponentProps> = ({
   closeRouteSheet,
-  destination,
-  setDestination,
-  departure,
-  setDeparture,
   setMapLocation,
   isAnimationComplete,
   destinationInputRef,
 }) => {
   const dispatch = useDispatch();
+  const departure = useSelector(
+    (state: RootState) => state.address.departure.name
+  );
+  const destination = useSelector(
+    (state: RootState) => state.address.destination.name
+  );
 
   const [focusedField, setFocusedField] = useState<"departure" | "destination">(
     "destination"
@@ -89,12 +96,16 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   );
 
   const handleSettingDeparture = (text: string) => {
-    setDeparture((prev: LocationProps) => ({ ...prev, name: text }));
+    setDeparture(
+      (prev: LocationProps): LocationProps => ({ ...prev, name: text })
+    );
     debouncedFindAddresses(text);
   };
 
   const handleSettingDestination = (text: string) => {
-    setDestination((prev: LocationProps) => ({ ...prev, name: text }));
+    setDestination(
+      (prev: LocationProps): LocationProps => ({ ...prev, name: text })
+    );
     debouncedFindAddresses(text);
   };
 

@@ -2,6 +2,7 @@ import BottomContent from "@/components/homeScreenComponents/BottomContent";
 import { LocationProps } from "@/components/homeScreenComponents/interfaces";
 import MapComponent from "@/components/homeScreenComponents/MapComponent";
 import SheetComponent from "@/components/homeScreenComponents/SheetComponent";
+import { setDeparture, setLocation } from "@/data/redux/addressListSlice/slice";
 import { RootState } from "@/data/redux/store";
 import * as Location from "expo-location";
 import { StatusBar } from "expo-status-bar";
@@ -60,36 +61,10 @@ const HomeScreen = () => {
       }
 
       setLocation({ name, coords });
+
       !departure.name && setDeparture({ name, coords });
     })();
-  }, []);
-
-  // const handleLocationSelected = async (
-  //   location: LocationCoords,
-  //   focusedField: "departure" | "destination"
-  // ) => {
-  //   console.log("Selected location:", location);
-  //   try {
-  //     let [address] = await Location.reverseGeocodeAsync(location);
-
-  //     if (address && address.street) {
-  //       setDestinationName(`${address.street}, ${address.city}`);
-  //     } else if (address && address.name) {
-  //       setDestinationName(address.name);
-  //     } else {
-  //       setDestinationName(
-  //         `${location.latitude.toFixed(5)}, ${location.longitude.toFixed(5)}`
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error("Error in reverse geocoding:", error);
-  //     setDestinationName(
-  //       `${location.latitude.toFixed(5)}, ${location.longitude.toFixed(5)}`
-  //     );
-  //   }
-
-  //   setIsSelectingLocation(false);
-  // };
+  }, [dispatch, departure.name]);
 
   const showRouteSheet = () => {
     setIsAnimationComplete(false);
@@ -154,11 +129,6 @@ const HomeScreen = () => {
         <SheetComponent
           {...{
             closeRouteSheet,
-            destination: destination.name,
-            setDestination,
-            departure: departure.name,
-            setDeparture,
-            location,
             setMapLocation,
             isAnimationComplete,
             destinationInputRef,
