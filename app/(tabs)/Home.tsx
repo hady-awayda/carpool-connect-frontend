@@ -2,6 +2,7 @@ import BottomContent from "@/components/homeScreenComponents/BottomContent";
 import { LocationProps } from "@/components/homeScreenComponents/interfaces";
 import MapComponent from "@/components/homeScreenComponents/MapComponent";
 import SheetComponent from "@/components/homeScreenComponents/SheetComponent";
+import { RootState } from "@/data/redux/store";
 import * as Location from "expo-location";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef, useState } from "react";
@@ -14,22 +15,14 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
 const { height } = Dimensions.get("window");
 
 const HomeScreen = () => {
-  const [location, setLocation] = useState<LocationProps>({
-    name: "Fetching...",
-    coords: null,
-  });
-  const [departure, setDeparture] = useState<LocationProps>({
-    name: "",
-    coords: null,
-  });
-  const [destination, setDestination] = useState<LocationProps>({
-    name: "",
-    coords: null,
-  });
+  const location = useSelector((state: RootState) => state.address.location);
+  const departure = useSelector((state: RootState) => state.address.departure);
+  const dispatch = useDispatch();
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
   const animatedValue = useRef(new Animated.Value(0)).current;
   const destinationInputRef = useRef<TextInput>(null);
