@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import AnimatedTextInput from "./AnimatedTextInput";
 import { LocationProps, SheetComponentProps } from "./interfaces";
+import { useDispatch } from "react-redux";
+import { updateAddressList } from "@/data/redux/addressListSlice/slice";
 
 const SheetComponent: React.FC<SheetComponentProps> = ({
   closeRouteSheet,
@@ -22,6 +24,8 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   isAnimationComplete,
   destinationInputRef,
 }) => {
+  const dispatch = useDispatch();
+
   const [focusedField, setFocusedField] = useState<"departure" | "destination">(
     "destination"
   );
@@ -45,9 +49,9 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
     }
   };
 
-  const findAddressesByName = async (name: string, limit = 5) => {
+  const findAddressesByName = async (name: string, limit = 5, page = 1) => {
     const encodedName = encodeURIComponent(name);
-    const url = `https://nominatim.openstreetmap.org/search?q=${encodedName}&format=json&limit=${limit}`;
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodedName}&format=json&limit=${limit}&page=${page}`;
 
     try {
       const response = await fetch(url);
@@ -71,28 +75,27 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
     }
   };
 
-  const debouncedfindCoords = useCallback(
+  const debouncedFindAddresses = useCallback(
     debounce(async (text: string) => {
-      const coords = await findAddressesByName(text);
-      return coords as LocationProps[];
-    }, 1000),
+      if (text.trim().length === 0) {
+        dispatch(updateAddressList([]));
+        return;
+      }
+
+      const addresses = await findAddressesByName(text);
+      dispatch(updateAddressList(addresses));
+    }, 500),
     []
   );
 
-  const handleSettingDeparture = async (text: string) => {
-    const coords = await debouncedfindCoords(text);
-    setDeparture({
-      name: text,
-      coords: coords[0]?.coords,
-    });
+  const handleSettingDeparture = (text: string) => {
+    setDeparture((prev: LocationProps) => ({ ...prev, name: text }));
+    debouncedFindAddresses(text);
   };
 
-  const handleSettingDestination = async (text: string) => {
-    const coords = await debouncedfindCoords(text);
-    setDestination({
-      name: text,
-      coords: coords[0]?.coords,
-    });
+  const handleSettingDestination = (text: string) => {
+    setDestination((prev: LocationProps) => ({ ...prev, name: text }));
+    debouncedFindAddresses(text);
   };
 
   return (
