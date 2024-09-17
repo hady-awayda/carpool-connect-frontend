@@ -2,10 +2,12 @@ import { Colors } from "@/constants/Variables";
 import {
   setDeparture,
   setDestination,
+  updateAddressList,
 } from "@/data/redux/addressListSlice/slice";
 import { RootState } from "@/data/redux/store";
 import { Ionicons } from "@expo/vector-icons";
-import { useEffect, useRef, useState } from "react";
+import debounce from "lodash.debounce";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -16,8 +18,7 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import AnimatedTextInput from "./AnimatedTextInput";
-import debouncedFindAddresses from "./findAddress";
-import { SheetComponentProps } from "./interfaces";
+import { LocationProps, SheetComponentProps } from "./interfaces";
 
 const SheetComponent: React.FC<SheetComponentProps> = ({
   closeRouteSheet,
@@ -63,6 +64,45 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
     }
   };
 
+  const findAddressesByName = async (name: string, limit = 5, page = 1) => {
+    const encodedName = encodeURIComponent(name);
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodedName}&format=json&limit=${limit}&page=${page}`;
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data && data.length > 0) {
+        const addresses = data.map((item: LocationProps) => ({
+          name: item.name,
+          coords: {
+            latitude: item.coords?.latitude,
+            longitude: item.coords?.longitude,
+            latitudeDelta: 0.004,
+            longitudeDelta: 0.004,
+          },
+        }));
+        return addresses;
+      } else return [];
+    } catch (error) {
+      console.error("Error fetching addresses:", error);
+      return [];
+    }
+  };
+
+  const debouncedFindAddresses = useCallback(
+    debounce(async (text: string) => {
+      if (text.trim().length === 0) {
+        dispatch(updateAddressList([]));
+        return;
+      }
+
+      const addresses = await findAddressesByName(text);
+      dispatch(updateAddressList(addresses));
+    }, 500),
+    []
+  );
+
   const handleSettingDeparture = (text: string) => {
     dispatch(setDeparture({ ...departure, name: text }));
     debouncedFindAddresses(text);
@@ -95,7 +135,10 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
           onFocus={() => handleFocus("departure")}
           isFocused={focusedField === "departure"}
           leftIcon1={{ name: "search", color: "black" }}
-          leftIcon2={{ name: "radiobox-marked", color: Colors.light.secondary }}
+          leftIcon2={{
+            name: "radiobox-marked",
+            color: Colors.light.secondary,
+          }}
           rightIcon1={{ name: "close-circle", color: "#bbb" }}
           rightIcon2={{
             name: "map-marker-radius",
@@ -160,6 +203,3 @@ const styles = StyleSheet.create({
 });
 
 export default SheetComponent;
-function findAddressesByName(text: string) {
-  throw new Error("Function not implemented.");
-}
