@@ -2,7 +2,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { LocationProps } from "@/components/homeScreenComponents/interfaces";
 
-const initialState = {
+type AddressState = {
+  addressList: any[];
+  location: LocationProps;
+  departure: LocationProps;
+  destination: LocationProps;
+};
+
+const initialState: AddressState = {
   addressList: [],
   location: {
     name: "Fetching...",
@@ -37,11 +44,7 @@ const addressSlice = createSlice({
   },
 });
 
-export const {
-  updateAddressList,
-  setLocation,
-  setDeparture,
-  setDestination,
-} = addressSlice.actions;
+export const { updateAddressList, setLocation, setDeparture, setDestination } =
+  addressSlice.actions;
 
 export default addressSlice.reducer;
