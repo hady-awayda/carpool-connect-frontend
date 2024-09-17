@@ -3,8 +3,20 @@ import { RootState } from "@/data/redux/store";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet, Text, View } from "react-native";
 import { useSelector } from "react-redux";
+import { MaterialCommunityIconsName } from "./AnimatedTextInput";
 
-const defaultAddresses = [
+type Address = {
+  name: string;
+  icon?: string;
+  coords?: {
+    latitude: number;
+    longitude: number;
+    latitudeDelta?: number;
+    longitudeDelta?: number;
+  };
+};
+
+const defaultAddresses: Address[] = [
   {
     name: "Beirut Rafic Hariri Airport (BEY)",
     icon: "airplane",
@@ -20,11 +32,11 @@ const defaultAddresses = [
 ];
 
 const LastDestinations = () => {
-  const addresses = useSelector(
+  const addresses: Address[] = useSelector(
     (state: RootState) => state.address.addressList
   );
 
-  const dataToRender =
+  const dataToRender: Address[] =
     addresses && addresses.length > 0 ? addresses : defaultAddresses;
 
   return (
@@ -33,7 +45,7 @@ const LastDestinations = () => {
         <View key={index} style={styles.suggestionItem}>
           <View style={styles.iconContainer}>
             <MaterialCommunityIcons
-              name={item.icon || "map-marker"}
+              name={(item.icon as MaterialCommunityIconsName) || "map-marker"}
               size={24}
               color={Colors.light.text}
             />

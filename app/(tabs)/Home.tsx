@@ -147,11 +147,7 @@ const HomeScreen = () => {
   };
 
   return (
-    <TouchableOpacity
-      onPress={closeRouteSheet}
-      activeOpacity={1}
-      style={styles.container}
-    >
+    <TouchableOpacity activeOpacity={1} style={styles.container}>
       <StatusBar style="auto" />
 
       {location.coords && <MapComponent location={location.coords} />}
