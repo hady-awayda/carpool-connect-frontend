@@ -65,15 +65,11 @@ const HomeScreen = () => {
       } catch (error) {
         console.error("Error in reverse geocoding:", error);
       }
+
       setLocation({ name, coords });
-
-      console.log(location.name);
-
       !departure.name && setDeparture({ name, coords });
     })();
   }, []);
-
-  // useEffect(() => console.log(currentLocationName), [currentLocationName]);
 
   // const handleLocationSelected = async (
   //   location: LocationCoords,

@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/Variables";
 import { Ionicons } from "@expo/vector-icons";
+import debounce from "lodash.debounce";
 import { useCallback, useEffect, useState } from "react";
 import {
   Dimensions,
@@ -10,7 +11,6 @@ import {
 } from "react-native";
 import AnimatedTextInput from "./AnimatedTextInput";
 import { SheetComponentProps } from "./interfaces";
-import debounce from "lodash.debounce";
 
 const SheetComponent: React.FC<SheetComponentProps> = ({
   closeRouteSheet,
@@ -67,27 +67,17 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
     }
   };
 
-  const debouncedHandleSettingDeparture = useCallback(
+  const debouncedfindCoords = useCallback(
     debounce(async (text: string) => {
       const coords = await findCoordsByName(text);
-      if (coords) {
-        setDeparture({
-          name: text,
-          coords,
-        });
-      } else {
-        console.warn("Coordinates not found for departure location");
-        setDeparture({
-          name: text,
-          coords: null,
-        });
-      }
+      if (coords) return coords;
+      else return null;
     }, 1000),
     []
   );
 
   const handleSettingDeparture = async (text: string) => {
-    const coords = await findCoordsByName(text);
+    const coords = await debouncedfindCoords(text);
     setDeparture({
       name: text,
       coords,
@@ -95,7 +85,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   };
 
   const handleSettingDestination = async (text: string) => {
-    const coords = await findCoordsByName(text);
+    const coords = await debouncedfindCoords(text);
     setDestination({
       name: text,
       coords,

@@ -1,6 +1,6 @@
-import { View, Text, StyleSheet } from "react-native";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Colors, Typography } from "@/constants/Variables";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { StyleSheet, Text, View } from "react-native";
 
 const LastDestinations = () => {
   return (
