@@ -1,4 +1,3 @@
-// addressSlice.js
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { LocationProps } from "@/components/homeScreenComponents/interfaces";
 

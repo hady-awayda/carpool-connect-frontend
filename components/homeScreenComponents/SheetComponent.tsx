@@ -27,6 +27,7 @@ import { useDispatch, useSelector } from "react-redux";
 import BorderedButton from "../BorderedButton";
 import AnimatedTextInput from "./AnimatedTextInput";
 import { LocationProps, SheetComponentProps } from "./interfaces";
+import addSchedule from "./addSchedule";
 
 const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   const dispatch = useDispatch();
@@ -153,7 +154,8 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
     animateToState("sheet-expanded");
   };
 
-  const handleSubmitSchedule = () => {
+  const handleSubmitSchedule = async () => {
+    addSchedule();
     animateToState("expanded");
     Keyboard.dismiss();
   };
@@ -226,7 +228,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
               isFocused={focusedField === "departureTime"}
               leftIcon1={{ name: "time-outline", color: "black" }}
               leftIcon2={{
-                name: "radiobox-marked",
+                name: "clock",
                 color: departureTime ? Colors.light.secondary : "#bbb",
               }}
               rightIcon1={{ name: "close-circle", color: "#bbb" }}
@@ -241,7 +243,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
               isFocused={focusedField === "destinationTime"}
               leftIcon1={{ name: "time-outline", color: "black" }}
               leftIcon2={{
-                name: "radiobox-marked",
+                name: "clock",
                 color: destinationTime ? Colors.light.secondary : "#bbb",
               }}
               rightIcon1={{ name: "close-circle", color: "#bbb" }}
@@ -284,7 +286,8 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
           <BorderedButton
             buttonText="+ Add Schedule"
             onPress={handleSubmitSchedule}
-            color={Colors.light.primary}
+            textColor={Colors.light.primary}
+            borderColor={Colors.light.secondary}
           />
         </>
       )}

@@ -13,7 +13,8 @@ type BorderedButtonProps = {
   onPress: () => void;
   buttonStyle?: ViewStyle;
   textStyle?: TextStyle;
-  color?: string;
+  textColor?: string;
+  borderColor?: string;
 };
 
 const BorderedButton: React.FC<BorderedButtonProps> = ({
@@ -21,7 +22,8 @@ const BorderedButton: React.FC<BorderedButtonProps> = ({
   buttonStyle,
   textStyle,
   buttonText,
-  color,
+  textColor,
+  borderColor,
 }) => {
   const [animation] = useState(new Animated.Value(0));
   let pressInTime = 0;
@@ -53,12 +55,18 @@ const BorderedButton: React.FC<BorderedButtonProps> = ({
 
   const animatedBorderColor = animation.interpolate({
     inputRange: [0, 1],
-    outputRange: ["#333", Colors.light.primary],
+    outputRange: [
+      textColor ? Colors.light.primary : "#333",
+      Colors.light.primary,
+    ],
   });
 
   const animatedTextColor = animation.interpolate({
     inputRange: [0, 1],
-    outputRange: [color ? Colors.light.primary : "#333", Colors.light.primary],
+    outputRange: [
+      textColor ? Colors.light.primary : "#333",
+      Colors.light.primary,
+    ],
   });
 
   return (
