@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type UIState = "collapsed" | "expanded" | "full";
+export type UIState = "expanded" | "collapsed" | "full";
 
 type UIStateSlice = {
   uiState: UIState;

@@ -3,6 +3,7 @@ import userReducer from "./userSlice/slice";
 import tokenReducer from "./tokenSlice/slice";
 import addressReducer from "./addressListSlice/slice";
 import uiStateReducer from "./UIStateSlice/slice";
+import scheduleReducer from "./scheduleSlice/slice";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     token: tokenReducer,
     address: addressReducer,
     uiState: uiStateReducer,
+    schedule: scheduleReducer,
   },
 });
 

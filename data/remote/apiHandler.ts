@@ -3,6 +3,8 @@ import store from "@/data/redux/store";
 
 const API_BASE_URL =
   "http://carpool-dev-load-balancer-854327849.eu-central-1.elb.amazonaws.com/api/";
+const SOCKET_IO_URL =
+  "ws://carpool-dev-load-balancer-854327849.eu-central-1.elb.amazonaws.com/socket.io/?EIO=4&transport=websocket";
 
 const api = axios.create({
   baseURL: API_BASE_URL,

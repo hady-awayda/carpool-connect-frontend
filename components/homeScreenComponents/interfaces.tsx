@@ -6,7 +6,7 @@ export type AnimatedTextInputProps = {
   placeholder: string;
   inputRef?: React.RefObject<TextInput>;
   onChangeText: (text: string) => void;
-  onMapLocationSelect: () => void;
+  onMapLocationSelect?: () => void;
   onFocus: () => void;
   isFocused: boolean;
   leftIcon1?: { name: IoniconsName; color: string };
@@ -17,19 +17,21 @@ export type AnimatedTextInputProps = {
 
 export type SheetComponentProps = {
   closeRouteSheet: () => void;
-  setMapLocation: (focusedField: "departure" | "destination") => void;
   isAnimationComplete: boolean;
 };
+
 export type LocationCoords = {
   latitude: number;
   longitude: number;
   latitudeDelta: number;
   longitudeDelta: number;
 };
+
 export type LocationProps = {
   name: string;
   coords: LocationCoords | null;
 };
+
 export type Address = {
   name: string;
   icon?: string;

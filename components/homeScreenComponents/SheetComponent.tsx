@@ -19,10 +19,14 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import AnimatedTextInput from "./AnimatedTextInput";
 import { LocationProps, SheetComponentProps } from "./interfaces";
+import {
+  setDepartureTime,
+  setDestinationTime,
+  setTravelMode,
+} from "@/data/redux/scheduleSlice/slice";
 
 const SheetComponent: React.FC<SheetComponentProps> = ({
   closeRouteSheet,
-  setMapLocation,
   isAnimationComplete,
 }) => {
   const dispatch = useDispatch();
@@ -30,12 +34,24 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   const destination = useSelector(
     (state: RootState) => state.address.destination
   );
+  const departureTime = useSelector(
+    (state: RootState) => state.schedule.departureTime
+  );
+  const destinationTime = useSelector(
+    (state: RootState) => state.schedule.destinationTime
+  );
+  const travelMode = useSelector(
+    (state: RootState) => state.schedule.travelMode
+  );
+
   const departureInputRef = useRef<TextInput>(null);
   const destinationInputRef = useRef<TextInput>(null);
+  const departureTimeInputRef = useRef<TextInput>(null);
+  const destinationTimeInputRef = useRef<TextInput>(null);
 
-  const [focusedField, setFocusedField] = useState<"departure" | "destination">(
-    "destination"
-  );
+  const [focusedField, setFocusedField] = useState<
+    "departure" | "destination" | "departureTime" | "destinationTime"
+  >("destination");
 
   useEffect(() => {
     if (isAnimationComplete) {
@@ -44,6 +60,10 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
       } else if (focusedField === "destination") {
         destinationInputRef.current?.focus();
       }
+    } else if (focusedField === "departureTime") {
+      departureTimeInputRef.current?.focus();
+    } else if (focusedField === "destinationTime") {
+      destinationTimeInputRef.current?.focus();
     }
   }, [
     isAnimationComplete,
@@ -52,17 +72,13 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
     destinationInputRef,
   ]);
 
-  const handleFocus = (field: "departure" | "destination") => {
+  const handleFocus = (
+    field: "departure" | "destination" | "departureTime" | "destinationTime"
+  ) => {
     setFocusedField(field);
   };
 
-  const handleSettingMapLocation = () => {
-    if (focusedField === "departure") {
-      setMapLocation("departure");
-    } else if (focusedField === "destination") {
-      setMapLocation("destination");
-    }
-  };
+  const handleSettingMapLocation = () => {};
 
   const findAddressesByName = async (name: string, limit = 5, page = 1) => {
     const encodedName = encodeURIComponent(name);
@@ -111,6 +127,20 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   const handleSettingDestination = (text: string) => {
     dispatch(setDestination({ ...destination, name: text }));
     debouncedFindAddresses(text);
+  };
+
+  const handleDepartureTimeChange = (text: string) => {
+    dispatch(setDepartureTime(text));
+  };
+
+  const handleDestinationTimeChange = (text: string) => {
+    dispatch(setDestinationTime(text));
+  };
+
+  const handleTravelModeChange = (
+    mode: "rider" | "passenger" | "partnership"
+  ) => {
+    dispatch(setTravelMode(mode));
   };
 
   return (
@@ -162,6 +192,58 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
             color: Colors.light.secondary,
           }}
         />
+
+        <AnimatedTextInput
+          value={departureTime}
+          placeholder="Departure Time"
+          inputRef={departureTimeInputRef}
+          onChangeText={handleDepartureTimeChange}
+          onFocus={() => handleFocus("departureTime")}
+          isFocused={focusedField === "departureTime"}
+          leftIcon1={{ name: "time-outline", color: "black" }}
+          rightIcon1={{ name: "close-circle", color: "#bbb" }}
+        />
+
+        <AnimatedTextInput
+          value={destinationTime}
+          placeholder="Arrival Time"
+          inputRef={destinationTimeInputRef}
+          onChangeText={handleDestinationTimeChange}
+          onFocus={() => handleFocus("destinationTime")}
+          isFocused={focusedField === "destinationTime"}
+          leftIcon1={{ name: "time-outline", color: "black" }}
+          rightIcon1={{ name: "close-circle", color: "#bbb" }}
+        />
+
+        <View style={styles.travelModeContainer}>
+          <TouchableOpacity
+            style={[
+              styles.travelModeButton,
+              travelMode === "rider" && styles.activeButton,
+            ]}
+            onPress={() => handleTravelModeChange("rider")}
+          >
+            <Text style={styles.travelModeText}>Rider</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.travelModeButton,
+              travelMode === "passenger" && styles.activeButton,
+            ]}
+            onPress={() => handleTravelModeChange("passenger")}
+          >
+            <Text style={styles.travelModeText}>Passenger</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.travelModeButton,
+              travelMode === "partnership" && styles.activeButton,
+            ]}
+            onPress={() => handleTravelModeChange("partnership")}
+          >
+            <Text style={styles.travelModeText}>Partnership</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -199,6 +281,24 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light.background,
     borderRadius: 8,
     marginTop: 16,
+  },
+  travelModeContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 16,
+  },
+  travelModeButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    backgroundColor: Colors.light.background,
+  },
+  activeButton: {
+    backgroundColor: Colors.light.primary,
+  },
+  travelModeText: {
+    color: Colors.light.text,
+    fontSize: 16,
   },
 });
 
