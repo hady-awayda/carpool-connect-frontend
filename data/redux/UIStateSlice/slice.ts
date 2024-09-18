@@ -16,7 +16,7 @@ interface UIStateSlice {
 const initialState: UIStateSlice = {
   uiState: "collapsed",
   isAnimationComplete: false,
-  focusedField: null,
+  focusedField: "destination",
 };
 
 const uiStateSlice = createSlice({

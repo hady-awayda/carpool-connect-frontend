@@ -82,7 +82,6 @@ const HomeScreen = () => {
   }, [dispatch, departure.name]);
 
   const animateToState = (state: UIState) => {
-    Keyboard.dismiss();
     dispatch(setAnimationComplete(false));
     dispatch(setUIState(state));
     Animated.timing(animatedValue, {
@@ -145,9 +144,7 @@ const HomeScreen = () => {
               { transform: [{ translateY: sheetTranslateY }] },
             ]}
           >
-            <SheetComponent
-              closeRouteSheet={() => animateToState("expanded")}
-            />
+            <SheetComponent {...{ animateToState }} />
           </Animated.View>
         </PanGestureHandler>
 

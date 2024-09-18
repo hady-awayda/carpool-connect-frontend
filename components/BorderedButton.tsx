@@ -58,7 +58,7 @@ const BorderedButton: React.FC<BorderedButtonProps> = ({
 
   const animatedTextColor = animation.interpolate({
     inputRange: [0, 1],
-    outputRange: [color ? Colors.light.primary : "#bbb", Colors.light.primary],
+    outputRange: [color ? Colors.light.primary : "#333", Colors.light.primary],
   });
 
   return (
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: "100%",
-    borderWidth: 1, // Added borderWidth here
+    borderWidth: 1,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 5,

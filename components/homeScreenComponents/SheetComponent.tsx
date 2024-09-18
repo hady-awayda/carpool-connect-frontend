@@ -10,7 +10,7 @@ import {
   setTravelMode,
 } from "@/data/redux/scheduleSlice/slice";
 import { RootState } from "@/data/redux/store";
-import { setFocusedField, setUIState } from "@/data/redux/UIStateSlice/slice";
+import { setFocusedField } from "@/data/redux/UIStateSlice/slice";
 import { Ionicons } from "@expo/vector-icons";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useRef } from "react";
@@ -28,7 +28,7 @@ import BorderedButton from "../BorderedButton";
 import AnimatedTextInput from "./AnimatedTextInput";
 import { LocationProps, SheetComponentProps } from "./interfaces";
 
-const SheetComponent: React.FC<SheetComponentProps> = ({ closeRouteSheet }) => {
+const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   const dispatch = useDispatch();
   const departure = useSelector((state: RootState) => state.address.departure);
   const destination = useSelector(
@@ -57,8 +57,8 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ closeRouteSheet }) => {
   const destinationTimeInputRef = useRef<TextInput>(null);
 
   useEffect(() => {
-    Keyboard.dismiss();
-    if (isAnimationComplete) {
+    console.log(focusedField);
+    if (isAnimationComplete || uiState === "full") {
       if (focusedField === "departure") {
         departureInputRef.current?.focus();
       } else if (focusedField === "destination") {
@@ -69,7 +69,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ closeRouteSheet }) => {
         destinationTimeInputRef.current?.focus();
       }
     }
-  }, [dispatch, isAnimationComplete, focusedField]);
+  }, [isAnimationComplete, uiState, focusedField]);
 
   const handleFocus = (
     field: "departure" | "destination" | "departureTime" | "destinationTime"
@@ -142,14 +142,20 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ closeRouteSheet }) => {
     dispatch(setTravelMode(mode));
   };
 
+  const handleCloseSheet = () => {
+    animateToState("expanded");
+    departureInputRef.current?.blur();
+    destinationInputRef.current?.blur();
+  };
+
   const handleExpandSheet = () => {
     dispatch(setFocusedField("departureTime"));
-    dispatch(setUIState("sheet-expanded"));
+    animateToState("sheet-expanded");
   };
 
   const handleSubmitSchedule = () => {
-    dispatch(setFocusedField(null));
-    dispatch(setUIState("collapsed"));
+    animateToState("expanded");
+    Keyboard.dismiss();
   };
 
   const sheetHeight =
@@ -160,7 +166,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ closeRouteSheet }) => {
   return (
     <View style={[styles.sheetContainer, { height: sheetHeight }]}>
       <View style={styles.routeHeader}>
-        <TouchableOpacity onPress={closeRouteSheet}>
+        <TouchableOpacity onPress={handleCloseSheet}>
           <Ionicons name="close" size={28} />
         </TouchableOpacity>
         <Text style={styles.routeTitle}>Your route</Text>

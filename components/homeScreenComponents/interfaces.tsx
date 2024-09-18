@@ -1,5 +1,6 @@
 import { TextInput } from "react-native";
 import { IoniconsName, MaterialCommunityIconsName } from "./AnimatedTextInput";
+import { UIState } from "@/data/redux/UIStateSlice/slice";
 
 export type AnimatedTextInputProps = {
   value: string;
@@ -7,7 +8,8 @@ export type AnimatedTextInputProps = {
   inputRef?: React.RefObject<TextInput>;
   onChangeText: (text: string) => void;
   onMapLocationSelect?: () => void;
-  onFocus: () => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
   isFocused: boolean;
   leftIcon1?: { name: IoniconsName; color: string };
   leftIcon2?: { name: MaterialCommunityIconsName; color: string };
@@ -16,7 +18,7 @@ export type AnimatedTextInputProps = {
 };
 
 export type SheetComponentProps = {
-  closeRouteSheet: () => void;
+  animateToState: (state: UIState) => void;
 };
 
 export type LocationCoords = {
