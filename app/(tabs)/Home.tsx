@@ -80,7 +80,7 @@ const HomeScreen = () => {
         dispatch(setDeparture({ name, coords }));
       }
 
-      animateToState("full");
+      animateToState("expanded");
     })();
   }, []);
 

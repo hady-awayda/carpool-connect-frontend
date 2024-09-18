@@ -11,7 +11,7 @@ import {
 
 type BoldButtonProps = {
   buttonText: string;
-  onPress: () => void;
+  onPress?: () => void;
   buttonStyle?: ViewStyle;
   textStyle?: TextStyle;
   width?: number;
@@ -43,7 +43,7 @@ const BoldButton: React.FC<BoldButtonProps> = ({
     const pressOutTime = Date.now();
     const pressDuration = pressOutTime - pressInTime;
     const remainingTime = Math.max(200 - pressDuration, 0);
-    onPress();
+    onPress && onPress();
 
     setTimeout(() => {
       Animated.timing(animation, {
