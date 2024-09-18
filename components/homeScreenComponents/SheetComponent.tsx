@@ -24,11 +24,11 @@ import {
   View,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import BoldButton from "../BoldButton";
 import BorderedButton from "../BorderedButton";
+import addSchedule from "./addSchedule";
 import AnimatedTextInput from "./AnimatedTextInput";
 import { LocationProps, SheetComponentProps } from "./interfaces";
-import addSchedule from "./addSchedule";
-import BoldButton from "../BoldButton";
 
 const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   const dispatch = useDispatch();
@@ -49,9 +49,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   const focusedField = useSelector(
     (state: RootState) => state.uiState.focusedField
   );
-  const isAnimationComplete = useSelector(
-    (state: RootState) => state.uiState.isAnimationComplete
-  );
 
   const departureInputRef = useRef<TextInput>(null);
   const destinationInputRef = useRef<TextInput>(null);
@@ -59,8 +56,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   const destinationTimeInputRef = useRef<TextInput>(null);
 
   useEffect(() => {
-    console.log(focusedField);
-    if (isAnimationComplete || uiState === "full") {
+    if (uiState === "full" || uiState === "sheet-expanded") {
       if (focusedField === "departure") {
         departureInputRef.current?.focus();
       } else if (focusedField === "destination") {
@@ -147,6 +143,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   const handleCloseSheet = () => {
     if (uiState === "sheet-expanded") {
       animateToState("full");
+      dispatch(setFocusedField("destination"));
     } else if (uiState === "full") {
       animateToState("expanded");
     }
