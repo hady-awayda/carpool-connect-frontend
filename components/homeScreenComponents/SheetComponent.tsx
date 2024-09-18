@@ -24,6 +24,7 @@ import {
   View,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import BorderedButton from "../BorderedButton";
 import AnimatedTextInput from "./AnimatedTextInput";
 import { LocationProps, SheetComponentProps } from "./interfaces";
 
@@ -56,6 +57,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ closeRouteSheet }) => {
   const destinationTimeInputRef = useRef<TextInput>(null);
 
   useEffect(() => {
+    Keyboard.dismiss();
     if (isAnimationComplete) {
       if (focusedField === "departure") {
         departureInputRef.current?.focus();
@@ -67,7 +69,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ closeRouteSheet }) => {
         destinationTimeInputRef.current?.focus();
       }
     }
-  }, [isAnimationComplete, focusedField]);
+  }, [dispatch, isAnimationComplete, focusedField]);
 
   const handleFocus = (
     field: "departure" | "destination" | "departureTime" | "destinationTime"
@@ -141,13 +143,18 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ closeRouteSheet }) => {
   };
 
   const handleExpandSheet = () => {
-    Keyboard.dismiss();
+    dispatch(setFocusedField("departureTime"));
     dispatch(setUIState("sheet-expanded"));
+  };
+
+  const handleSubmitSchedule = () => {
+    dispatch(setFocusedField(null));
+    dispatch(setUIState("collapsed"));
   };
 
   const sheetHeight =
     uiState === "sheet-expanded"
-      ? Dimensions.get("window").height * 0.47
+      ? Dimensions.get("window").height * 0.55
       : Dimensions.get("window").height * 0.25;
 
   return (
@@ -237,35 +244,43 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ closeRouteSheet }) => {
         )}
       </View>
       {uiState === "sheet-expanded" && (
-        <View style={styles.travelModeContainer}>
-          <TouchableOpacity
-            style={[
-              styles.travelModeButton,
-              travelMode === "rider" && styles.activeButton,
-            ]}
-            onPress={() => handleTravelModeChange("rider")}
-          >
-            <Text style={styles.travelModeText}>Rider</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.travelModeButton,
-              travelMode === "passenger" && styles.activeButton,
-            ]}
-            onPress={() => handleTravelModeChange("passenger")}
-          >
-            <Text style={styles.travelModeText}>Passenger</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.travelModeButton,
-              travelMode === "partnership" && styles.activeButton,
-            ]}
-            onPress={() => handleTravelModeChange("partnership")}
-          >
-            <Text style={styles.travelModeText}>Partnership</Text>
-          </TouchableOpacity>
-        </View>
+        <>
+          <View style={styles.travelModeContainer}>
+            <TouchableOpacity
+              style={[
+                styles.travelModeButton,
+                travelMode === "rider" && styles.activeButton,
+              ]}
+              onPress={() => handleTravelModeChange("rider")}
+            >
+              <Text style={styles.travelModeText}>Rider</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.travelModeButton,
+                travelMode === "passenger" && styles.activeButton,
+              ]}
+              onPress={() => handleTravelModeChange("passenger")}
+            >
+              <Text style={styles.travelModeText}>Passenger</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.travelModeButton,
+                travelMode === "partnership" && styles.activeButton,
+              ]}
+              onPress={() => handleTravelModeChange("partnership")}
+            >
+              <Text style={styles.travelModeText}>Partnership</Text>
+            </TouchableOpacity>
+          </View>
+
+          <BorderedButton
+            buttonText="+ Add Schedule"
+            onPress={handleSubmitSchedule}
+            color={Colors.light.primary}
+          />
+        </>
       )}
     </View>
   );
@@ -309,7 +324,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     flexDirection: "row",
     justifyContent: "space-around",
-    marginTop: 16,
+    marginTop: 24,
+    marginBottom: 18,
   },
   travelModeButton: {
     paddingVertical: 8,

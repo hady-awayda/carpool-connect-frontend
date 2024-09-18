@@ -82,6 +82,7 @@ const HomeScreen = () => {
   }, [dispatch, departure.name]);
 
   const animateToState = (state: UIState) => {
+    Keyboard.dismiss();
     dispatch(setAnimationComplete(false));
     dispatch(setUIState(state));
     Animated.timing(animatedValue, {
@@ -91,7 +92,6 @@ const HomeScreen = () => {
       useNativeDriver: true,
     }).start(() => {
       dispatch(setAnimationComplete(true));
-      Keyboard.dismiss();
     });
   };
 
@@ -120,12 +120,7 @@ const HomeScreen = () => {
 
   const sheetTranslateY = animatedValue.interpolate({
     inputRange: [0, 1, 2, 3],
-    outputRange: [
-      -height * 1.4,
-      -height * 1.4,
-      -height * 0.71,
-      -height * 0.484,
-    ],
+    outputRange: [-height * 1.4, -height * 1.4, -height * 0.71, -height * 0.41],
   });
 
   const bottomContentTranslateY = animatedValue.interpolate({
