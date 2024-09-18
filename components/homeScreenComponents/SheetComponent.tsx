@@ -245,54 +245,41 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
       {uiState === "sheet-expanded" && (
         <>
           <View style={styles.travelModeContainer}>
-            {travelMode === "rider" ? (
-              <BoldButton
-                width={90}
-                height={40}
-                buttonText="Rider"
-                buttonStyle={{ backgroundColor: Colors.light.primary }}
-              />
-            ) : (
-              <BorderedButton
-                onPress={() => dispatch(setTravelMode("rider"))}
-                width={90}
-                height={40}
-                buttonText="Rider"
-                textColor={Colors.light.text}
-              />
-            )}
-            {travelMode === "passenger" ? (
-              <BoldButton
-                width={120}
-                height={40}
-                buttonText="Passenger"
-                buttonStyle={{ backgroundColor: Colors.light.primary }}
-              />
-            ) : (
-              <BorderedButton
-                onPress={() => dispatch(setTravelMode("passenger"))}
-                width={120}
-                height={40}
-                buttonText="Passenger"
-                textColor={Colors.light.text}
-              />
-            )}
-            {travelMode === "partnership" ? (
-              <BoldButton
-                width={120}
-                height={40}
-                buttonText="Partnership"
-                buttonStyle={{ backgroundColor: Colors.light.primary }}
-              />
-            ) : (
-              <BorderedButton
-                onPress={() => dispatch(setTravelMode("partnership"))}
-                width={120}
-                height={40}
-                buttonText="Partnership"
-                textColor={Colors.light.text}
-              />
-            )}
+            <BorderedButton
+              onPress={() => dispatch(setTravelMode("rider"))}
+              width={90}
+              height={40}
+              buttonText="Rider"
+              borderColor={
+                travelMode === "rider"
+                  ? Colors.light.primary
+                  : Colors.light.text
+              }
+            />
+
+            <BorderedButton
+              onPress={() => dispatch(setTravelMode("passenger"))}
+              width={120}
+              height={40}
+              buttonText="Passenger"
+              borderColor={
+                travelMode === "passenger"
+                  ? Colors.light.primary
+                  : Colors.light.text
+              }
+            />
+
+            <BorderedButton
+              onPress={() => dispatch(setTravelMode("partnership"))}
+              width={120}
+              height={40}
+              buttonText="Partnership"
+              borderColor={
+                travelMode === "partnership"
+                  ? Colors.light.primary
+                  : Colors.light.text
+              }
+            />
           </View>
 
           <BoldButton

@@ -59,7 +59,7 @@ const BorderedButton: React.FC<BorderedButtonProps> = ({
 
   const animatedBorderColor = animation.interpolate({
     inputRange: [0, 1],
-    outputRange: [textColor ? textColor : "#333", Colors.light.primary],
+    outputRange: [borderColor ? borderColor : "#333", Colors.light.primary],
   });
 
   const animatedTextColor = animation.interpolate({
