@@ -62,18 +62,24 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
       departureTimeInputRef.current?.blur();
       destinationTimeInputRef.current?.blur();
     }
-    if (uiState === "full" || uiState === "sheet-expanded") {
+    if (uiState === "full") {
       if (focusedField === "departure") {
         departureInputRef.current?.focus();
       } else if (focusedField === "destination") {
         destinationInputRef.current?.focus();
-      } else if (focusedField === "departureTime") {
+      } else
+        departure.name === ""
+          ? departureInputRef.current?.focus()
+          : destinationInputRef.current?.focus();
+    }
+    if (uiState === "sheet-expanded") {
+      if (focusedField === "departureTime") {
         departureTimeInputRef.current?.focus();
       } else if (focusedField === "destinationTime") {
         destinationTimeInputRef.current?.focus();
       }
     }
-  }, [uiState, focusedField]);
+  }, [uiState]);
 
   const handleSettingMapLocation = () => {};
 
@@ -128,15 +134,10 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
 
   const handleCloseSheet = () => {
     if (uiState === "sheet-expanded") {
-      departure.name === ""
-        ? dispatch(setFocusedField("departure"))
-        : dispatch(setFocusedField("destination"));
       animateToState("full");
     } else if (uiState === "full") {
       animateToState("expanded");
     }
-    departureInputRef.current?.blur();
-    destinationInputRef.current?.blur();
   };
 
   const handleExpandSheet = () => {
