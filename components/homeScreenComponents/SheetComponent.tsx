@@ -69,12 +69,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
     }
   }, [uiState, focusedField]);
 
-  const handleFocus = (
-    field: "departure" | "destination" | "departureTime" | "destinationTime"
-  ) => {
-    dispatch(setFocusedField(field));
-  };
-
   const handleSettingMapLocation = () => {};
 
   const findAddressesByName = async (name: string, limit = 5, page = 1) => {
@@ -126,24 +120,12 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
     debouncedFindAddresses(text);
   };
 
-  const handleDepartureTimeChange = (text: string) => {
-    dispatch(setDepartureTime(text));
-  };
-
-  const handleDestinationTimeChange = (text: string) => {
-    dispatch(setDestinationTime(text));
-  };
-
-  const handleTravelModeChange = (
-    mode: "rider" | "passenger" | "partnership"
-  ) => {
-    dispatch(setTravelMode(mode));
-  };
-
   const handleCloseSheet = () => {
     if (uiState === "sheet-expanded") {
+      departure.name === ""
+        ? dispatch(setFocusedField("departure"))
+        : dispatch(setFocusedField("destination"));
       animateToState("full");
-      dispatch(setFocusedField("destination"));
     } else if (uiState === "full") {
       animateToState("expanded");
     }
@@ -167,8 +149,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
       ? Dimensions.get("window").height * 0.55
       : Dimensions.get("window").height * 0.25;
 
-  useEffect(() => console.log("uiState:", travelMode), [travelMode]);
-
   return (
     <View style={[styles.sheetContainer, { height: sheetHeight }]}>
       <View style={styles.routeHeader}>
@@ -188,7 +168,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
           inputRef={departureInputRef}
           onChangeText={(text) => handleSettingDeparture(text)}
           onMapLocationSelect={handleSettingMapLocation}
-          onFocus={() => handleFocus("departure")}
+          onFocus={() => dispatch(setFocusedField("departure"))}
           isFocused={focusedField === "departure"}
           leftIcon1={{ name: "search", color: "black" }}
           leftIcon2={{
@@ -208,7 +188,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
           inputRef={destinationInputRef}
           onChangeText={(text) => handleSettingDestination(text)}
           onMapLocationSelect={handleSettingMapLocation}
-          onFocus={() => handleFocus("destination")}
+          onFocus={() => dispatch(setFocusedField("destination"))}
           isFocused={focusedField === "destination"}
           leftIcon1={{ name: "search", color: "black" }}
           leftIcon2={{
@@ -227,8 +207,8 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
               value={departureTime}
               placeholder="Departure Time"
               inputRef={departureTimeInputRef}
-              onChangeText={handleDepartureTimeChange}
-              onFocus={() => handleFocus("departureTime")}
+              onChangeText={(text) => dispatch(setDepartureTime(text))}
+              onFocus={() => dispatch(setFocusedField("departureTime"))}
               isFocused={focusedField === "departureTime"}
               leftIcon1={{ name: "time-outline", color: "black" }}
               leftIcon2={{
@@ -242,8 +222,8 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
               value={destinationTime}
               placeholder="Arrival Time"
               inputRef={destinationTimeInputRef}
-              onChangeText={handleDestinationTimeChange}
-              onFocus={() => handleFocus("destinationTime")}
+              onChangeText={(text) => dispatch(setDestinationTime(text))}
+              onFocus={() => dispatch(setFocusedField("destinationTime"))}
               isFocused={focusedField === "destinationTime"}
               leftIcon1={{ name: "time-outline", color: "black" }}
               leftIcon2={{
@@ -259,7 +239,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
         <>
           <View style={styles.travelModeContainer}>
             <BoldButton
-              onPress={() => handleTravelModeChange("rider")}
+              onPress={() => dispatch(setTravelMode("rider"))}
               width={90}
               height={40}
               buttonText="Rider"
@@ -268,7 +248,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
               }
             />
             <BoldButton
-              onPress={() => handleTravelModeChange("passenger")}
+              onPress={() => dispatch(setTravelMode("passenger"))}
               width={120}
               height={40}
               buttonText="Passenger"
@@ -277,7 +257,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
               }
             />
             <BoldButton
-              onPress={() => handleTravelModeChange("partnership")}
+              onPress={() => dispatch(setTravelMode("partnership"))}
               width={120}
               height={40}
               buttonText="Partnership"
