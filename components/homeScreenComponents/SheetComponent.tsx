@@ -56,6 +56,12 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   const destinationTimeInputRef = useRef<TextInput>(null);
 
   useEffect(() => {
+    if (uiState !== "full" && uiState !== "sheet-expanded") {
+      departureInputRef.current?.blur();
+      destinationInputRef.current?.blur();
+      departureTimeInputRef.current?.blur();
+      destinationTimeInputRef.current?.blur();
+    }
     if (uiState === "full" || uiState === "sheet-expanded") {
       if (focusedField === "departure") {
         departureInputRef.current?.focus();

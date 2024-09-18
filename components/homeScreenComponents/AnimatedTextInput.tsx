@@ -61,8 +61,8 @@ const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
 
       <View
         style={[
-          isFocused && styles.focusedInputContainer,
           styles.inputContainer,
+          isFocused && styles.focusedInputContainer,
         ]}
       >
         <TextInput
