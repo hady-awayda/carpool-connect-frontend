@@ -10,6 +10,7 @@ import { useRouter } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Colors } from "@/constants/Variables";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -32,11 +33,14 @@ export default function WelcomeScreen() {
   }
 
   const handleLogin = () => router.push("/login");
-  const handleRegister = () => router.push("/register");
+  const handleRegister = () => router.push("/Home");
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Ride Together. Save. Together.</Text>
+      <Text style={styles.title}>
+        Ride Together.{" "}
+        <Text style={{ color: Colors.light.primary }}>Save.</Text> Together.
+      </Text>
       <Text style={styles.subtitle}>
         Join our community to reduce traffic, save costs, and promote
         sustainability.

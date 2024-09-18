@@ -1,6 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type UIState = "collapsed" | "expanded" | "full" | "sheet-expanded";
+export type UIState =
+  | "collapsed"
+  | "expanded"
+  | "full"
+  | "sheet-expanded"
+  | "setting-departure"
+  | "setting-destination";
 
 interface UIStateSlice {
   uiState: UIState;

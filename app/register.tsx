@@ -76,7 +76,7 @@ export default function SignupScreen() {
       dispatch(setToken(token));
       saveToken(token);
 
-      router.push("/CarOwnerScreen");
+      router.push("/Home");
     }
   };
 

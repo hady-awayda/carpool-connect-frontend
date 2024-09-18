@@ -15,7 +15,6 @@ import {
   Animated,
   Dimensions,
   Easing,
-  Keyboard,
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
@@ -40,6 +39,8 @@ const HomeScreen = () => {
     expanded: 1,
     full: 2,
     "sheet-expanded": 3,
+    "setting-departure": 4,
+    "setting-destination": 5,
   };
 
   useEffect(() => {
@@ -79,7 +80,7 @@ const HomeScreen = () => {
         dispatch(setDeparture({ name, coords }));
       }
     })();
-  }, [dispatch, departure.name]);
+  }, []);
 
   const animateToState = (state: UIState) => {
     dispatch(setAnimationComplete(false));
