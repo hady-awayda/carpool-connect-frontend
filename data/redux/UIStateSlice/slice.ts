@@ -20,7 +20,7 @@ interface UIStateSlice {
 }
 
 const initialState: UIStateSlice = {
-  uiState: "collapsed",
+  uiState: "expanded",
   isAnimationComplete: false,
   focusedField: "destination",
 };

@@ -79,6 +79,8 @@ const HomeScreen = () => {
       if (!departure.name) {
         dispatch(setDeparture({ name, coords }));
       }
+
+      animateToState("expanded");
     })();
   }, []);
 
@@ -125,7 +127,7 @@ const HomeScreen = () => {
 
   const bottomContentTranslateY = animatedValue.interpolate({
     inputRange: [0, 1, 2],
-    outputRange: [height * 0.88, height * 0.66, height * 0.194],
+    outputRange: [height * 0.88, height * 0.66, height * 0.186],
   });
 
   return (

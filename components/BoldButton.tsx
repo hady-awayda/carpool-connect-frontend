@@ -14,6 +14,8 @@ type BoldButtonProps = {
   onPress: () => void;
   buttonStyle?: ViewStyle;
   textStyle?: TextStyle;
+  width?: number;
+  height?: number;
 };
 
 const BoldButton: React.FC<BoldButtonProps> = ({
@@ -21,6 +23,8 @@ const BoldButton: React.FC<BoldButtonProps> = ({
   buttonStyle,
   textStyle,
   buttonText,
+  width,
+  height = 54,
 }) => {
   const [animation] = useState(new Animated.Value(0));
   let pressInTime = 0;
@@ -52,7 +56,10 @@ const BoldButton: React.FC<BoldButtonProps> = ({
 
   const animatedBackgroundColor = animation.interpolate({
     inputRange: [0, 1],
-    outputRange: ["#333", Colors.light.primary],
+    outputRange: [
+      (buttonStyle?.backgroundColor as string) || "#333",
+      Colors.light.primary,
+    ],
   });
 
   return (
@@ -60,7 +67,7 @@ const BoldButton: React.FC<BoldButtonProps> = ({
       activeOpacity={1}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      style={[styles.button, buttonStyle]}
+      style={[styles.button, buttonStyle, { width: width, height: height }]}
     >
       <Animated.View
         style={[
@@ -82,8 +89,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: "100%",
     height: 54,
-    marginBottom: 15,
-    marginTop: 15,
     justifyContent: "center",
     alignItems: "center",
   },

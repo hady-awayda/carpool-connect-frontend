@@ -28,6 +28,7 @@ import BorderedButton from "../BorderedButton";
 import AnimatedTextInput from "./AnimatedTextInput";
 import { LocationProps, SheetComponentProps } from "./interfaces";
 import addSchedule from "./addSchedule";
+import BoldButton from "../BoldButton";
 
 const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   const dispatch = useDispatch();
@@ -70,7 +71,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
         destinationTimeInputRef.current?.focus();
       }
     }
-  }, [isAnimationComplete, uiState, focusedField]);
+  }, [uiState, focusedField]);
 
   const handleFocus = (
     field: "departure" | "destination" | "departureTime" | "destinationTime"
@@ -144,7 +145,11 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   };
 
   const handleCloseSheet = () => {
-    animateToState("expanded");
+    if (uiState === "sheet-expanded") {
+      animateToState("full");
+    } else if (uiState === "full") {
+      animateToState("expanded");
+    }
     departureInputRef.current?.blur();
     destinationInputRef.current?.blur();
   };
@@ -164,6 +169,8 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
     uiState === "sheet-expanded"
       ? Dimensions.get("window").height * 0.55
       : Dimensions.get("window").height * 0.25;
+
+  useEffect(() => console.log("uiState:", travelMode), [travelMode]);
 
   return (
     <View style={[styles.sheetContainer, { height: sheetHeight }]}>
@@ -254,33 +261,33 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
       {uiState === "sheet-expanded" && (
         <>
           <View style={styles.travelModeContainer}>
-            <TouchableOpacity
-              style={[
-                styles.travelModeButton,
-                travelMode === "rider" && styles.activeButton,
-              ]}
+            <BoldButton
               onPress={() => handleTravelModeChange("rider")}
-            >
-              <Text style={styles.travelModeText}>Rider</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.travelModeButton,
-                travelMode === "passenger" && styles.activeButton,
-              ]}
+              width={90}
+              height={40}
+              buttonText="Rider"
+              buttonStyle={
+                travelMode === "rider" ? styles.activeButton : undefined
+              }
+            />
+            <BoldButton
               onPress={() => handleTravelModeChange("passenger")}
-            >
-              <Text style={styles.travelModeText}>Passenger</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.travelModeButton,
-                travelMode === "partnership" && styles.activeButton,
-              ]}
+              width={120}
+              height={40}
+              buttonText="Passenger"
+              buttonStyle={
+                travelMode === "passenger" ? styles.activeButton : undefined
+              }
+            />
+            <BoldButton
               onPress={() => handleTravelModeChange("partnership")}
-            >
-              <Text style={styles.travelModeText}>Partnership</Text>
-            </TouchableOpacity>
+              width={120}
+              height={40}
+              buttonText="Partnership"
+              buttonStyle={
+                travelMode === "partnership" ? styles.activeButton : undefined
+              }
+            />
           </View>
 
           <BorderedButton
@@ -314,7 +321,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 8,
     marginBottom: 4,
   },
   routeTitle: {
@@ -332,7 +338,7 @@ const styles = StyleSheet.create({
   travelModeContainer: {
     backgroundColor: "#fff",
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     marginTop: 24,
     marginBottom: 18,
   },
