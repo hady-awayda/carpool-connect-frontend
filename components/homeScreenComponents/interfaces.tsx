@@ -17,7 +17,6 @@ export type AnimatedTextInputProps = {
 
 export type SheetComponentProps = {
   closeRouteSheet: () => void;
-  isAnimationComplete: boolean;
 };
 
 export type LocationCoords = {

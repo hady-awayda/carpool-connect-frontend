@@ -3,10 +3,14 @@ import MapComponent from "@/components/homeScreenComponents/MapComponent";
 import SheetComponent from "@/components/homeScreenComponents/SheetComponent";
 import { setDeparture, setLocation } from "@/data/redux/addressListSlice/slice";
 import { RootState } from "@/data/redux/store";
-import { setUIState, UIState } from "@/data/redux/UIStateSlice/slice";
+import {
+  setAnimationComplete,
+  setUIState,
+  UIState,
+} from "@/data/redux/UIStateSlice/slice";
 import * as Location from "expo-location";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import {
   Animated,
   Dimensions,
@@ -15,12 +19,12 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
 import {
+  GestureHandlerRootView,
   PanGestureHandler,
   State,
-  GestureHandlerRootView,
 } from "react-native-gesture-handler";
+import { useDispatch, useSelector } from "react-redux";
 
 const { height } = Dimensions.get("window");
 
@@ -28,11 +32,8 @@ const HomeScreen = () => {
   const dispatch = useDispatch();
   const uiState = useSelector((state: RootState) => state.uiState.uiState);
   const departure = useSelector((state: RootState) => state.address.departure);
-
-  const [isAnimationComplete, setIsAnimationComplete] = useState(false);
   const animatedValue = useRef(new Animated.Value(0)).current;
   const gestureY = useRef(new Animated.Value(0)).current;
-  // const [isSelectingLocation, setIsSelectingLocation] = useState(false);
 
   const uiStateValues = {
     collapsed: 0,
@@ -73,12 +74,14 @@ const HomeScreen = () => {
 
       dispatch(setLocation({ name, coords }));
 
-      !departure.name && dispatch(setDeparture({ name, coords }));
+      if (!departure.name) {
+        dispatch(setDeparture({ name, coords }));
+      }
     })();
-  }, [dispatch]);
+  }, [dispatch, departure.name]);
 
   const animateToState = (state: UIState) => {
-    setIsAnimationComplete(false);
+    dispatch(setAnimationComplete(false));
     dispatch(setUIState(state));
     Animated.timing(animatedValue, {
       toValue: uiStateValues[state],
@@ -86,8 +89,8 @@ const HomeScreen = () => {
       easing: Easing.bezier(0.35, 0.14, 0.29, 0.99),
       useNativeDriver: true,
     }).start(() => {
-      setIsAnimationComplete(true);
-      if (state !== "full") {
+      dispatch(setAnimationComplete(true));
+      if (state === "collapsed") {
         Keyboard.dismiss();
       }
     });
@@ -121,24 +124,10 @@ const HomeScreen = () => {
     outputRange: [-height * 1.2, -height * 1.2, -height * 0.704],
   });
 
-  const bottomContentTranslateUp = animatedValue.interpolate({
+  const bottomContentTranslateY = animatedValue.interpolate({
     inputRange: [0, 1, 2],
     outputRange: [height * 0.88, height * 0.66, height * 0.194],
   });
-
-  // const setMapLocation = (focusedField: "departure" | "destination") => {
-  //   if (focusedField === "departure") {
-  //     console.log(focusedField);
-  //     // closeRouteSheet();
-  //     setIsSelectingLocation(true);
-  //     // setDeparture(value);
-  //   } else if (focusedField === "destination") {
-  //     console.log(focusedField);
-  //     // closeRouteSheet();
-  //     setIsSelectingLocation(true);
-  //     // setDestination(value);
-  //   }
-  // };
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -158,10 +147,7 @@ const HomeScreen = () => {
             ]}
           >
             <SheetComponent
-              {...{
-                closeRouteSheet: () => animateToState("expanded"),
-                isAnimationComplete,
-              }}
+              closeRouteSheet={() => animateToState("expanded")}
             />
           </Animated.View>
         </PanGestureHandler>
@@ -173,7 +159,7 @@ const HomeScreen = () => {
           <Animated.View
             style={[
               styles.bottomContentContainer,
-              { transform: [{ translateY: bottomContentTranslateUp }] },
+              { transform: [{ translateY: bottomContentTranslateY }] },
             ]}
           >
             <BottomContent showRouteSheet={() => animateToState("full")} />
@@ -188,9 +174,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-  },
-  map: {
-    flex: 1,
   },
   sheetContainer: {
     position: "absolute",

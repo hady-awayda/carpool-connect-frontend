@@ -25,10 +25,7 @@ import {
   setTravelMode,
 } from "@/data/redux/scheduleSlice/slice";
 
-const SheetComponent: React.FC<SheetComponentProps> = ({
-  closeRouteSheet,
-  isAnimationComplete,
-}) => {
+const SheetComponent: React.FC<SheetComponentProps> = ({ closeRouteSheet }) => {
   const dispatch = useDispatch();
   const departure = useSelector((state: RootState) => state.address.departure);
   const destination = useSelector(
@@ -42,6 +39,10 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
   );
   const travelMode = useSelector(
     (state: RootState) => state.schedule.travelMode
+  );
+  const uiState = useSelector((state: RootState) => state.uiState.uiState);
+  const isAnimationComplete = useSelector(
+    (state: RootState) => state.uiState.isAnimationComplete
   );
 
   const departureInputRef = useRef<TextInput>(null);
