@@ -16,6 +16,7 @@ import debounce from "lodash.debounce";
 import { useCallback, useEffect, useRef } from "react";
 import {
   Dimensions,
+  Keyboard,
   StyleSheet,
   Text,
   TextInput,
@@ -139,21 +140,24 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ closeRouteSheet }) => {
     dispatch(setTravelMode(mode));
   };
 
+  const handleExpandSheet = () => {
+    Keyboard.dismiss();
+    dispatch(setUIState("sheet-expanded"));
+  };
+
   const sheetHeight =
     uiState === "sheet-expanded"
       ? Dimensions.get("window").height * 0.47
       : Dimensions.get("window").height * 0.25;
 
   return (
-    <View style={(styles.sheetContainer, { height: sheetHeight })}>
+    <View style={[styles.sheetContainer, { height: sheetHeight }]}>
       <View style={styles.routeHeader}>
         <TouchableOpacity onPress={closeRouteSheet}>
           <Ionicons name="close" size={28} />
         </TouchableOpacity>
         <Text style={styles.routeTitle}>Your route</Text>
-        <TouchableOpacity
-          onPress={() => dispatch(setUIState("sheet-expanded"))}
-        >
+        <TouchableOpacity onPress={handleExpandSheet}>
           <Ionicons name="add" size={28} />
         </TouchableOpacity>
       </View>

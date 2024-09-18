@@ -91,9 +91,7 @@ const HomeScreen = () => {
       useNativeDriver: true,
     }).start(() => {
       dispatch(setAnimationComplete(true));
-      if (state === "full") {
-        Keyboard.dismiss();
-      }
+      Keyboard.dismiss();
     });
   };
 
@@ -121,8 +119,13 @@ const HomeScreen = () => {
   };
 
   const sheetTranslateY = animatedValue.interpolate({
-    inputRange: [0, 1, 2],
-    outputRange: [-height * 1.4, -height * 1.4, -height * 0.484],
+    inputRange: [0, 1, 2, 3],
+    outputRange: [
+      -height * 1.4,
+      -height * 1.4,
+      -height * 0.71,
+      -height * 0.484,
+    ],
   });
 
   const bottomContentTranslateY = animatedValue.interpolate({
