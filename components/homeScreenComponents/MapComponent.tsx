@@ -2,7 +2,7 @@ import { Colors } from "@/constants/Variables";
 import { RootState } from "@/data/redux/store";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { useSelector } from "react-redux";
 
@@ -40,12 +40,6 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 10,
     backgroundColor: "blue",
-  },
-  cone: {
-    width: 5,
-    height: 10,
-    backgroundColor: "rgba(0, 0, 255, 0.5)",
-    transform: [{ rotate: "45deg" }],
   },
 });
 

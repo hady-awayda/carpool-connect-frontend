@@ -83,15 +83,15 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
 
   const handleSettingMapLocation = () => {
     if (focusedField === "departure") {
-      dispatch(setUIState("setting-departure"));
+      animateToState("setting-departure");
     } else if (focusedField === "destination") {
-      dispatch(setUIState("setting-destination"));
+      animateToState("setting-destination");
     }
   };
 
   const findAddressesByName = async (name: string, limit = 5, page = 1) => {
     const encodedName = encodeURIComponent(name);
-    const url = `https://nominatim.openstreetmap.org/search?q=${encodedName}&format=json&limit=${limit}&page=${page}`;
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodedName}&format=json&limit=${limit}&page=${page}&countrycodes=lb&lang=en`;
 
     try {
       const response = await fetch(url);

@@ -1,6 +1,7 @@
 import BottomContent from "@/components/homeScreenComponents/BottomContent";
 import MapComponent from "@/components/homeScreenComponents/MapComponent";
 import SheetComponent from "@/components/homeScreenComponents/SheetComponent";
+import { Colors } from "@/constants/Variables";
 import { setDeparture, setLocation } from "@/data/redux/addressListSlice/slice";
 import { RootState } from "@/data/redux/store";
 import {
@@ -8,6 +9,7 @@ import {
   setUIState,
   UIState,
 } from "@/data/redux/UIStateSlice/slice";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef } from "react";
@@ -123,19 +125,31 @@ const HomeScreen = () => {
   };
 
   const sheetTranslateY = animatedValue.interpolate({
-    inputRange: [0, 1, 2, 3],
+    inputRange: [0, 1, 2, 3, 4, 5],
     outputRange: [
       -height * 1.3,
       -height * 1.3,
       -height * 0.955,
       -height * 0.955,
+      -height * 1.3,
+      -height * 1.3,
     ],
   });
 
   const bottomContentTranslateY = animatedValue.interpolate({
-    inputRange: [0, 1, 2, 3],
-    outputRange: [height * 0.886, height * 0.68, height * 0.19, height * 0.19],
+    inputRange: [0, 1, 2, 3, 4, 5],
+    outputRange: [
+      height * 0.886,
+      height * 0.68,
+      height * 0.19,
+      height * 0.19,
+      height * 0.886,
+      height * 0.886,
+    ],
   });
+
+  const isMarkerOverlayVisible =
+    uiState === "setting-departure" || uiState === "setting-destination";
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -143,6 +157,23 @@ const HomeScreen = () => {
         <StatusBar style="auto" />
 
         <MapComponent />
+        {isMarkerOverlayVisible && (
+          <Animated.View
+            style={styles.fullScreenMarkerOverlay}
+            pointerEvents="box-none"
+          >
+            <MaterialCommunityIcons
+              name="map-marker"
+              size={60}
+              color={
+                uiState === "setting-departure"
+                  ? Colors.light.primary
+                  : Colors.light.secondary
+              }
+              style={styles.fullScreenMarker}
+            />
+          </Animated.View>
+        )}
 
         <PanGestureHandler
           onGestureEvent={onGestureEvent}
@@ -191,6 +222,21 @@ const styles = StyleSheet.create({
     width: "100%",
     bottom: 0,
     zIndex: 1,
+  },
+  fullScreenMarkerOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    transform: [{ translateY: -30 }],
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 3,
+  },
+  fullScreenMarker: {
+    position: "absolute",
+    zIndex: 4,
   },
 });
 
