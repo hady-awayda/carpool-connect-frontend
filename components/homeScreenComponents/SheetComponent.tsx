@@ -10,7 +10,7 @@ import {
   setTravelMode,
 } from "@/data/redux/scheduleSlice/slice";
 import { RootState } from "@/data/redux/store";
-import { setFocusedField } from "@/data/redux/UIStateSlice/slice";
+import { setFocusedField, setUIState } from "@/data/redux/UIStateSlice/slice";
 import { Ionicons } from "@expo/vector-icons";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useRef } from "react";
@@ -81,7 +81,13 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
     }
   }, [uiState]);
 
-  const handleSettingMapLocation = () => {};
+  const handleSettingMapLocation = () => {
+    if (focusedField === "departure") {
+      dispatch(setUIState("setting-departure"));
+    } else if (focusedField === "destination") {
+      dispatch(setUIState("setting-destination"));
+    }
+  };
 
   const findAddressesByName = async (name: string, limit = 5, page = 1) => {
     const encodedName = encodeURIComponent(name);

@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#fff",
     paddingLeft: 48,
-    paddingRight: 36,
+    paddingRight: 80,
     justifyContent: "center",
     backgroundColor: "transparent",
   },
