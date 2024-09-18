@@ -4,10 +4,16 @@ import {
   setDestination,
   updateAddressList,
 } from "@/data/redux/addressListSlice/slice";
+import {
+  setDepartureTime,
+  setDestinationTime,
+  setTravelMode,
+} from "@/data/redux/scheduleSlice/slice";
 import { RootState } from "@/data/redux/store";
+import { setFocusedField, setUIState } from "@/data/redux/UIStateSlice/slice";
 import { Ionicons } from "@expo/vector-icons";
 import debounce from "lodash.debounce";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -19,11 +25,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import AnimatedTextInput from "./AnimatedTextInput";
 import { LocationProps, SheetComponentProps } from "./interfaces";
-import {
-  setDepartureTime,
-  setDestinationTime,
-  setTravelMode,
-} from "@/data/redux/scheduleSlice/slice";
 
 const SheetComponent: React.FC<SheetComponentProps> = ({ closeRouteSheet }) => {
   const dispatch = useDispatch();
@@ -37,10 +38,13 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ closeRouteSheet }) => {
   const destinationTime = useSelector(
     (state: RootState) => state.schedule.destinationTime
   );
+  const uiState = useSelector((state: RootState) => state.uiState.uiState);
   const travelMode = useSelector(
     (state: RootState) => state.schedule.travelMode
   );
-  const uiState = useSelector((state: RootState) => state.uiState.uiState);
+  const focusedField = useSelector(
+    (state: RootState) => state.uiState.focusedField
+  );
   const isAnimationComplete = useSelector(
     (state: RootState) => state.uiState.isAnimationComplete
   );
@@ -49,10 +53,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ closeRouteSheet }) => {
   const destinationInputRef = useRef<TextInput>(null);
   const departureTimeInputRef = useRef<TextInput>(null);
   const destinationTimeInputRef = useRef<TextInput>(null);
-
-  const [focusedField, setFocusedField] = useState<
-    "departure" | "destination" | "departureTime" | "destinationTime"
-  >("destination");
 
   useEffect(() => {
     if (isAnimationComplete) {
@@ -66,19 +66,12 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ closeRouteSheet }) => {
         destinationTimeInputRef.current?.focus();
       }
     }
-  }, [
-    isAnimationComplete,
-    focusedField,
-    departureInputRef,
-    destinationInputRef,
-    departureTimeInputRef,
-    destinationTimeInputRef,
-  ]);
+  }, [isAnimationComplete, focusedField]);
 
   const handleFocus = (
     field: "departure" | "destination" | "departureTime" | "destinationTime"
   ) => {
-    setFocusedField(field);
+    dispatch(setFocusedField(field));
   };
 
   const handleSettingMapLocation = () => {};
@@ -146,14 +139,21 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ closeRouteSheet }) => {
     dispatch(setTravelMode(mode));
   };
 
+  const sheetHeight =
+    uiState === "sheet-expanded"
+      ? Dimensions.get("window").height * 0.47
+      : Dimensions.get("window").height * 0.25;
+
   return (
-    <View style={styles.sheetContainer}>
+    <View style={(styles.sheetContainer, { height: sheetHeight })}>
       <View style={styles.routeHeader}>
         <TouchableOpacity onPress={closeRouteSheet}>
           <Ionicons name="close" size={28} />
         </TouchableOpacity>
         <Text style={styles.routeTitle}>Your route</Text>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => dispatch(setUIState("sheet-expanded"))}
+        >
           <Ionicons name="add" size={28} />
         </TouchableOpacity>
       </View>
@@ -170,7 +170,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ closeRouteSheet }) => {
           leftIcon1={{ name: "search", color: "black" }}
           leftIcon2={{
             name: "radiobox-marked",
-            color: Colors.light.secondary,
+            color: departure.name ? Colors.light.secondary : "#bbb",
           }}
           rightIcon1={{ name: "close-circle", color: "#bbb" }}
           rightIcon2={{
@@ -188,38 +188,51 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ closeRouteSheet }) => {
           onFocus={() => handleFocus("destination")}
           isFocused={focusedField === "destination"}
           leftIcon1={{ name: "search", color: "black" }}
-          leftIcon2={{ name: "radiobox-marked", color: "#bbb" }}
+          leftIcon2={{
+            name: "radiobox-marked",
+            color: destination.name ? Colors.light.secondary : "#bbb",
+          }}
           rightIcon1={{ name: "close-circle", color: "#bbb" }}
           rightIcon2={{
             name: "map-marker-radius",
             color: Colors.light.secondary,
           }}
         />
+        {uiState === "sheet-expanded" && (
+          <>
+            <AnimatedTextInput
+              value={departureTime}
+              placeholder="Departure Time"
+              inputRef={departureTimeInputRef}
+              onChangeText={handleDepartureTimeChange}
+              onFocus={() => handleFocus("departureTime")}
+              isFocused={focusedField === "departureTime"}
+              leftIcon1={{ name: "time-outline", color: "black" }}
+              leftIcon2={{
+                name: "radiobox-marked",
+                color: departureTime ? Colors.light.secondary : "#bbb",
+              }}
+              rightIcon1={{ name: "close-circle", color: "#bbb" }}
+            />
 
-        <AnimatedTextInput
-          value={departureTime}
-          placeholder="Departure Time"
-          inputRef={departureTimeInputRef}
-          onChangeText={handleDepartureTimeChange}
-          onFocus={() => handleFocus("departureTime")}
-          isFocused={focusedField === "departureTime"}
-          leftIcon1={{ name: "time-outline", color: "black" }}
-          leftIcon2={{ name: "radiobox-marked", color: "#bbb" }}
-          rightIcon1={{ name: "close-circle", color: "#bbb" }}
-        />
-
-        <AnimatedTextInput
-          value={destinationTime}
-          placeholder="Arrival Time"
-          inputRef={destinationTimeInputRef}
-          onChangeText={handleDestinationTimeChange}
-          onFocus={() => handleFocus("destinationTime")}
-          isFocused={focusedField === "destinationTime"}
-          leftIcon1={{ name: "time-outline", color: "black" }}
-          leftIcon2={{ name: "radiobox-marked", color: "#bbb" }}
-          rightIcon1={{ name: "close-circle", color: "#bbb" }}
-        />
-
+            <AnimatedTextInput
+              value={destinationTime}
+              placeholder="Arrival Time"
+              inputRef={destinationTimeInputRef}
+              onChangeText={handleDestinationTimeChange}
+              onFocus={() => handleFocus("destinationTime")}
+              isFocused={focusedField === "destinationTime"}
+              leftIcon1={{ name: "time-outline", color: "black" }}
+              leftIcon2={{
+                name: "radiobox-marked",
+                color: destinationTime ? Colors.light.secondary : "#bbb",
+              }}
+              rightIcon1={{ name: "close-circle", color: "#bbb" }}
+            />
+          </>
+        )}
+      </View>
+      {uiState === "sheet-expanded" && (
         <View style={styles.travelModeContainer}>
           <TouchableOpacity
             style={[
@@ -249,14 +262,13 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ closeRouteSheet }) => {
             <Text style={styles.travelModeText}>Partnership</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   sheetContainer: {
-    height: Dimensions.get("window").height * 0.25,
     backgroundColor: "#fff",
     paddingTop: 40,
     paddingHorizontal: 16,
@@ -270,6 +282,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   routeHeader: {
+    backgroundColor: "#fff",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -277,6 +290,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   routeTitle: {
+    backgroundColor: "#fff",
     fontSize: 18,
     fontWeight: "bold",
     textAlign: "center",
@@ -286,9 +300,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light.background,
     borderRadius: 8,
     marginTop: 16,
-    paddingBottom: 16,
   },
   travelModeContainer: {
+    backgroundColor: "#fff",
     flexDirection: "row",
     justifyContent: "space-around",
     marginTop: 16,
@@ -303,7 +317,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light.primary,
   },
   travelModeText: {
-    color: Colors.light.text,
+    color: Colors.light.background,
     fontSize: 16,
   },
 });

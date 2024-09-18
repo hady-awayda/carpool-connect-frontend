@@ -1,15 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type UIState = "collapsed" | "expanded" | "full";
+export type UIState = "collapsed" | "expanded" | "full" | "sheet-expanded";
 
 interface UIStateSlice {
   uiState: UIState;
   isAnimationComplete: boolean;
+  focusedField:
+    | "departure"
+    | "destination"
+    | "departureTime"
+    | "destinationTime"
+    | null;
 }
 
 const initialState: UIStateSlice = {
   uiState: "collapsed",
   isAnimationComplete: false,
+  focusedField: null,
 };
 
 const uiStateSlice = createSlice({
@@ -22,8 +29,15 @@ const uiStateSlice = createSlice({
     setAnimationComplete: (state, action: PayloadAction<boolean>) => {
       state.isAnimationComplete = action.payload;
     },
+    setFocusedField: (
+      state,
+      action: PayloadAction<UIStateSlice["focusedField"]>
+    ) => {
+      state.focusedField = action.payload;
+    },
   },
 });
 
-export const { setUIState, setAnimationComplete } = uiStateSlice.actions;
+export const { setUIState, setAnimationComplete, setFocusedField } =
+  uiStateSlice.actions;
 export default uiStateSlice.reducer;

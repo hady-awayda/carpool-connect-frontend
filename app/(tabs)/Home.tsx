@@ -39,6 +39,7 @@ const HomeScreen = () => {
     collapsed: 0,
     expanded: 1,
     full: 2,
+    "sheet-expanded": 3,
   };
 
   useEffect(() => {
@@ -90,7 +91,7 @@ const HomeScreen = () => {
       useNativeDriver: true,
     }).start(() => {
       dispatch(setAnimationComplete(true));
-      if (state === "collapsed") {
+      if (state === "full") {
         Keyboard.dismiss();
       }
     });
@@ -121,7 +122,7 @@ const HomeScreen = () => {
 
   const sheetTranslateY = animatedValue.interpolate({
     inputRange: [0, 1, 2],
-    outputRange: [-height * 1.2, -height * 1.2, -height * 0.704],
+    outputRange: [-height * 1.4, -height * 1.4, -height * 0.484],
   });
 
   const bottomContentTranslateY = animatedValue.interpolate({
