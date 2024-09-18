@@ -59,17 +59,19 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
         departureInputRef.current?.focus();
       } else if (focusedField === "destination") {
         destinationInputRef.current?.focus();
+      } else if (focusedField === "departureTime") {
+        departureTimeInputRef.current?.focus();
+      } else if (focusedField === "destinationTime") {
+        destinationTimeInputRef.current?.focus();
       }
-    } else if (focusedField === "departureTime") {
-      departureTimeInputRef.current?.focus();
-    } else if (focusedField === "destinationTime") {
-      destinationTimeInputRef.current?.focus();
     }
   }, [
     isAnimationComplete,
     focusedField,
     departureInputRef,
     destinationInputRef,
+    departureTimeInputRef,
+    destinationTimeInputRef,
   ]);
 
   const handleFocus = (
@@ -201,6 +203,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
           onFocus={() => handleFocus("departureTime")}
           isFocused={focusedField === "departureTime"}
           leftIcon1={{ name: "time-outline", color: "black" }}
+          leftIcon2={{ name: "radiobox-marked", color: "#bbb" }}
           rightIcon1={{ name: "close-circle", color: "#bbb" }}
         />
 
@@ -212,6 +215,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({
           onFocus={() => handleFocus("destinationTime")}
           isFocused={focusedField === "destinationTime"}
           leftIcon1={{ name: "time-outline", color: "black" }}
+          leftIcon2={{ name: "radiobox-marked", color: "#bbb" }}
           rightIcon1={{ name: "close-circle", color: "#bbb" }}
         />
 
@@ -281,6 +285,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light.background,
     borderRadius: 8,
     marginTop: 16,
+    paddingBottom: 16,
   },
   travelModeContainer: {
     flexDirection: "row",
@@ -291,7 +296,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 8,
-    backgroundColor: Colors.light.background,
+    backgroundColor: Colors.light.accent,
   },
   activeButton: {
     backgroundColor: Colors.light.primary,

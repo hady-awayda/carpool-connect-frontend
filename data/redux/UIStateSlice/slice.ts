@@ -1,25 +1,29 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type UIState = "expanded" | "collapsed" | "full";
+export type UIState = "collapsed" | "expanded" | "full";
 
-type UIStateSlice = {
+interface UIStateSlice {
   uiState: UIState;
-};
+  isAnimationComplete: boolean;
+}
 
 const initialState: UIStateSlice = {
-  uiState: "expanded",
+  uiState: "collapsed",
+  isAnimationComplete: false,
 };
 
-const uiState = createSlice({
+const uiStateSlice = createSlice({
   name: "uiState",
   initialState,
   reducers: {
     setUIState: (state, action: PayloadAction<UIState>) => {
       state.uiState = action.payload;
     },
+    setAnimationComplete: (state, action: PayloadAction<boolean>) => {
+      state.isAnimationComplete = action.payload;
+    },
   },
 });
 
-export const { setUIState } = uiState.actions;
-
-export default uiState.reducer;
+export const { setUIState, setAnimationComplete } = uiStateSlice.actions;
+export default uiStateSlice.reducer;

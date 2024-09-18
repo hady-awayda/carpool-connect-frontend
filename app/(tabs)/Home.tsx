@@ -78,6 +78,7 @@ const HomeScreen = () => {
   }, [dispatch]);
 
   const animateToState = (state: UIState) => {
+    setIsAnimationComplete(false);
     dispatch(setUIState(state));
     Animated.timing(animatedValue, {
       toValue: uiStateValues[state],
@@ -85,7 +86,8 @@ const HomeScreen = () => {
       easing: Easing.bezier(0.35, 0.14, 0.29, 0.99),
       useNativeDriver: true,
     }).start(() => {
-      if (state === "collapsed") {
+      setIsAnimationComplete(true);
+      if (state !== "full") {
         Keyboard.dismiss();
       }
     });
