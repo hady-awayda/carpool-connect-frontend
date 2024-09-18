@@ -123,16 +123,15 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   inputContainer: {
-    borderWidth: 1.5,
-    borderColor: "transparent",
-    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#fff",
     paddingLeft: 48,
-    paddingRight: 36,
+    paddingRight: 80,
     justifyContent: "center",
     backgroundColor: "transparent",
   },
   focusedInputContainer: {
-    backgroundColor: "#fff",
+    backgroundColor: Colors.light.background,
   },
   textInput: {
     fontSize: 16,
@@ -141,13 +140,15 @@ const styles = StyleSheet.create({
   },
   overlayBorder: {
     position: "absolute",
-    top: 0,
+    top: -0.5,
     left: 0,
     right: 0,
     bottom: 0,
+    height: 52,
     borderWidth: 2,
     borderColor: Colors.light.primary,
     borderRadius: 8,
+    zIndex: 1,
   },
   leftIcon: {
     position: "absolute",

@@ -108,11 +108,13 @@ const HomeScreen = () => {
       const { translationY, velocityY } = event.nativeEvent;
 
       if (translationY > 50 || velocityY > 500) {
-        if (uiState === "full") newState = "expanded";
+        if (uiState === "sheet-expanded") newState = "full";
+        else if (uiState === "full") newState = "expanded";
         else if (uiState === "expanded") newState = "collapsed";
       } else if (translationY < -50 || velocityY < -500) {
         if (uiState === "collapsed") newState = "expanded";
         else if (uiState === "expanded") newState = "full";
+        else if (uiState === "full") newState = "sheet-expanded";
       }
 
       animateToState(newState);
@@ -122,12 +124,17 @@ const HomeScreen = () => {
 
   const sheetTranslateY = animatedValue.interpolate({
     inputRange: [0, 1, 2, 3],
-    outputRange: [-height * 1.4, -height * 1.4, -height * 0.71, -height * 0.41],
+    outputRange: [
+      -height * 1.3,
+      -height * 1.3,
+      -height * 0.955,
+      -height * 0.955,
+    ],
   });
 
   const bottomContentTranslateY = animatedValue.interpolate({
-    inputRange: [0, 1, 2],
-    outputRange: [height * 0.88, height * 0.66, height * 0.186],
+    inputRange: [0, 1, 2, 3],
+    outputRange: [height * 0.886, height * 0.68, height * 0.19, height * 0.19],
   });
 
   return (
@@ -175,7 +182,6 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   sheetContainer: {
-    position: "absolute",
     width: "100%",
     bottom: 0,
     zIndex: 2,

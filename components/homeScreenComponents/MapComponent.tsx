@@ -11,8 +11,6 @@ const MapComponent = () => {
     (state: RootState) => state.address.location.coords
   );
 
-  console.log(location);
-
   return (
     <View style={styles.mapContainer}>
       {location && (

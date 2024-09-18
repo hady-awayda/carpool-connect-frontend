@@ -15,6 +15,8 @@ type BorderedButtonProps = {
   textStyle?: TextStyle;
   textColor?: string;
   borderColor?: string;
+  width?: number;
+  height?: number;
 };
 
 const BorderedButton: React.FC<BorderedButtonProps> = ({
@@ -24,6 +26,8 @@ const BorderedButton: React.FC<BorderedButtonProps> = ({
   buttonText,
   textColor,
   borderColor,
+  width,
+  height,
 }) => {
   const [animation] = useState(new Animated.Value(0));
   let pressInTime = 0;
@@ -55,25 +59,19 @@ const BorderedButton: React.FC<BorderedButtonProps> = ({
 
   const animatedBorderColor = animation.interpolate({
     inputRange: [0, 1],
-    outputRange: [
-      textColor ? Colors.light.primary : "#333",
-      Colors.light.primary,
-    ],
+    outputRange: [borderColor ? borderColor : "#333", Colors.light.primary],
   });
 
   const animatedTextColor = animation.interpolate({
     inputRange: [0, 1],
-    outputRange: [
-      textColor ? Colors.light.primary : "#333",
-      Colors.light.primary,
-    ],
+    outputRange: [textColor ? textColor : "#333", Colors.light.primary],
   });
 
   return (
     <Pressable
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      style={[styles.button, buttonStyle]}
+      style={[styles.button, buttonStyle, { width, height }]}
     >
       <Animated.View
         style={[styles.animationStyle, { borderColor: animatedBorderColor }]}
@@ -95,8 +93,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: "100%",
     height: 54,
-    marginBottom: 32,
-    marginTop: 6,
     justifyContent: "center",
     alignItems: "center",
   },

@@ -10,7 +10,7 @@ import {
   setTravelMode,
 } from "@/data/redux/scheduleSlice/slice";
 import { RootState } from "@/data/redux/store";
-import { setFocusedField } from "@/data/redux/UIStateSlice/slice";
+import { setFocusedField, setUIState } from "@/data/redux/UIStateSlice/slice";
 import { Ionicons } from "@expo/vector-icons";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useRef } from "react";
@@ -24,11 +24,11 @@ import {
   View,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import BoldButton from "../BoldButton";
 import BorderedButton from "../BorderedButton";
+import addSchedule from "./addSchedule";
 import AnimatedTextInput from "./AnimatedTextInput";
 import { LocationProps, SheetComponentProps } from "./interfaces";
-import addSchedule from "./addSchedule";
-import BoldButton from "../BoldButton";
 
 const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   const dispatch = useDispatch();
@@ -49,9 +49,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   const focusedField = useSelector(
     (state: RootState) => state.uiState.focusedField
   );
-  const isAnimationComplete = useSelector(
-    (state: RootState) => state.uiState.isAnimationComplete
-  );
 
   const departureInputRef = useRef<TextInput>(null);
   const destinationInputRef = useRef<TextInput>(null);
@@ -59,27 +56,38 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   const destinationTimeInputRef = useRef<TextInput>(null);
 
   useEffect(() => {
-    console.log(focusedField);
-    if (isAnimationComplete || uiState === "full") {
+    if (uiState !== "full" && uiState !== "sheet-expanded") {
+      departureInputRef.current?.blur();
+      destinationInputRef.current?.blur();
+      departureTimeInputRef.current?.blur();
+      destinationTimeInputRef.current?.blur();
+    }
+    if (uiState === "full") {
       if (focusedField === "departure") {
         departureInputRef.current?.focus();
       } else if (focusedField === "destination") {
         destinationInputRef.current?.focus();
-      } else if (focusedField === "departureTime") {
+      } else
+        departure.name === ""
+          ? departureInputRef.current?.focus()
+          : destinationInputRef.current?.focus();
+    }
+    if (uiState === "sheet-expanded") {
+      if (focusedField === "departureTime") {
         departureTimeInputRef.current?.focus();
       } else if (focusedField === "destinationTime") {
         destinationTimeInputRef.current?.focus();
       }
     }
-  }, [uiState, focusedField]);
+  }, [uiState]);
 
-  const handleFocus = (
-    field: "departure" | "destination" | "departureTime" | "destinationTime"
-  ) => {
-    dispatch(setFocusedField(field));
+  const handleSettingMapLocation = () => {
+    if (focusedField === "departure") {
+      dispatch(setUIState("setting-departure"));
+    } else if (focusedField === "destination") {
+      dispatch(setUIState("setting-destination"));
+    }
   };
-
-  const handleSettingMapLocation = () => {};
 
   const findAddressesByName = async (name: string, limit = 5, page = 1) => {
     const encodedName = encodeURIComponent(name);
@@ -130,28 +138,12 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
     debouncedFindAddresses(text);
   };
 
-  const handleDepartureTimeChange = (text: string) => {
-    dispatch(setDepartureTime(text));
-  };
-
-  const handleDestinationTimeChange = (text: string) => {
-    dispatch(setDestinationTime(text));
-  };
-
-  const handleTravelModeChange = (
-    mode: "rider" | "passenger" | "partnership"
-  ) => {
-    dispatch(setTravelMode(mode));
-  };
-
   const handleCloseSheet = () => {
     if (uiState === "sheet-expanded") {
       animateToState("full");
     } else if (uiState === "full") {
       animateToState("expanded");
     }
-    departureInputRef.current?.blur();
-    destinationInputRef.current?.blur();
   };
 
   const handleExpandSheet = () => {
@@ -169,8 +161,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
     uiState === "sheet-expanded"
       ? Dimensions.get("window").height * 0.55
       : Dimensions.get("window").height * 0.25;
-
-  useEffect(() => console.log("uiState:", travelMode), [travelMode]);
 
   return (
     <View style={[styles.sheetContainer, { height: sheetHeight }]}>
@@ -191,7 +181,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
           inputRef={departureInputRef}
           onChangeText={(text) => handleSettingDeparture(text)}
           onMapLocationSelect={handleSettingMapLocation}
-          onFocus={() => handleFocus("departure")}
+          onFocus={() => dispatch(setFocusedField("departure"))}
           isFocused={focusedField === "departure"}
           leftIcon1={{ name: "search", color: "black" }}
           leftIcon2={{
@@ -211,7 +201,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
           inputRef={destinationInputRef}
           onChangeText={(text) => handleSettingDestination(text)}
           onMapLocationSelect={handleSettingMapLocation}
-          onFocus={() => handleFocus("destination")}
+          onFocus={() => dispatch(setFocusedField("destination"))}
           isFocused={focusedField === "destination"}
           leftIcon1={{ name: "search", color: "black" }}
           leftIcon2={{
@@ -230,8 +220,8 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
               value={departureTime}
               placeholder="Departure Time"
               inputRef={departureTimeInputRef}
-              onChangeText={handleDepartureTimeChange}
-              onFocus={() => handleFocus("departureTime")}
+              onChangeText={(text) => dispatch(setDepartureTime(text))}
+              onFocus={() => dispatch(setFocusedField("departureTime"))}
               isFocused={focusedField === "departureTime"}
               leftIcon1={{ name: "time-outline", color: "black" }}
               leftIcon2={{
@@ -245,8 +235,8 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
               value={destinationTime}
               placeholder="Arrival Time"
               inputRef={destinationTimeInputRef}
-              onChangeText={handleDestinationTimeChange}
-              onFocus={() => handleFocus("destinationTime")}
+              onChangeText={(text) => dispatch(setDestinationTime(text))}
+              onFocus={() => dispatch(setFocusedField("destinationTime"))}
               isFocused={focusedField === "destinationTime"}
               leftIcon1={{ name: "time-outline", color: "black" }}
               leftIcon2={{
@@ -261,40 +251,47 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
       {uiState === "sheet-expanded" && (
         <>
           <View style={styles.travelModeContainer}>
-            <BoldButton
-              onPress={() => handleTravelModeChange("rider")}
+            <BorderedButton
+              onPress={() => dispatch(setTravelMode("rider"))}
               width={90}
               height={40}
               buttonText="Rider"
-              buttonStyle={
-                travelMode === "rider" ? styles.activeButton : undefined
+              borderColor={
+                travelMode === "rider"
+                  ? Colors.light.primary
+                  : Colors.light.text
               }
             />
-            <BoldButton
-              onPress={() => handleTravelModeChange("passenger")}
+
+            <BorderedButton
+              onPress={() => dispatch(setTravelMode("passenger"))}
               width={120}
               height={40}
               buttonText="Passenger"
-              buttonStyle={
-                travelMode === "passenger" ? styles.activeButton : undefined
+              borderColor={
+                travelMode === "passenger"
+                  ? Colors.light.primary
+                  : Colors.light.text
               }
             />
-            <BoldButton
-              onPress={() => handleTravelModeChange("partnership")}
+
+            <BorderedButton
+              onPress={() => dispatch(setTravelMode("partnership"))}
               width={120}
               height={40}
               buttonText="Partnership"
-              buttonStyle={
-                travelMode === "partnership" ? styles.activeButton : undefined
+              borderColor={
+                travelMode === "partnership"
+                  ? Colors.light.primary
+                  : Colors.light.text
               }
             />
           </View>
 
-          <BorderedButton
+          <BoldButton
             buttonText="+ Add Schedule"
             onPress={handleSubmitSchedule}
-            textColor={Colors.light.primary}
-            borderColor={Colors.light.secondary}
+            buttonStyle={{ backgroundColor: Colors.light.primary }}
           />
         </>
       )}
@@ -332,7 +329,7 @@ const styles = StyleSheet.create({
   },
   inputWrapper: {
     backgroundColor: Colors.light.background,
-    borderRadius: 8,
+    borderRadius: 12,
     marginTop: 16,
   },
   travelModeContainer: {
@@ -349,7 +346,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light.accent,
   },
   activeButton: {
-    backgroundColor: Colors.light.primary,
+    backgroundColor: Colors.light.text,
   },
   travelModeText: {
     color: Colors.light.background,
