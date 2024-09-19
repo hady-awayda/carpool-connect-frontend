@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 24,
-    marginBottom: 18,
+    marginBottom: 24,
   },
   travelModeButton: {
     paddingVertical: 8,
