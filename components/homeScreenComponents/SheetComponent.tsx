@@ -256,6 +256,12 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
               width={90}
               height={40}
               buttonText="Rider"
+              borderWidth={travelMode === "rider" ? 1.5 : 1}
+              textColor={
+                travelMode === "rider"
+                  ? Colors.light.primary
+                  : Colors.light.text
+              }
               borderColor={
                 travelMode === "rider"
                   ? Colors.light.primary
@@ -268,6 +274,12 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
               width={120}
               height={40}
               buttonText="Passenger"
+              borderWidth={travelMode === "passenger" ? 1.5 : 1}
+              textColor={
+                travelMode === "passenger"
+                  ? Colors.light.primary
+                  : Colors.light.text
+              }
               borderColor={
                 travelMode === "passenger"
                   ? Colors.light.primary
@@ -280,6 +292,12 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
               width={120}
               height={40}
               buttonText="Partnership"
+              borderWidth={travelMode === "partnership" ? 1.5 : 1}
+              textColor={
+                travelMode === "partnership"
+                  ? Colors.light.primary
+                  : Colors.light.text
+              }
               borderColor={
                 travelMode === "partnership"
                   ? Colors.light.primary

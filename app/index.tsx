@@ -45,11 +45,11 @@ export default function WelcomeScreen() {
         Join our community to reduce traffic, save costs, and promote
         sustainability.
       </Text>
+      <View style={styles.credentialsContainer}>
+        <BoldButton buttonText="Login" onPress={handleLogin} />
 
-      <BoldButton buttonText="Login" onPress={handleLogin} />
-
-      <BorderedButton buttonText="Register" onPress={handleRegister} />
-
+        <BorderedButton buttonText="Register" onPress={handleRegister} />
+      </View>
       <Text style={styles.orText}>or login with</Text>
       <View style={styles.socialContainer}>
         <TouchableOpacity style={styles.socialButton}>
