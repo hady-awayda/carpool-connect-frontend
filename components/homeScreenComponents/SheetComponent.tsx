@@ -10,11 +10,12 @@ import {
   setTravelMode,
 } from "@/data/redux/scheduleSlice/slice";
 import { RootState } from "@/data/redux/store";
-import { setFocusedField, setUIState } from "@/data/redux/UIStateSlice/slice";
+import { setFocusedField } from "@/data/redux/UIStateSlice/slice";
 import { Ionicons } from "@expo/vector-icons";
 import debounce from "lodash.debounce";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  Animated,
   Dimensions,
   Keyboard,
   StyleSheet,
@@ -24,13 +25,57 @@ import {
   View,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import addSchedule from "../../data/remote/addSchedule";
 import BoldButton from "../BoldButton";
 import BorderedButton from "../BorderedButton";
-import addSchedule from "../../data/remote/addSchedule";
 import AnimatedTextInput from "./AnimatedTextInput";
 import { LocationProps, SheetComponentProps } from "./interfaces";
 
 const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
+  const [sheetHeight] = useState(
+    new Animated.Value(Dimensions.get("window").height * 0.25)
+  );
+  const [contentOpacity] = useState(new Animated.Value(0)); // For animating content opacity
+
+  const handleExpandSheet = () => {
+    // Animate the sheet height
+    Animated.parallel([
+      Animated.timing(sheetHeight, {
+        toValue: Dimensions.get("window").height * 0.55,
+        duration: 500,
+        useNativeDriver: false,
+      }),
+      // Animate the opacity of the content (e.g., time fields, buttons)
+      Animated.timing(contentOpacity, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true, // Opacity can use native driver for better performance
+      }),
+    ]).start();
+
+    dispatch(setFocusedField("departureTime"));
+    animateToState("sheet-expanded");
+  };
+
+  const handleCloseSheet = () => {
+    // Animate the sheet back to its original height and hide content
+    Animated.parallel([
+      Animated.timing(sheetHeight, {
+        toValue: Dimensions.get("window").height * 0.25,
+        duration: 500,
+        useNativeDriver: false,
+      }),
+      // Set the opacity of content to 0 (invisible)
+      Animated.timing(contentOpacity, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    animateToState("full");
+  };
+
   const dispatch = useDispatch();
   const departure = useSelector((state: RootState) => state.address.departure);
   const destination = useSelector(
@@ -138,19 +183,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
     debouncedFindAddresses(text);
   };
 
-  const handleCloseSheet = () => {
-    if (uiState === "sheet-expanded") {
-      animateToState("full");
-    } else if (uiState === "full") {
-      animateToState("expanded");
-    }
-  };
-
-  const handleExpandSheet = () => {
-    dispatch(setFocusedField("departureTime"));
-    animateToState("sheet-expanded");
-  };
-
   const handleDepartureTime = () => {
     dispatch(setFocusedField("departureTime"));
   };
@@ -163,13 +195,8 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
     Keyboard.dismiss();
   };
 
-  const sheetHeight =
-    uiState === "sheet-expanded"
-      ? Dimensions.get("window").height * 0.55
-      : Dimensions.get("window").height * 0.25;
-
   return (
-    <View style={[styles.sheetContainer, { height: sheetHeight }]}>
+    <Animated.View style={[styles.sheetContainer, { height: sheetHeight }]}>
       <View style={styles.routeHeader}>
         <TouchableOpacity onPress={handleCloseSheet}>
           <Ionicons name="close" size={28} />
@@ -181,12 +208,13 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
       </View>
 
       <View style={styles.inputWrapper}>
+        {/* The departure and destination inputs are always visible */}
         <AnimatedTextInput
           value={departure.name}
           placeholder="Departure"
           inputRef={departureInputRef}
           onChangeText={(text) => handleSettingDeparture(text)}
-          onIcon1Press={() => dispatch(setDeparture(""))}
+          onIcon1Press={() => handleSettingDeparture("")}
           onIcon2Press={handleSettingMapLocation}
           onFocus={() => dispatch(setFocusedField("departure"))}
           isFocused={focusedField === "departure"}
@@ -207,7 +235,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
           placeholder="Destination"
           inputRef={destinationInputRef}
           onChangeText={(text) => handleSettingDestination(text)}
-          onIcon1Press={() => dispatch(setDestination(""))}
+          onIcon1Press={() => handleSettingDestination("")}
           onIcon2Press={handleSettingMapLocation}
           onFocus={() => dispatch(setFocusedField("destination"))}
           isFocused={focusedField === "destination"}
@@ -222,7 +250,10 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
             color: Colors.light.secondary,
           }}
         />
+      </View>
 
+      {/* Conditionally show the expanded content with opacity animation */}
+      <Animated.View style={{ opacity: contentOpacity }}>
         {uiState === "sheet-expanded" && (
           <>
             <AnimatedTextInput
@@ -256,75 +287,72 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
               }}
               rightIcon2={{ name: "close-circle", color: "#bbb" }}
             />
+
+            <View style={styles.travelModeContainer}>
+              <BorderedButton
+                onPress={() => dispatch(setTravelMode("rider"))}
+                width={90}
+                height={40}
+                buttonText="Rider"
+                borderWidth={travelMode === "rider" ? 1.5 : 1}
+                textColor={
+                  travelMode === "rider"
+                    ? Colors.light.primary
+                    : Colors.light.text
+                }
+                borderColor={
+                  travelMode === "rider"
+                    ? Colors.light.primary
+                    : Colors.light.text
+                }
+              />
+
+              <BorderedButton
+                onPress={() => dispatch(setTravelMode("passenger"))}
+                width={120}
+                height={40}
+                buttonText="Passenger"
+                borderWidth={travelMode === "passenger" ? 1.5 : 1}
+                textColor={
+                  travelMode === "passenger"
+                    ? Colors.light.primary
+                    : Colors.light.text
+                }
+                borderColor={
+                  travelMode === "passenger"
+                    ? Colors.light.primary
+                    : Colors.light.text
+                }
+              />
+
+              <BorderedButton
+                onPress={() => dispatch(setTravelMode("partnership"))}
+                width={120}
+                height={40}
+                buttonText="Partnership"
+                borderWidth={travelMode === "partnership" ? 1.5 : 1}
+                textColor={
+                  travelMode === "partnership"
+                    ? Colors.light.primary
+                    : Colors.light.text
+                }
+                borderColor={
+                  travelMode === "partnership"
+                    ? Colors.light.primary
+                    : Colors.light.text
+                }
+              />
+            </View>
+
+            <BoldButton
+              buttonText="+ Add Schedule"
+              onPress={handleSubmitSchedule}
+              buttonStyle={{ backgroundColor: Colors.light.primary }}
+            />
           </>
         )}
-      </View>
-      {uiState === "sheet-expanded" && (
-        <>
-          <View style={styles.travelModeContainer}>
-            <BorderedButton
-              onPress={() => dispatch(setTravelMode("rider"))}
-              width={90}
-              height={40}
-              buttonText="Rider"
-              borderWidth={travelMode === "rider" ? 1.5 : 1}
-              textColor={
-                travelMode === "rider"
-                  ? Colors.light.primary
-                  : Colors.light.text
-              }
-              borderColor={
-                travelMode === "rider"
-                  ? Colors.light.primary
-                  : Colors.light.text
-              }
-            />
-
-            <BorderedButton
-              onPress={() => dispatch(setTravelMode("passenger"))}
-              width={120}
-              height={40}
-              buttonText="Passenger"
-              borderWidth={travelMode === "passenger" ? 1.5 : 1}
-              textColor={
-                travelMode === "passenger"
-                  ? Colors.light.primary
-                  : Colors.light.text
-              }
-              borderColor={
-                travelMode === "passenger"
-                  ? Colors.light.primary
-                  : Colors.light.text
-              }
-            />
-
-            <BorderedButton
-              onPress={() => dispatch(setTravelMode("partnership"))}
-              width={120}
-              height={40}
-              buttonText="Partnership"
-              borderWidth={travelMode === "partnership" ? 1.5 : 1}
-              textColor={
-                travelMode === "partnership"
-                  ? Colors.light.primary
-                  : Colors.light.text
-              }
-              borderColor={
-                travelMode === "partnership"
-                  ? Colors.light.primary
-                  : Colors.light.text
-              }
-            />
-          </View>
-
-          <BoldButton
-            buttonText="+ Add Schedule"
-            onPress={handleSubmitSchedule}
-            buttonStyle={{ backgroundColor: Colors.light.primary }}
-          />
-        </>
-      )}
-    </View>
+      </Animated.View>
+    </Animated.View>
   );
 };
 
