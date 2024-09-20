@@ -24,6 +24,7 @@ const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
   onMapLocationSelect,
   onFocus,
   onBlur,
+  onPress,
   isFocused,
   leftIcon1,
   leftIcon2,
@@ -59,7 +60,8 @@ const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
         />
       )}
 
-      <View
+      <TouchableOpacity
+        onPress={onPress}
         style={[
           styles.inputContainer,
           isFocused && styles.focusedInputContainer,
@@ -76,7 +78,7 @@ const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
           cursorColor={Colors.light.primary}
           selectionColor={Colors.light.primary}
         />
-      </View>
+      </TouchableOpacity>
 
       {isFocused && (
         <>

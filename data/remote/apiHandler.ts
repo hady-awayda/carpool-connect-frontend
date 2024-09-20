@@ -3,11 +3,13 @@ import store from "@/data/redux/store";
 
 const API_BASE_URL =
   "http://carpool-dev-load-balancer-854327849.eu-central-1.elb.amazonaws.com/api/";
+const LOCAL_BASE_URL = "http://10.18.200.185:5000/api/";
+
 const SOCKET_IO_URL =
   "ws://carpool-dev-load-balancer-854327849.eu-central-1.elb.amazonaws.com/socket.io/?EIO=4&transport=websocket";
 
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: LOCAL_BASE_URL,
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
@@ -16,6 +18,20 @@ const api = axios.create({
 
 api.interceptors.request.use(
   async (config) => {
+    const token = store.getState().token.token;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+api.interceptors.request.use(
+  async (config) => {
+    console.log("Axios Base URL:", config.baseURL);
     const token = store.getState().token.token;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;

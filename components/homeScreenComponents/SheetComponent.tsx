@@ -26,7 +26,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import BoldButton from "../BoldButton";
 import BorderedButton from "../BorderedButton";
-import addSchedule from "./addSchedule";
+import addSchedule from "../../data/remote/addSchedule";
 import AnimatedTextInput from "./AnimatedTextInput";
 import { LocationProps, SheetComponentProps } from "./interfaces";
 
@@ -151,9 +151,15 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
     animateToState("sheet-expanded");
   };
 
+  const handleDepartureTime = () => {
+    dispatch(setFocusedField("departureTime"));
+  };
+
   const handleSubmitSchedule = async () => {
+    if (departureTime > destinationTime)
+      alert("Departure time can't be ahead of destination time!");
     addSchedule();
-    animateToState("expanded");
+    // animateToState("expanded");
     Keyboard.dismiss();
   };
 
@@ -214,6 +220,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
             color: Colors.light.secondary,
           }}
         />
+
         {uiState === "sheet-expanded" && (
           <>
             <AnimatedTextInput
@@ -221,7 +228,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
               placeholder="Departure Time"
               inputRef={departureTimeInputRef}
               onChangeText={(text) => dispatch(setDepartureTime(text))}
-              onFocus={() => dispatch(setFocusedField("departureTime"))}
+              onFocus={handleDepartureTime}
               isFocused={focusedField === "departureTime"}
               leftIcon1={{ name: "time-outline", color: "black" }}
               leftIcon2={{

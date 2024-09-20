@@ -23,7 +23,7 @@ const BoldButton: React.FC<BoldButtonProps> = ({
   buttonStyle,
   textStyle,
   buttonText,
-  width,
+  width = 340,
   height = 54,
 }) => {
   const [animation] = useState(new Animated.Value(0));

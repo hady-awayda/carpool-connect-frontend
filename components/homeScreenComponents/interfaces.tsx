@@ -10,6 +10,7 @@ export type AnimatedTextInputProps = {
   onMapLocationSelect?: () => void;
   onFocus?: () => void;
   onBlur?: () => void;
+  onPress?: () => void;
   isFocused: boolean;
   leftIcon1?: { name: IoniconsName; color: string };
   leftIcon2?: { name: MaterialCommunityIconsName; color: string };

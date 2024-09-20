@@ -1,4 +1,4 @@
-import { apiRequest } from "../../data/remote/apiHandler";
+import { apiRequest } from "./apiHandler";
 import store from "@/data/redux/store";
 
 const addSchedule = async () => {
@@ -11,13 +11,15 @@ const addSchedule = async () => {
     scheduleType: state.schedule.travelMode,
     departureLat: state.address.departure.coords?.latitude,
     departureLng: state.address.departure.coords?.longitude,
-    destinationLat: state.address.destination.coords?.latitude,
-    destinationLng: state.address.destination.coords?.longitude,
-    departureTime: state.schedule.departureTime,
-    arrivalTime: state.schedule.destinationTime,
+    destinationLat: state.address.departure.coords?.latitude,
+    destinationLng: state.address.departure.coords?.longitude,
+    departureTime: Date.now(),
+    arrivalTime: Date.now(),
     isDefault: true,
     isActive: true,
   };
+
+  console.log(scheduleData);
 
   try {
     const response = await apiRequest(endpoint, method, scheduleData);
