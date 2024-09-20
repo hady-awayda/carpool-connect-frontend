@@ -7,10 +7,11 @@ export type AnimatedTextInputProps = {
   placeholder: string;
   inputRef?: React.RefObject<TextInput>;
   onChangeText: (text: string) => void;
-  onMapLocationSelect?: () => void;
   onFocus?: () => void;
   onBlur?: () => void;
   onPress?: () => void;
+  onIcon1Press?: () => void;
+  onIcon2Press?: () => void;
   isFocused: boolean;
   leftIcon1?: { name: IoniconsName; color: string };
   leftIcon2?: { name: MaterialCommunityIconsName; color: string };

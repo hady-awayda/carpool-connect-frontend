@@ -186,7 +186,8 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
           placeholder="Departure"
           inputRef={departureInputRef}
           onChangeText={(text) => handleSettingDeparture(text)}
-          onMapLocationSelect={handleSettingMapLocation}
+          onIcon1Press={() => dispatch(setDeparture(""))}
+          onIcon2Press={handleSettingMapLocation}
           onFocus={() => dispatch(setFocusedField("departure"))}
           isFocused={focusedField === "departure"}
           leftIcon1={{ name: "search", color: "black" }}
@@ -206,7 +207,8 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
           placeholder="Destination"
           inputRef={destinationInputRef}
           onChangeText={(text) => handleSettingDestination(text)}
-          onMapLocationSelect={handleSettingMapLocation}
+          onIcon1Press={() => dispatch(setDestination(""))}
+          onIcon2Press={handleSettingMapLocation}
           onFocus={() => dispatch(setFocusedField("destination"))}
           isFocused={focusedField === "destination"}
           leftIcon1={{ name: "search", color: "black" }}
@@ -229,13 +231,14 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
               inputRef={departureTimeInputRef}
               onChangeText={(text) => dispatch(setDepartureTime(text))}
               onFocus={handleDepartureTime}
+              onIcon2Press={() => dispatch(setDepartureTime(""))}
               isFocused={focusedField === "departureTime"}
               leftIcon1={{ name: "time-outline", color: "black" }}
               leftIcon2={{
                 name: "clock",
                 color: departureTime ? Colors.light.secondary : "#bbb",
               }}
-              rightIcon1={{ name: "close-circle", color: "#bbb" }}
+              rightIcon2={{ name: "close-circle", color: "#bbb" }}
             />
 
             <AnimatedTextInput
@@ -244,13 +247,14 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
               inputRef={destinationTimeInputRef}
               onChangeText={(text) => dispatch(setDestinationTime(text))}
               onFocus={() => dispatch(setFocusedField("destinationTime"))}
+              onIcon2Press={() => dispatch(setDestinationTime(""))}
               isFocused={focusedField === "destinationTime"}
               leftIcon1={{ name: "time-outline", color: "black" }}
               leftIcon2={{
                 name: "clock",
                 color: destinationTime ? Colors.light.secondary : "#bbb",
               }}
-              rightIcon1={{ name: "close-circle", color: "#bbb" }}
+              rightIcon2={{ name: "close-circle", color: "#bbb" }}
             />
           </>
         )}

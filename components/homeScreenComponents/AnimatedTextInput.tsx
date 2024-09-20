@@ -21,10 +21,11 @@ const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
   placeholder,
   inputRef,
   onChangeText,
-  onMapLocationSelect,
   onFocus,
   onBlur,
   onPress,
+  onIcon1Press,
+  onIcon2Press,
   isFocused,
   leftIcon1,
   leftIcon2,
@@ -84,7 +85,7 @@ const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
         <>
           {value !== "" && (
             <TouchableOpacity
-              onPress={() => onChangeText("")}
+              onPress={onIcon1Press}
               style={styles.rightIconButton}
             >
               <Ionicons
@@ -94,10 +95,7 @@ const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
               />
             </TouchableOpacity>
           )}
-          <TouchableOpacity
-            onPress={onMapLocationSelect}
-            style={styles.rightIcon}
-          >
+          <TouchableOpacity onPress={onIcon2Press} style={styles.rightIcon}>
             <MaterialCommunityIcons
               name={rightIcon2?.name}
               size={24}
