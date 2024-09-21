@@ -166,11 +166,11 @@ const ScheduleCard = ({ schedule, onPress }: ScheduleCardProps) => {
         </Text>
         <View style={styles.textContainer}>
           <Text style={styles.leftText}>From: </Text>
-          <Text style={styles.text}>{departureName}</Text>
+          <Text style={styles.text}>{departureName?.slice(0, 24)}</Text>
         </View>
         <View style={styles.textContainer}>
           <Text style={styles.leftText}>To: </Text>
-          <Text style={styles.text}>{destinationName}</Text>
+          <Text style={styles.text}>{destinationName?.slice(0, 16)}</Text>
         </View>
         <View style={styles.textContainer}>
           <Text style={styles.leftText}>Departure: </Text>
@@ -210,19 +210,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderColor: Colors.light.backgroundIcon,
     borderBottomWidth: 1,
-    // marginBottom: 10,
     width: width,
-    height: 160,
-    padding: 10,
+    paddingHorizontal: 16,
+    paddingBottom: 0,
+    paddingTop: 12,
     alignSelf: "center",
   },
   mapContainer: {
-    width: 140,
-    height: 140,
+    width: width / 2.75,
+    height: width / 2.75,
     borderRadius: 10,
     overflow: "hidden",
     marginRight: 16,
-    marginLeft: 8,
+    marginLeft: 2,
   },
   map: {
     width: "100%",
@@ -232,19 +232,22 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: 16,
-    fontWeight: "bold",
+    ...Typography.subheading,
+    marginBottom: 8,
   },
   textContainer: {
     flexDirection: "row",
-    marginTop: 6,
+    justifyContent: "space-between",
+    alignItems: "flex-end",
   },
   leftText: {
     ...Typography.title,
+    color: Colors.light.text,
   },
   text: {
-    marginVertical: 1,
     ...Typography.text,
+    overflow: "hidden",
+    height: 20,
   },
   weekdayContainer: {
     flexDirection: "row",
