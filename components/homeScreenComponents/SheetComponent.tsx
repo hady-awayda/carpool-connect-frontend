@@ -256,7 +256,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
 
   const findAddressesByName = async (name: string, limit = 5, page = 1) => {
     const encodedName = encodeURIComponent(name);
-    const apiKey = "";
+    const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
     const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedName}&key=${apiKey}`;
 
     try {
