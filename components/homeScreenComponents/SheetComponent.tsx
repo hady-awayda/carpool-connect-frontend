@@ -12,7 +12,6 @@ import {
 } from "@/data/redux/scheduleSlice/slice";
 import { RootState } from "@/data/redux/store";
 import { setFocusedField, setUIState } from "@/data/redux/UIStateSlice/slice";
-import { GOOGLE_MAPS_API_KEY } from "@env";
 import { Ionicons } from "@expo/vector-icons";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -257,7 +256,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
 
   const findAddressesByName = async (name: string, limit = 5, page = 1) => {
     const encodedName = encodeURIComponent(name);
-    const apiKey = GOOGLE_MAPS_API_KEY;
+    const apiKey = "AIzaSyCzduXSDjg5mbh4txUTEVVu7LN1O53_fEc";
     const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedName}&key=${apiKey}`;
 
     try {

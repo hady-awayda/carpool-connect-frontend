@@ -5,7 +5,6 @@
     "jsx": "react-native",
     "module": "esnext",
     "strict": true,
-    "typeRoots": ["node_modules/@types", "node_modules/@tanstack/react-query"],
     "paths": {
       "@/*": ["./*"]
     },
