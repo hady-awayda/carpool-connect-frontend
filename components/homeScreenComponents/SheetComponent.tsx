@@ -229,7 +229,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
         destinationTimeInputRef.current?.focus();
       }
     }
-  }, [uiState]);
+  }, [uiState, focusedField]);
 
   const handleClosePress = () => {
     if (uiState === "slide-1") {

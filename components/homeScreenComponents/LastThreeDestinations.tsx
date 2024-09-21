@@ -13,7 +13,7 @@ import {
   setUIState,
   setFocusedField,
   UIState,
-} from "@/data/redux/UIStateSlice/slice"; // Import UIState actions
+} from "@/data/redux/UIStateSlice/slice";
 
 const defaultAddresses: Address[] = [
   {
@@ -58,7 +58,7 @@ const LastDestinations = ({
   const focusedField = useSelector(
     (state: RootState) => state.uiState.focusedField
   );
-  const uiState = useSelector((state: RootState) => state.uiState.uiState); // Get current UI state
+  const uiState = useSelector((state: RootState) => state.uiState.uiState);
 
   const dataToRender: Address[] =
     addresses && addresses.length > 0 ? addresses : defaultAddresses;
@@ -66,10 +66,9 @@ const LastDestinations = ({
   const handleAddressPress = (item: Address) => {
     const locationData = {
       name: item.name,
-      coords: null, // You can enhance this with real coordinates if needed
+      coords: null,
     };
 
-    // If UI state is "expanded", handle default behavior (set destination and switch to full)
     if (uiState === "expanded") {
       if (!destination.name) {
         dispatch(setDestination(locationData));
@@ -78,10 +77,8 @@ const LastDestinations = ({
       return;
     }
 
-    // Handle switching between departure and destination based on the focusedField
     if (focusedField === "departure") {
       dispatch(setDeparture(locationData));
-      // If the destination isn't set, switch focus to it
       if (!destination.name) {
         dispatch(setFocusedField("destination"));
       } else {
@@ -89,7 +86,6 @@ const LastDestinations = ({
       }
     } else if (focusedField === "destination") {
       dispatch(setDestination(locationData));
-      // If the departure isn't set, switch focus to it
       if (!departure.name) {
         dispatch(setFocusedField("departure"));
       } else {
