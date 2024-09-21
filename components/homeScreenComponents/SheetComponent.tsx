@@ -35,21 +35,38 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   const [sheetHeight] = useState(
     new Animated.Value(Dimensions.get("window").height * 0.25)
   );
-  const [contentOpacity] = useState(new Animated.Value(0)); // For animating content opacity
+  const [departureTimeOpacity] = useState(new Animated.Value(0));
+  const [destinationTimeOpacity] = useState(new Animated.Value(0));
+  const [buttonsOpacity] = useState(new Animated.Value(0));
+  const [addButtonOpacity] = useState(new Animated.Value(0));
 
   const handleExpandSheet = () => {
-    // Animate the sheet height
-    Animated.parallel([
-      Animated.timing(sheetHeight, {
-        toValue: Dimensions.get("window").height * 0.55,
-        duration: 500,
-        useNativeDriver: false,
+    Animated.timing(sheetHeight, {
+      toValue: Dimensions.get("window").height * 0.55,
+      duration: 500,
+      useNativeDriver: false,
+    }).start();
+
+    Animated.stagger(150, [
+      Animated.timing(departureTimeOpacity, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
       }),
-      // Animate the opacity of the content (e.g., time fields, buttons)
-      Animated.timing(contentOpacity, {
+      Animated.timing(destinationTimeOpacity, {
         toValue: 1,
         duration: 500,
-        useNativeDriver: true, // Opacity can use native driver for better performance
+        useNativeDriver: true,
+      }),
+      Animated.timing(buttonsOpacity, {
+        toValue: 1,
+        duration: 700,
+        useNativeDriver: true,
+      }),
+      Animated.timing(addButtonOpacity, {
+        toValue: 1,
+        duration: 900,
+        useNativeDriver: true,
       }),
     ]).start();
 
@@ -58,17 +75,31 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   };
 
   const handleCloseSheet = () => {
-    // Animate the sheet back to its original height and hide content
     Animated.parallel([
       Animated.timing(sheetHeight, {
         toValue: Dimensions.get("window").height * 0.25,
         duration: 500,
         useNativeDriver: false,
       }),
-      // Set the opacity of content to 0 (invisible)
-      Animated.timing(contentOpacity, {
+      // Reverse the opacity for all elements
+      Animated.timing(departureTimeOpacity, {
         toValue: 0,
-        duration: 500,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(destinationTimeOpacity, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(buttonsOpacity, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(addButtonOpacity, {
+        toValue: 0,
+        duration: 300,
         useNativeDriver: true,
       }),
     ]).start();
@@ -208,7 +239,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
       </View>
 
       <View style={styles.inputWrapper}>
-        {/* The departure and destination inputs are always visible */}
         <AnimatedTextInput
           value={departure.name}
           placeholder="Departure"
@@ -250,108 +280,127 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
             color: Colors.light.secondary,
           }}
         />
-      </View>
 
-      {/* Conditionally show the expanded content with opacity animation */}
-      <Animated.View style={{ opacity: contentOpacity }}>
         {uiState === "sheet-expanded" && (
           <>
-            <AnimatedTextInput
-              value={departureTime}
-              placeholder="Departure Time"
-              inputRef={departureTimeInputRef}
-              onChangeText={(text) => dispatch(setDepartureTime(text))}
-              onFocus={handleDepartureTime}
-              onIcon2Press={() => dispatch(setDepartureTime(""))}
-              isFocused={focusedField === "departureTime"}
-              leftIcon1={{ name: "time-outline", color: "black" }}
-              leftIcon2={{
-                name: "clock",
-                color: departureTime ? Colors.light.secondary : "#bbb",
-              }}
-              rightIcon2={{ name: "close-circle", color: "#bbb" }}
+            <Animated.View
+              style={[
+                focusedField === "departureTime" && { zIndex: 400 },
+                { opacity: departureTimeOpacity },
+              ]}
+            >
+              <AnimatedTextInput
+                value={departureTime}
+                placeholder="Departure Time"
+                inputRef={departureTimeInputRef}
+                onChangeText={(text) => dispatch(setDepartureTime(text))}
+                onFocus={handleDepartureTime}
+                onIcon2Press={() => dispatch(setDepartureTime(""))}
+                isFocused={focusedField === "departureTime"}
+                leftIcon1={{ name: "time-outline", color: "black" }}
+                leftIcon2={{
+                  name: "clock",
+                  color: departureTime ? Colors.light.secondary : "#bbb",
+                }}
+                rightIcon2={{ name: "close-circle", color: "#bbb" }}
+              />
+            </Animated.View>
+
+            <Animated.View
+              style={[
+                focusedField === "destinationTime" && { zIndex: 400 },
+                { opacity: destinationTimeOpacity },
+              ]}
+            >
+              <AnimatedTextInput
+                value={destinationTime}
+                placeholder="Arrival Time"
+                inputRef={destinationTimeInputRef}
+                onChangeText={(text) => dispatch(setDestinationTime(text))}
+                onFocus={() => dispatch(setFocusedField("destinationTime"))}
+                onIcon2Press={() => dispatch(setDestinationTime(""))}
+                isFocused={focusedField === "destinationTime"}
+                leftIcon1={{ name: "time-outline", color: "black" }}
+                leftIcon2={{
+                  name: "clock",
+                  color: destinationTime ? Colors.light.secondary : "#bbb",
+                }}
+                rightIcon2={{ name: "close-circle", color: "#bbb" }}
+              />
+            </Animated.View>
+          </>
+        )}
+      </View>
+
+      {uiState === "sheet-expanded" && (
+        <>
+          <Animated.View
+            style={[styles.travelModeContainer, { opacity: buttonsOpacity }]}
+          >
+            <BorderedButton
+              onPress={() => dispatch(setTravelMode("rider"))}
+              width={90}
+              height={40}
+              buttonText="Rider"
+              borderWidth={travelMode === "rider" ? 1.5 : 1}
+              textColor={
+                travelMode === "rider"
+                  ? Colors.light.primary
+                  : Colors.light.text
+              }
+              borderColor={
+                travelMode === "rider"
+                  ? Colors.light.primary
+                  : Colors.light.text
+              }
             />
 
-            <AnimatedTextInput
-              value={destinationTime}
-              placeholder="Arrival Time"
-              inputRef={destinationTimeInputRef}
-              onChangeText={(text) => dispatch(setDestinationTime(text))}
-              onFocus={() => dispatch(setFocusedField("destinationTime"))}
-              onIcon2Press={() => dispatch(setDestinationTime(""))}
-              isFocused={focusedField === "destinationTime"}
-              leftIcon1={{ name: "time-outline", color: "black" }}
-              leftIcon2={{
-                name: "clock",
-                color: destinationTime ? Colors.light.secondary : "#bbb",
-              }}
-              rightIcon2={{ name: "close-circle", color: "#bbb" }}
+            <BorderedButton
+              onPress={() => dispatch(setTravelMode("passenger"))}
+              width={120}
+              height={40}
+              buttonText="Passenger"
+              borderWidth={travelMode === "passenger" ? 1.5 : 1}
+              textColor={
+                travelMode === "passenger"
+                  ? Colors.light.primary
+                  : Colors.light.text
+              }
+              borderColor={
+                travelMode === "passenger"
+                  ? Colors.light.primary
+                  : Colors.light.text
+              }
             />
 
-            <View style={styles.travelModeContainer}>
-              <BorderedButton
-                onPress={() => dispatch(setTravelMode("rider"))}
-                width={90}
-                height={40}
-                buttonText="Rider"
-                borderWidth={travelMode === "rider" ? 1.5 : 1}
-                textColor={
-                  travelMode === "rider"
-                    ? Colors.light.primary
-                    : Colors.light.text
-                }
-                borderColor={
-                  travelMode === "rider"
-                    ? Colors.light.primary
-                    : Colors.light.text
-                }
-              />
+            <BorderedButton
+              onPress={() => dispatch(setTravelMode("partnership"))}
+              width={120}
+              height={40}
+              buttonText="Partnership"
+              borderWidth={travelMode === "partnership" ? 1.5 : 1}
+              textColor={
+                travelMode === "partnership"
+                  ? Colors.light.primary
+                  : Colors.light.text
+              }
+              borderColor={
+                travelMode === "partnership"
+                  ? Colors.light.primary
+                  : Colors.light.text
+              }
+            />
+          </Animated.View>
 
-              <BorderedButton
-                onPress={() => dispatch(setTravelMode("passenger"))}
-                width={120}
-                height={40}
-                buttonText="Passenger"
-                borderWidth={travelMode === "passenger" ? 1.5 : 1}
-                textColor={
-                  travelMode === "passenger"
-                    ? Colors.light.primary
-                    : Colors.light.text
-                }
-                borderColor={
-                  travelMode === "passenger"
-                    ? Colors.light.primary
-                    : Colors.light.text
-                }
-              />
-
-              <BorderedButton
-                onPress={() => dispatch(setTravelMode("partnership"))}
-                width={120}
-                height={40}
-                buttonText="Partnership"
-                borderWidth={travelMode === "partnership" ? 1.5 : 1}
-                textColor={
-                  travelMode === "partnership"
-                    ? Colors.light.primary
-                    : Colors.light.text
-                }
-                borderColor={
-                  travelMode === "partnership"
-                    ? Colors.light.primary
-                    : Colors.light.text
-                }
-              />
-            </View>
-
+          <Animated.View style={{ opacity: addButtonOpacity }}>
             <BoldButton
               buttonText="+ Add Schedule"
               onPress={handleSubmitSchedule}
               buttonStyle={{ backgroundColor: Colors.light.primary }}
             />
-          </>
-        )}
-      </Animated.View>
+          </Animated.View>
+        </>
+      )}
     </Animated.View>
   );
 };
@@ -385,6 +434,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inputWrapper: {
+    justifyContent: "space-between",
     backgroundColor: Colors.light.background,
     borderRadius: 12,
     marginTop: 16,
