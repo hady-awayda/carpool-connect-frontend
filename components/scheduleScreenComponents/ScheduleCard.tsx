@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/Variables";
 import React from "react";
 import {
   View,
@@ -53,7 +54,8 @@ const ScheduleCard = ({ schedule, onPress }: ScheduleCardProps) => {
   const destLat = parseCoordinate(destinationLat);
   const destLng = parseCoordinate(destinationLng);
 
-  console.log({ depLat, depLng, destLat, destLng });
+  const latitudeDelta = Math.abs(depLat - destLat) * 1.5;
+  const longitudeDelta = Math.abs(depLng - destLng) * 1.5;
 
   const formatTime = (time: Date) => {
     const date = new Date(time);
@@ -64,15 +66,15 @@ const ScheduleCard = ({ schedule, onPress }: ScheduleCardProps) => {
   };
 
   return (
-    <TouchableOpacity onPress={onPress} style={styles.card}>
+    <TouchableOpacity activeOpacity={0.8} onPress={onPress} style={styles.card}>
       <View style={styles.mapContainer}>
         <MapView
           style={styles.map}
           initialRegion={{
             latitude: (depLat + destLat) / 2,
             longitude: (depLng + destLng) / 2,
-            latitudeDelta: 0.004,
-            longitudeDelta: 0.004,
+            latitudeDelta: latitudeDelta || 0.05,
+            longitudeDelta: longitudeDelta || 0.05,
           }}
           scrollEnabled={false}
           zoomEnabled={false}
@@ -80,17 +82,19 @@ const ScheduleCard = ({ schedule, onPress }: ScheduleCardProps) => {
           <Marker
             coordinate={{ latitude: depLat, longitude: depLng }}
             title="Departure"
+            style={{ width: 24, height: 24 }}
           />
           <Marker
             coordinate={{ latitude: destLat, longitude: destLng }}
             title="Destination"
+            style={{ width: 24, height: 24 }}
           />
           <Polyline
             coordinates={[
               { latitude: depLat, longitude: depLng },
               { latitude: destLat, longitude: destLng },
             ]}
-            strokeColor="#000"
+            strokeColor={Colors.light.secondary}
             strokeWidth={3}
           />
         </MapView>
@@ -131,6 +135,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#fff",
     borderRadius: 10,
+    borderColor: Colors.light.backgroundIcon,
+    borderWidth: 1,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
