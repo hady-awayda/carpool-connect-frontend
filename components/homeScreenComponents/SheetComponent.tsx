@@ -197,6 +197,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   const focusedField = useSelector(
     (state: RootState) => state.uiState.focusedField
   );
+  useEffect(() => console.log(uiState), [uiState]);
 
   const departureInputRef = useRef<TextInput>(null);
   const destinationInputRef = useRef<TextInput>(null);
@@ -297,6 +298,11 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
     debouncedFindAddresses(text);
   };
 
+  const handleSettingDestination = (text: string) => {
+    dispatch(setDestination({ ...destination, name: text }));
+    debouncedFindAddresses(text);
+  };
+
   const handleClearingDeparture = () => {
     dispatch(setDeparture({ ...departure, name: "" }));
     dispatch(setFocusedField("departure"));
@@ -309,13 +315,12 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
     animateToState("full");
   };
 
-  const handleSettingDestination = (text: string) => {
-    dispatch(setDestination({ ...destination, name: text }));
-    debouncedFindAddresses(text);
-  };
-
   const handleDepartureTime = () => {
     dispatch(setFocusedField("departureTime"));
+  };
+
+  const handleDestinationTime = () => {
+    dispatch(setFocusedField("destinationTime"));
   };
 
   const handleSubmitSchedule = async () => {
@@ -446,7 +451,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
                   placeholder="Arrival Time"
                   inputRef={destinationTimeInputRef}
                   onChangeText={(text) => dispatch(setDestinationTime(text))}
-                  onFocus={() => dispatch(setFocusedField("destinationTime"))}
+                  onFocus={handleDestinationTime}
                   onIcon2Press={() => dispatch(setDestinationTime(""))}
                   isFocused={focusedField === "destinationTime"}
                   leftIcon1={{ name: "time-outline", color: "black" }}

@@ -1,19 +1,15 @@
 import { Colors, Typography } from "@/constants/Variables";
+import {
+  setDeparture,
+  setDestination,
+} from "@/data/redux/addressListSlice/slice";
 import { RootState } from "@/data/redux/store";
+import { setFocusedField, UIState } from "@/data/redux/UIStateSlice/slice";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { MaterialCommunityIconsName } from "./AnimatedTextInput";
 import { Address } from "./interfaces";
-import {
-  setDeparture,
-  setDestination,
-} from "@/data/redux/addressListSlice/slice";
-import {
-  setUIState,
-  setFocusedField,
-  UIState,
-} from "@/data/redux/UIStateSlice/slice";
 
 const defaultAddresses: Address[] = [
   {
@@ -66,14 +62,12 @@ const LastDestinations = ({
   const handleAddressPress = (item: Address) => {
     const locationData = {
       name: item.name,
-      coords: null,
+      coords: item.coords,
     };
 
     if (uiState === "expanded") {
-      if (!destination.name) {
-        dispatch(setDestination(locationData));
-      }
-      dispatch(setUIState("full"));
+      dispatch(setDestination(locationData));
+      animateToState("full");
       return;
     }
 
