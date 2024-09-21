@@ -45,6 +45,7 @@ const HomeScreen = () => {
     "sheet-expanded": 3,
     "setting-departure": 4,
     "setting-destination": 5,
+    "slide-1": 6,
   };
 
   useEffect(() => {

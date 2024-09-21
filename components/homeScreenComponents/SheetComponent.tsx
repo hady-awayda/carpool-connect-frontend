@@ -10,7 +10,7 @@ import {
   setTravelMode,
 } from "@/data/redux/scheduleSlice/slice";
 import { RootState } from "@/data/redux/store";
-import { setFocusedField } from "@/data/redux/UIStateSlice/slice";
+import { setFocusedField, setUIState } from "@/data/redux/UIStateSlice/slice";
 import { Ionicons } from "@expo/vector-icons";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -39,10 +39,11 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   const [destinationTimeOpacity] = useState(new Animated.Value(0));
   const [buttonsOpacity] = useState(new Animated.Value(0));
   const [addButtonOpacity] = useState(new Animated.Value(0));
+  const [iconRotation] = useState(new Animated.Value(0));
 
   const handleExpandSheet = () => {
     Animated.timing(sheetHeight, {
-      toValue: Dimensions.get("window").height * 0.55,
+      toValue: Dimensions.get("window").height * 0.62,
       duration: 100,
       useNativeDriver: false,
     }).start();
@@ -69,6 +70,12 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
         useNativeDriver: true,
       }),
     ]).start();
+
+    Animated.timing(iconRotation, {
+      toValue: 1,
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
   };
 
   const handleCloseSheet = () => {
@@ -101,7 +108,22 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
           useNativeDriver: true,
         }),
       ]),
+
+      Animated.timing(iconRotation, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      }),
     ]).start();
+  };
+
+  const iconInterpolation = iconRotation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["0deg", "90deg"],
+  });
+
+  const handleArrowPress = () => {
+    dispatch(setUIState("slide-1"));
   };
 
   const dispatch = useDispatch();
@@ -157,7 +179,9 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   }, [uiState]);
 
   const handleClosePress = () => {
-    if (uiState === "sheet-expanded") {
+    if (uiState === "slide-1") {
+      animateToState("sheet-expanded");
+    } else if (uiState === "sheet-expanded") {
       animateToState("full");
     } else if (uiState === "full") {
       animateToState("expanded");
@@ -241,12 +265,38 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
     <Animated.View style={[styles.sheetContainer, { height: sheetHeight }]}>
       <View style={styles.routeHeader}>
         <TouchableOpacity onPress={handleClosePress}>
-          <Ionicons name="close" size={28} />
+          <Animated.View
+            style={
+              uiState === "slide-1" && {
+                transform: [{ rotate: iconInterpolation }],
+              }
+            }
+          >
+            <Ionicons
+              name={uiState === "slide-1" ? "chevron-down" : "close"}
+              size={28}
+              color="black"
+            />
+          </Animated.View>
         </TouchableOpacity>
         <Text style={styles.routeTitle}>Your route</Text>
-        <TouchableOpacity onPress={handleExpandPress}>
-          <Ionicons name="add" size={28} />
-        </TouchableOpacity>
+        {uiState !== "slide-1" ? (
+          <TouchableOpacity
+            onPress={uiState === "full" ? handleExpandPress : handleArrowPress}
+          >
+            <Animated.View
+              style={{ transform: [{ rotate: iconInterpolation }] }}
+            >
+              <Ionicons
+                name={uiState === "sheet-expanded" ? "chevron-up" : "add"}
+                size={28}
+                color="black"
+              />
+            </Animated.View>
+          </TouchableOpacity>
+        ) : (
+          <Ionicons name={"add"} size={28} color="transparent" />
+        )}
       </View>
 
       <View style={styles.inputWrapper}>
@@ -404,12 +454,22 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
           </Animated.View>
 
           <Animated.View
-            style={{ opacity: addButtonOpacity, alignItems: "center" }}
+            style={{
+              opacity: addButtonOpacity,
+              alignItems: "center",
+              height: 100,
+              gap: 10,
+            }}
           >
             <BoldButton
               buttonText="+ Add Schedule"
               onPress={handleSubmitSchedule}
               buttonStyle={{ backgroundColor: Colors.light.primary }}
+              width={352}
+            />
+            <BorderedButton
+              buttonText="Set Days"
+              onPress={handleArrowPress}
               width={352}
             />
           </Animated.View>
