@@ -255,7 +255,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
     }
   };
 
-  const findAddressesByName = async (name: string, limit = 5, page = 1) => {
+  const findPlaceByName = async (name: string, limit = 5, page = 1) => {
     const encodedName = encodeURIComponent(name);
     const apiKey = "AIzaSyCzduXSDjg5mbh4txUTEVVu7LN1O53_fEc";
     const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodedName}&key=${apiKey}`;
@@ -278,7 +278,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
           types: item.types,
         }));
 
-        console.log(places);
         return places;
       } else {
         console.log("No results found or error occurred.");
@@ -290,12 +289,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
     }
   };
 
-  const addressList = useSelector(
-    (state: RootState) => state.address.addressList
-  );
-
-  useEffect(() => console.log(addressList), [addressList]);
-
   const debouncedFindAddresses = useCallback(
     debounce(async (text: string) => {
       if (text.trim().length === 0) {
@@ -303,7 +296,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
         return;
       }
 
-      const addresses = await findAddressesByName(text);
+      const addresses = await findPlaceByName(text);
       dispatch(updateAddressList(addresses));
     }, 500),
     []

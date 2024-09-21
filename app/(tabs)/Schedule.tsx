@@ -1,3 +1,4 @@
+import BoldButton from "@/components/BoldButton";
 import UserSchedulesList from "@/components/scheduleScreenComponents/UserSchedulesList";
 import { Colors, Typography } from "@/constants/Variables";
 import { useRouter } from "expo-router";
@@ -16,12 +17,14 @@ const SchedulesScreen: React.FC = () => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.header}>
         <Text style={styles.title}>Schedules</Text>
-        <TouchableOpacity
-          style={styles.newButton}
+
+        <BoldButton
           onPress={handleNavigationToNewSchedule}
-        >
-          <Text style={styles.newButtonText}>New</Text>
-        </TouchableOpacity>
+          buttonText="New"
+          width={80}
+          height={40}
+          buttonStyle={{ backgroundColor: Colors.light.primary }}
+        />
       </View>
 
       <UserSchedulesList />
@@ -33,37 +36,19 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#fff",
+    width: "100%",
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 20,
-    paddingTop: 24,
+    paddingHorizontal: 24,
+    paddingTop: 28,
     paddingBottom: 20,
     backgroundColor: "#fff",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   title: {
     ...Typography.heading,
-  },
-  newButton: {
-    backgroundColor: Colors.light.primary,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 5,
-  },
-  newButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
   },
 });
 

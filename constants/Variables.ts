@@ -25,39 +25,39 @@ export const Colors = {
 export const Typography: { [key: string]: TextStyle } = {
   heading: {
     fontSize: 24,
-    fontWeight: "bold",
     fontFamily: "Urbanist_700Bold",
   },
   heading1: {
     fontSize: 22,
-    fontWeight: "bold",
     fontFamily: "Urbanist_700Bold",
   },
   heading2: {
     fontSize: 20,
-    fontWeight: "bold",
     fontFamily: "Urbanist_700Bold",
   },
   subheading: {
     fontSize: 18,
-    fontWeight: "700",
     fontFamily: "Urbanist_700Bold",
   },
   title: {
     fontSize: 16,
-    fontWeight: "600",
+    fontFamily: "Urbanist_700Bold",
   },
   title2: {
     fontSize: 16,
-    fontWeight: "400",
+    fontFamily: "Urbanist_600SemiBold",
+  },
+  title3: {
+    fontSize: 16,
+    fontFamily: "Urbanist_500Medium",
   },
   body: {
     fontSize: 15,
-    fontWeight: "500",
+    fontFamily: "Urbanist_500Medium",
   },
   text: {
     fontSize: 14,
-    fontWeight: "400",
+    fontFamily: "Urbanist_400Regular",
   },
 };
 

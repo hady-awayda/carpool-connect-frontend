@@ -208,14 +208,10 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: "row",
     backgroundColor: "#fff",
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
-    marginVertical: 10,
-    width: width - 40,
+    borderColor: Colors.light.backgroundIcon,
+    borderBottomWidth: 1,
+    // marginBottom: 10,
+    width: width,
     height: 160,
     padding: 10,
     alignSelf: "center",
@@ -225,6 +221,8 @@ const styles = StyleSheet.create({
     height: 140,
     borderRadius: 10,
     overflow: "hidden",
+    marginRight: 16,
+    marginLeft: 8,
   },
   map: {
     width: "100%",
@@ -232,7 +230,6 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     flex: 1,
-    paddingLeft: 10,
   },
   title: {
     fontSize: 16,
