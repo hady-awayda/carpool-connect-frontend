@@ -1,5 +1,5 @@
 import { Colors } from "@/constants/Variables";
-import React from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,7 +7,9 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import MapView, { Marker, Polyline } from "react-native-maps";
+import MapView, { LatLng, Marker, Polyline } from "react-native-maps";
+import axios from "axios";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -31,6 +33,8 @@ type ScheduleCardProps = {
 };
 
 const ScheduleCard = ({ schedule, onPress }: ScheduleCardProps) => {
+  const [route, setRoute] = useState<LatLng[]>([]);
+
   const {
     scheduleType,
     departureName = "Unknown",
@@ -57,6 +61,58 @@ const ScheduleCard = ({ schedule, onPress }: ScheduleCardProps) => {
   const latitudeDelta = Math.abs(depLat - destLat) * 1.5;
   const longitudeDelta = Math.abs(depLng - destLng) * 1.5;
 
+  const fetchRoute = async () => {
+    try {
+      const response = await axios.get(
+        `https://maps.googleapis.com/maps/api/directions/json?origin=${depLat},${depLng}&destination=${destLat},${destLng}&key=${"AIzaSyCzduXSDjg5mbh4txUTEVVu7LN1O53_fEc"}`
+      );
+      const points = response.data.routes[0].overview_polyline.points;
+      const decodedPoints = decodePolyline(points);
+      setRoute(decodedPoints);
+    } catch (error) {
+      console.error("Error fetching directions:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchRoute();
+  }, [depLat, depLng, destLat, destLng]);
+
+  const decodePolyline = (encoded: string): LatLng[] => {
+    let points = [];
+    let index = 0,
+      len = encoded.length;
+    let lat = 0,
+      lng = 0;
+
+    while (index < len) {
+      let b,
+        shift = 0,
+        result = 0;
+      do {
+        b = encoded.charCodeAt(index++) - 63;
+        result |= (b & 0x1f) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+      let dlat = (result & 1) != 0 ? ~(result >> 1) : result >> 1;
+      lat += dlat;
+
+      shift = 0;
+      result = 0;
+      do {
+        b = encoded.charCodeAt(index++) - 63;
+        result |= (b & 0x1f) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+      let dlng = (result & 1) != 0 ? ~(result >> 1) : result >> 1;
+      lng += dlng;
+
+      points.push({ latitude: lat / 1e5, longitude: lng / 1e5 });
+    }
+
+    return points;
+  };
+
   const formatTime = (time: Date) => {
     const date = new Date(time);
     return `${date.getHours()}:${date
@@ -79,29 +135,33 @@ const ScheduleCard = ({ schedule, onPress }: ScheduleCardProps) => {
           scrollEnabled={false}
           zoomEnabled={false}
         >
-          <Marker
-            coordinate={{ latitude: depLat, longitude: depLng }}
-            title="Departure"
-            style={{ width: 24, height: 24 }}
-          />
-          <Marker
-            coordinate={{ latitude: destLat, longitude: destLng }}
-            title="Destination"
-            style={{ width: 24, height: 24 }}
-          />
-          <Polyline
-            coordinates={[
-              { latitude: depLat, longitude: depLng },
-              { latitude: destLat, longitude: destLng },
-            ]}
-            strokeColor={Colors.light.secondary}
-            strokeWidth={3}
-          />
+          <Marker coordinate={{ latitude: depLat, longitude: depLng }}>
+            <MaterialCommunityIcons
+              name="map-marker"
+              size={30}
+              color={Colors.light.primary}
+            />
+          </Marker>
+
+          <Marker coordinate={{ latitude: destLat, longitude: destLng }}>
+            <MaterialCommunityIcons
+              name="map-marker"
+              size={30}
+              color={Colors.light.primary}
+            />
+          </Marker>
+          {route.length > 0 && (
+            <Polyline
+              coordinates={route}
+              strokeColor={Colors.light.secondary}
+              strokeWidth={6}
+            />
+          )}
         </MapView>
       </View>
 
       <View style={styles.infoContainer}>
-        <Text style={styles.title}>{scheduleType} Schedule</Text>
+        <Text style={styles.title}>{scheduleType}</Text>
         <Text style={styles.text}>From: {departureName}</Text>
         <Text style={styles.text}>To: {destinationName}</Text>
         <Text style={styles.text}>Departure: {formatTime(departureTime)}</Text>
@@ -120,7 +180,7 @@ const ScheduleCard = ({ schedule, onPress }: ScheduleCardProps) => {
               </View>
             ))
           ) : (
-            <Text style={styles.text}>No schedule</Text>
+            <Text style={styles.text}></Text>
           )}
         </View>
       </View>
@@ -135,8 +195,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#fff",
     borderRadius: 10,
-    borderColor: Colors.light.backgroundIcon,
-    borderWidth: 1,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,

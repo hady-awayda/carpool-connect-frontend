@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#fff",
+    fontFamily: "Urbanist_400Regular",
   },
   header: {
     flexDirection: "row",
