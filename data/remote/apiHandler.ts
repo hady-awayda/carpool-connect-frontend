@@ -18,7 +18,9 @@ const api = axios.create({
 
 api.interceptors.request.use(
   async (config) => {
-    const token = store.getState().token.token;
+    // const token = store.getState().token.token;
+    const token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJuYW1lIjoiaGFkeSIsImVtYWlsIjoiaGFkeUB1c2VyLmNvbSIsInJvbGUiOiJ1c2VyIn0sImlhdCI6MTcyNjk0MDAzMiwiZXhwIjoxNzkwMDU1MjMyfQ.sYW462TRsHHmwhwa8EwUuRnvRlnLq1kxxvSyqB34xSE";
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

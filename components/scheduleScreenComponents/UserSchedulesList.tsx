@@ -30,8 +30,6 @@ const UserSchedulesList: React.FC = () => {
     }
   };
 
-  useEffect(() => console.log(schedules), [schedules]);
-
   useEffect(() => {
     fetchData();
   }, []);

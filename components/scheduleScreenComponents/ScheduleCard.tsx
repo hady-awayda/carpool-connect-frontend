@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   TouchableOpacity,
   Dimensions,
 } from "react-native";
@@ -14,15 +13,15 @@ const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 type Schedule = {
   id: number;
   scheduleType: string;
-  departureName: string;
-  destinationName: string;
+  departureName?: string | null;
+  destinationName?: string | null;
   departureLat: number;
   departureLng: number;
   destinationLat: number;
   destinationLng: number;
   departureTime: Date;
   arrivalTime: Date;
-  schedulePattern: boolean[];
+  schedulePattern?: boolean[] | null;
 };
 
 type ScheduleCardProps = {
@@ -33,18 +32,28 @@ type ScheduleCardProps = {
 const ScheduleCard = ({ schedule, onPress }: ScheduleCardProps) => {
   const {
     scheduleType,
-    departureName,
-    destinationName,
+    departureName = "Unknown",
+    destinationName = "Unknown",
     departureLat,
     departureLng,
     destinationLat,
     destinationLng,
     departureTime,
     arrivalTime,
-    schedulePattern,
+    schedulePattern = [],
   } = schedule;
 
-  console.log("hi");
+  const parseCoordinate = (value: string | number) => {
+    const parsed = parseFloat(String(value));
+    return isNaN(parsed) ? 0 : parsed;
+  };
+
+  const depLat = parseCoordinate(departureLat);
+  const depLng = parseCoordinate(departureLng);
+  const destLat = parseCoordinate(destinationLat);
+  const destLng = parseCoordinate(destinationLng);
+
+  console.log({ depLat, depLng, destLat, destLng });
 
   const formatTime = (time: Date) => {
     const date = new Date(time);
@@ -60,26 +69,26 @@ const ScheduleCard = ({ schedule, onPress }: ScheduleCardProps) => {
         <MapView
           style={styles.map}
           initialRegion={{
-            latitude: (departureLat + destinationLat) / 2,
-            longitude: (departureLng + destinationLng) / 2,
-            latitudeDelta: Math.abs(departureLat - destinationLat) * 1.5,
-            longitudeDelta: Math.abs(departureLng - destinationLng) * 1.5,
+            latitude: (depLat + destLat) / 2,
+            longitude: (depLng + destLng) / 2,
+            latitudeDelta: 0.004,
+            longitudeDelta: 0.004,
           }}
           scrollEnabled={false}
           zoomEnabled={false}
         >
           <Marker
-            coordinate={{ latitude: departureLat, longitude: departureLng }}
+            coordinate={{ latitude: depLat, longitude: depLng }}
             title="Departure"
           />
           <Marker
-            coordinate={{ latitude: destinationLat, longitude: destinationLng }}
+            coordinate={{ latitude: destLat, longitude: destLng }}
             title="Destination"
           />
           <Polyline
             coordinates={[
-              { latitude: departureLat, longitude: departureLng },
-              { latitude: destinationLat, longitude: destinationLng },
+              { latitude: depLat, longitude: depLng },
+              { latitude: destLat, longitude: destLng },
             ]}
             strokeColor="#000"
             strokeWidth={3}
@@ -94,17 +103,21 @@ const ScheduleCard = ({ schedule, onPress }: ScheduleCardProps) => {
         <Text style={styles.text}>Departure: {formatTime(departureTime)}</Text>
         <Text style={styles.text}>Arrival: {formatTime(arrivalTime)}</Text>
         <View style={styles.weekdayContainer}>
-          {daysOfWeek.map((day, index) => (
-            <View
-              key={index}
-              style={[
-                styles.dayCircle,
-                schedulePattern[index] && styles.highlightedDay,
-              ]}
-            >
-              <Text style={styles.dayText}>{day}</Text>
-            </View>
-          ))}
+          {schedulePattern && schedulePattern.length > 0 ? (
+            daysOfWeek.map((day, index) => (
+              <View
+                key={index}
+                style={[
+                  styles.dayCircle,
+                  schedulePattern[index] && styles.highlightedDay,
+                ]}
+              >
+                <Text style={styles.dayText}>{day}</Text>
+              </View>
+            ))
+          ) : (
+            <Text style={styles.text}>No schedule</Text>
+          )}
         </View>
       </View>
     </TouchableOpacity>
