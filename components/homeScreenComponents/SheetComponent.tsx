@@ -530,7 +530,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
           { transform: [{ translateX: secondSheetPosition }] },
         ]}
       >
-        <View style={styles.routeHeader}>
+        <View style={styles.slideHeader}>
           <TouchableOpacity onPress={handleBackPress}>
             <Ionicons name="arrow-back" size={28} color="black" />
           </TouchableOpacity>
@@ -635,10 +635,13 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  slideHeader: {
+    marginTop: 24,
+  },
   buttonContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 60,
+    marginTop: 32,
     gap: 6,
   },
 });
