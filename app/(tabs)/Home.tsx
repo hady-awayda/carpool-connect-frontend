@@ -19,6 +19,7 @@ import {
   Easing,
   KeyboardAvoidingView,
   Platform,
+  SafeAreaView,
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
@@ -158,56 +159,58 @@ const HomeScreen = () => {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <TouchableOpacity activeOpacity={1} style={styles.container}>
-        <StatusBar style="auto" />
+      <SafeAreaView style={styles.safeArea}>
+        <TouchableOpacity activeOpacity={1} style={styles.container}>
+          <StatusBar style="auto" />
 
-        <MapComponent />
-        {isMarkerOverlayVisible && (
-          <Animated.View
-            style={styles.fullScreenMarkerOverlay}
-            pointerEvents="box-none"
-          >
-            <MaterialCommunityIcons
-              name="map-marker"
-              size={60}
-              color={
-                uiState === "setting-departure"
-                  ? Colors.light.primary
-                  : Colors.light.secondary
-              }
-              style={styles.fullScreenMarker}
-            />
-          </Animated.View>
-        )}
+          <MapComponent />
+          {isMarkerOverlayVisible && (
+            <Animated.View
+              style={styles.fullScreenMarkerOverlay}
+              pointerEvents="box-none"
+            >
+              <MaterialCommunityIcons
+                name="map-marker"
+                size={60}
+                color={
+                  uiState === "setting-departure"
+                    ? Colors.light.primary
+                    : Colors.light.secondary
+                }
+                style={styles.fullScreenMarker}
+              />
+            </Animated.View>
+          )}
 
-        <PanGestureHandler
-          onGestureEvent={onGestureEvent}
-          onHandlerStateChange={onHandlerStateChange}
-        >
-          <Animated.View
-            style={[
-              styles.sheetContainer,
-              { transform: [{ translateY: sheetTranslateY }] },
-            ]}
+          <PanGestureHandler
+            onGestureEvent={onGestureEvent}
+            onHandlerStateChange={onHandlerStateChange}
           >
-            <SheetComponent {...{ animateToState }} />
-          </Animated.View>
-        </PanGestureHandler>
+            <Animated.View
+              style={[
+                styles.sheetContainer,
+                { transform: [{ translateY: sheetTranslateY }] },
+              ]}
+            >
+              <SheetComponent {...{ animateToState }} />
+            </Animated.View>
+          </PanGestureHandler>
 
-        <PanGestureHandler
-          onGestureEvent={onGestureEvent}
-          onHandlerStateChange={onHandlerStateChange}
-        >
-          <Animated.View
-            style={[
-              styles.bottomContentContainer,
-              { transform: [{ translateY: bottomContentTranslateY }] },
-            ]}
+          <PanGestureHandler
+            onGestureEvent={onGestureEvent}
+            onHandlerStateChange={onHandlerStateChange}
           >
-            <BottomContent {...{ animateToState }} />
-          </Animated.View>
-        </PanGestureHandler>
-      </TouchableOpacity>
+            <Animated.View
+              style={[
+                styles.bottomContentContainer,
+                { transform: [{ translateY: bottomContentTranslateY }] },
+              ]}
+            >
+              <BottomContent {...{ animateToState }} />
+            </Animated.View>
+          </PanGestureHandler>
+        </TouchableOpacity>
+      </SafeAreaView>
     </GestureHandlerRootView>
   );
 };
@@ -242,6 +245,10 @@ const styles = StyleSheet.create({
   fullScreenMarker: {
     position: "absolute",
     zIndex: 4,
+  },
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#f9f9f9",
   },
 });
 

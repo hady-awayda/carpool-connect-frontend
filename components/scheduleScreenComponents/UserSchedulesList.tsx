@@ -1,58 +1,55 @@
-// import React from "react";
-// import { View, Button, FlatList, ActivityIndicator } from "react-native";
-// import { useInfiniteQuery } from "@tanstack/react-query";
-// import ScheduleCard from "./ScheduleCard";
-// import { fetchUserSchedules } from "../../data/remote/userSchedules/read";
+import React, { useEffect, useState } from "react";
+import { View, FlatList, ActivityIndicator, Text, Alert } from "react-native";
+import ScheduleCard from "./ScheduleCard";
+import { Schedule } from "./Schedule";
+import { fetchUserSchedules } from "@/data/remote/userSchedules/read";
 
-// const UserSchedulesList = () => {
-//   const {
-//     data,
-//     error,
-//     fetchNextPage,
-//     hasNextPage,
-//     isFetchingNextPage,
-//     status,
-//   } = useInfiniteQuery(
-//     ["userSchedules"],
-//     ({ pageParam = 0 }) => fetchUserSchedules({ pageParam }),
-//     {
-//       getNextPageParam: (lastPage) => lastPage.nextCursor ?? false,
-//     }
-//   );
+const UserSchedulesList: React.FC = () => {
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-//   if (status === "loading") {
-//     return <ActivityIndicator size="large" />;
-//   }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchUserSchedules();
+        setSchedules(response.schedules);
+        setLoading(false);
+      } catch (err) {
+        setError((err as Error).message);
+        setLoading(false);
+      }
+    };
 
-//   if (status === "error") {
-//     return <Text>Error: {error.message}</Text>;
-//   }
+    fetchData();
+  }, []);
 
-//   const schedules = data?.pages.flatMap((page) => page.schedules);
+  if (loading) {
+    return <ActivityIndicator size="large" />;
+  }
 
-//   return (
-//     <View style={{ flex: 1 }}>
-//       <FlatList
-//         data={schedules}
-//         keyExtractor={(item) => item.id.toString()}
-//         renderItem={({ item }) => (
-//           <ScheduleCard
-//             schedule={item}
-//             onPress={() => console.log("Pressed schedule", item.id)}
-//           />
-//         )}
-//         onEndReached={() => {
-//           if (hasNextPage) {
-//             fetchNextPage();
-//           }
-//         }}
-//         onEndReachedThreshold={0.5}
-//         ListFooterComponent={() =>
-//           isFetchingNextPage ? <ActivityIndicator size="large" /> : null
-//         }
-//       />
-//     </View>
-//   );
-// };
+  if (error) {
+    Alert.alert("Error", error);
+    return <Text>Error: {error}</Text>;
+  }
 
-// export default UserSchedulesList;
+  return (
+    <View style={{ flex: 1 }}>
+      <FlatList
+        data={schedules}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <ScheduleCard
+            schedule={item}
+            onPress={() => console.log("Pressed schedule", item.id)}
+          />
+        )}
+        ListFooterComponent={() => (
+          <Text style={{ textAlign: "center", padding: 10 }}>End of list</Text>
+        )}
+      />
+    </View>
+  );
+};
+
+export default UserSchedulesList;

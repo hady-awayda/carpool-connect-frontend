@@ -1,7 +1,7 @@
 import { apiRequest } from "../apiHandler";
 
-export const fetchUserSchedules = async ({ pageParam = 0 }) => {
-  const response = await apiRequest(`/user-schedules?page=${pageParam}`, "GET");
+export const fetchUserSchedules = async () => {
+  const response = await apiRequest(`/user-schedules`, "GET");
   if (response.error) {
     throw new Error(response.error);
   }
