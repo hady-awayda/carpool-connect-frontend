@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { LocationProps } from "@/components/homeScreenComponents/interfaces";
 
 type AddressState = {
-  addressList: any[];
+  addressList: LocationProps[];
   location: LocationProps;
   departure: LocationProps;
   destination: LocationProps;

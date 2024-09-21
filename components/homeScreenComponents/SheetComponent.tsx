@@ -256,29 +256,41 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
 
   const findAddressesByName = async (name: string, limit = 5, page = 1) => {
     const encodedName = encodeURIComponent(name);
-    const url = `https://nominatim.openstreetmap.org/search?q=${encodedName}&format=json&limit=${limit}&page=${page}&countrycodes=lb&lang=en`;
+    const apiKey = "AIzaSyCzduXSDjg5mbh4txUTEVVu7LN1O53_fEc";
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedName}&key=${apiKey}`;
 
     try {
       const response = await fetch(url);
       const data = await response.json();
 
-      if (data && data.length > 0) {
-        const addresses = data.map((item: LocationProps) => ({
-          name: item.name,
+      if (data.status === "OK" && data.results.length > 0) {
+        const addresses = data.results.slice(0, limit).map((item: any) => ({
+          name: item.formatted_address,
           coords: {
-            latitude: item.coords?.latitude,
-            longitude: item.coords?.longitude,
+            latitude: item.geometry.location.lat,
+            longitude: item.geometry.location.lng,
             latitudeDelta: 0.004,
             longitudeDelta: 0.004,
           },
         }));
+
+        console.log(addresses);
         return addresses;
-      } else return [];
+      } else {
+        console.log("No results found or error occurred.");
+        return [];
+      }
     } catch (error) {
       console.error("Error fetching addresses:", error);
       return [];
     }
   };
+
+  const addressList = useSelector(
+    (state: RootState) => state.address.addressList
+  );
+
+  useEffect(() => console.log(addressList), [addressList]);
 
   const debouncedFindAddresses = useCallback(
     debounce(async (text: string) => {
