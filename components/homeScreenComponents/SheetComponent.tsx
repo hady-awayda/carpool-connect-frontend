@@ -397,6 +397,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
               buttonText="+ Add Schedule"
               onPress={handleSubmitSchedule}
               buttonStyle={{ backgroundColor: Colors.light.primary }}
+              width={352}
             />
           </Animated.View>
         </>
