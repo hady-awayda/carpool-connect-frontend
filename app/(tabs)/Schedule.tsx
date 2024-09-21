@@ -2,6 +2,7 @@ import UserSchedulesList from "@/components/scheduleScreenComponents/UserSchedul
 import { useRouter } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const SchedulesScreen: React.FC = () => {
   const router = useRouter();
@@ -11,7 +12,7 @@ const SchedulesScreen: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.safeArea}>
       <View style={styles.header}>
         <Text style={styles.title}>Schedules</Text>
         <TouchableOpacity
@@ -23,12 +24,12 @@ const SchedulesScreen: React.FC = () => {
       </View>
 
       <UserSchedulesList />
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
     backgroundColor: "#f9f9f9",
   },

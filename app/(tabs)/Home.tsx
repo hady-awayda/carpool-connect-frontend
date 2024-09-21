@@ -17,9 +17,6 @@ import {
   Animated,
   Dimensions,
   Easing,
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
@@ -28,6 +25,7 @@ import {
   PanGestureHandler,
   State,
 } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 
 const { height } = Dimensions.get("window");
@@ -158,8 +156,8 @@ const HomeScreen = () => {
     uiState === "setting-departure" || uiState === "setting-destination";
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView edges={["left", "right", "bottom"]} style={styles.safeArea}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
         <TouchableOpacity activeOpacity={1} style={styles.container}>
           <StatusBar style="auto" />
 
@@ -210,12 +208,16 @@ const HomeScreen = () => {
             </Animated.View>
           </PanGestureHandler>
         </TouchableOpacity>
-      </SafeAreaView>
-    </GestureHandlerRootView>
+      </GestureHandlerRootView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#f9f9f9",
+  },
   container: {
     flex: 1,
     width: "100%",
@@ -245,10 +247,6 @@ const styles = StyleSheet.create({
   fullScreenMarker: {
     position: "absolute",
     zIndex: 4,
-  },
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#f9f9f9",
   },
 });
 

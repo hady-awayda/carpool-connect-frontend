@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type Rider = {
   id: string;
@@ -44,18 +45,18 @@ const _renderItem = ({ item }: { item: Rider }) => (
 
 export default function ExploreScreen() {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.safeArea}>
       <FlatList
         data={ridersData}
         keyExtractor={(item) => item.id}
         renderItem={_renderItem}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
     padding: 20,
     backgroundColor: "#fff",
