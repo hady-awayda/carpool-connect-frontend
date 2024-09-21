@@ -4,6 +4,7 @@ import {
   setDestination,
   updateAddressList,
 } from "@/data/redux/addressListSlice/slice";
+import { toggleDay } from "@/data/redux/daysSlice/slice";
 import {
   setDepartureTime,
   setDestinationTime,
@@ -19,7 +20,6 @@ import {
   Dimensions,
   Keyboard,
   StyleSheet,
-  Switch,
   Text,
   TextInput,
   TouchableOpacity,
@@ -31,7 +31,6 @@ import BoldButton from "../BoldButton";
 import BorderedButton from "../BorderedButton";
 import AnimatedTextInput from "./AnimatedTextInput";
 import { LocationProps, SheetComponentProps } from "./interfaces";
-import { toggleDay } from "@/data/redux/daysSlice/slice";
 
 const daysOfWeek = [
   "Monday",
@@ -532,9 +531,10 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
       >
         <View style={styles.slideHeader}>
           <TouchableOpacity onPress={handleBackPress}>
-            <Ionicons name="arrow-back" size={28} color="black" />
+            <Ionicons name="chevron-back" size={28} color="black" />
           </TouchableOpacity>
           <Text style={styles.routeTitle}>Set Days</Text>
+          <Ionicons name="chevron-back" size={28} color="transparent" />
         </View>
 
         <View style={styles.buttonContainer}>
@@ -624,6 +624,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
     backgroundColor: "#fff",
     padding: 16,
     shadowColor: "#000",
@@ -634,9 +635,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    paddingTop: 40,
   },
   slideHeader: {
-    marginTop: 24,
+    flexDirection: "row",
+    alignItems: "center",
   },
   buttonContainer: {
     justifyContent: "center",

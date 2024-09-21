@@ -116,10 +116,12 @@ const HomeScreen = () => {
         if (uiState === "sheet-expanded") newState = "full";
         else if (uiState === "full") newState = "expanded";
         else if (uiState === "expanded") newState = "collapsed";
+        else return;
       } else if (translationY < -50 || velocityY < -500) {
         if (uiState === "collapsed") newState = "expanded";
         else if (uiState === "expanded") newState = "full";
         else if (uiState === "full") newState = "sheet-expanded";
+        else return;
       }
 
       animateToState(newState);
