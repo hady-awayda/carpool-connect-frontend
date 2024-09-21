@@ -65,6 +65,11 @@ const BottomContent: React.FC<BottomContentProps> = ({ animateToState }) => {
     } else if (uiState === "setting-destination") {
       dispatch(setDestination({ name, coords }));
     }
+
+    if (uiState === "setting-departure") {
+      animateToState("full");
+    }
+    animateToState("full");
   };
 
   return (

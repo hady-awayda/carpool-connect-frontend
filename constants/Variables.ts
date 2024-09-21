@@ -28,6 +28,11 @@ export const Typography: { [key: string]: TextStyle } = {
     fontWeight: "bold",
     fontFamily: "Urbanist_700Bold",
   },
+  heading2: {
+    fontSize: 22,
+    fontWeight: "bold",
+    fontFamily: "Urbanist_700Bold",
+  },
   subheading: {
     fontSize: 18,
     fontWeight: "700",

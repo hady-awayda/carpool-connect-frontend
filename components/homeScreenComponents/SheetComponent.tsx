@@ -13,6 +13,7 @@ import {
 import { RootState } from "@/data/redux/store";
 import { setFocusedField, setUIState } from "@/data/redux/UIStateSlice/slice";
 import { Ionicons } from "@expo/vector-icons";
+import axios from "axios";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
@@ -257,31 +258,34 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   const findAddressesByName = async (name: string, limit = 5, page = 1) => {
     const encodedName = encodeURIComponent(name);
     const apiKey = "AIzaSyCzduXSDjg5mbh4txUTEVVu7LN1O53_fEc";
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedName}&key=${apiKey}`;
+    const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodedName}&key=${apiKey}`;
 
     try {
-      const response = await fetch(url);
-      const data = await response.json();
+      const response = await axios.get(url);
+      const data = response.data;
 
       if (data.status === "OK" && data.results.length > 0) {
-        const addresses = data.results.slice(0, limit).map((item: any) => ({
-          name: item.formatted_address,
+        const places = data.results.slice(0, limit).map((item: any) => ({
+          name: item.name,
+          address: item.formatted_address,
           coords: {
             latitude: item.geometry.location.lat,
             longitude: item.geometry.location.lng,
             latitudeDelta: 0.004,
             longitudeDelta: 0.004,
           },
+          placeId: item.place_id,
+          types: item.types,
         }));
 
-        console.log(addresses);
-        return addresses;
+        console.log(places);
+        return places;
       } else {
         console.log("No results found or error occurred.");
         return [];
       }
     } catch (error) {
-      console.error("Error fetching addresses:", error);
+      console.error("Error fetching places:", error);
       return [];
     }
   };
@@ -336,11 +340,18 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   };
 
   const handleSubmitSchedule = async () => {
+    if (!departure.name || !destination.name) {
+      alert("Please select departure and destination!");
+      return;
+    }
+    if (!departureTime || !destinationTime) {
+      alert("Please select departure and destination time!");
+      return;
+    }
     if (departureTime > destinationTime)
       alert("Departure time can't be ahead of destination time!");
     addSchedule();
-    // animateToState("expanded");
-    Keyboard.dismiss();
+    animateToState("full");
   };
 
   return (
@@ -585,18 +596,40 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
               buttonStyle={{
                 backgroundColor: selectedDays[day]
                   ? Colors.light.primary
-                  : Colors.light.text,
+                  : "#fff",
                 borderColor: selectedDays[day]
                   ? Colors.light.primary
                   : Colors.light.text,
-                borderWidth: 1,
+                borderWidth: 1.5,
                 justifyContent: "center",
+              }}
+              textStyle={{
+                color: selectedDays[day] ? "#fff" : Colors.light.primary,
+                ...Typography.title,
               }}
               width={240}
               height={48}
-              textStyle={{ color: "#fff" }}
             />
           ))}
+
+          <BoldButton
+            buttonText="Finish"
+            onPress={handleSubmitSchedule}
+            buttonStyle={{
+              backgroundColor: Colors.light.primary,
+              marginTop: 24,
+            }}
+            width={340}
+          />
+          <BorderedButton
+            buttonText="Edit Schedule"
+            onPress={handleBackPress}
+            buttonStyle={{
+              backgroundColor: "#fff",
+              marginTop: 16,
+            }}
+            width={340}
+          />
         </View>
       </Animated.View>
     </Animated.View>
@@ -628,7 +661,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     textAlign: "center",
     flex: 1,
-    ...Typography.subheading,
+    ...Typography.heading2,
   },
   inputWrapper: {
     justifyContent: "space-between",
