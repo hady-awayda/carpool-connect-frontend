@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Variables";
+import { Colors, Typography } from "@/constants/Variables";
 import {
   setDeparture,
   setDestination,
@@ -626,10 +626,9 @@ const styles = StyleSheet.create({
   },
   routeTitle: {
     backgroundColor: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
     textAlign: "center",
     flex: 1,
+    ...Typography.subheading,
   },
   inputWrapper: {
     justifyContent: "space-between",

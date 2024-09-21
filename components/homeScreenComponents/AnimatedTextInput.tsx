@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Variables";
+import { Colors, Typography } from "@/constants/Variables";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useEffect, useRef } from "react";
 import {
@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#000",
     height: 50,
+    ...Typography.title,
   },
   overlayBorder: {
     position: "absolute",

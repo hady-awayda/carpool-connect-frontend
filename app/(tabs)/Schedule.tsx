@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#fff",
-    fontFamily: "Urbanist_400Regular",
   },
   header: {
     flexDirection: "row",
@@ -49,6 +48,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
+    fontFamily: "Urbanist_800ExtraBold",
   },
   newButton: {
     backgroundColor: Colors.light.primary,

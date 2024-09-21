@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Variables";
+import { Colors, Typography } from "@/constants/Variables";
 import React, { useState } from "react";
 import {
   Animated,
@@ -101,10 +101,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonText: {
-    fontFamily: "Urbanist_700Bold",
-    fontSize: 16,
     textAlign: "center",
     width: "100%",
+    ...Typography.title,
   },
   animationStyle: {
     flex: 1,

@@ -26,14 +26,27 @@ export const Typography: { [key: string]: TextStyle } = {
   heading: {
     fontSize: 24,
     fontWeight: "bold",
+    fontFamily: "Urbanist_700Bold",
   },
   subheading: {
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: "700",
+    fontFamily: "Urbanist_700Bold",
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: "500",
+    fontFamily: "Urbanist_700Bold",
   },
   body: {
     fontSize: 16,
     fontWeight: "normal",
+    fontFamily: "Urbanist_400Regular",
+  },
+  Text: {
+    fontSize: 14,
+    fontWeight: "normal",
+    fontFamily: "Urbanist_400Regular",
   },
 };
 

@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Variables";
+import { Colors, Typography } from "@/constants/Variables";
 import { useState } from "react";
 import {
   TouchableOpacity,
@@ -93,11 +93,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonText: {
-    fontFamily: "Urbanist_700Bold",
     color: "#fff",
-    fontSize: 16,
     textAlign: "center",
     width: "100%",
+    ...Typography.title,
   },
   animationStyle: {
     flex: 1,
