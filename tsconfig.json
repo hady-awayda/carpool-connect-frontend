@@ -5,6 +5,7 @@
     "jsx": "react-native",
     "module": "esnext",
     "strict": true,
+    "typeRoots": ["node_modules/@types", "node_modules/@tanstack/react-query"],
     "paths": {
       "@/*": ["./*"]
     },
@@ -17,6 +18,12 @@
     "noEmit": true,
     "types": ["react", "react-native", "expo-router"]
   },
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "app/(tabs)/Home.jsx"],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts",
+    "app/(tabs)/Home.jsx"
+  ],
   "exclude": ["node_modules"]
 }

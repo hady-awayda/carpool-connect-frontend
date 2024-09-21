@@ -16,6 +16,9 @@ import * as SplashScreen from "expo-splash-screen";
 import React, { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
 import { Provider } from "react-redux";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 SplashScreen.preventAutoHideAsync();
 
@@ -62,9 +65,11 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-        <Stack />
-      </View>
+      <QueryClientProvider client={queryClient}>
+        <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+          <Stack />
+        </View>
+      </QueryClientProvider>
     </Provider>
   );
 }

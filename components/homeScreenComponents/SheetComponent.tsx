@@ -30,8 +30,11 @@ import addSchedule from "../../data/remote/addSchedule";
 import BoldButton from "../BoldButton";
 import BorderedButton from "../BorderedButton";
 import AnimatedTextInput from "./AnimatedTextInput";
-import { LocationProps, SheetComponentProps } from "./interfaces";
+import { SheetComponentProps } from "./interfaces";
+import { GOOGLE_MAPS_API_KEY } from "@env";
+import Constants from "expo-constants";
 
+const googleMapsApiKey = Constants.manifest.extra.googleMapsApiKey;
 const daysOfWeek = [
   "Monday",
   "Tuesday",
@@ -256,7 +259,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
 
   const findAddressesByName = async (name: string, limit = 5, page = 1) => {
     const encodedName = encodeURIComponent(name);
-    const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+    const apiKey = GOOGLE_MAPS_API_KEY;
     const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedName}&key=${apiKey}`;
 
     try {
