@@ -1,10 +1,14 @@
 import { Colors, Typography } from "@/constants/Variables";
 import { RootState } from "@/data/redux/store";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { StyleSheet, Text, View } from "react-native";
-import { useSelector } from "react-redux";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import { MaterialCommunityIconsName } from "./AnimatedTextInput";
 import { Address } from "./interfaces";
+import {
+  setDeparture,
+  setDestination,
+} from "@/data/redux/addressListSlice/slice";
 
 const defaultAddresses: Address[] = [
   {
@@ -33,17 +37,39 @@ const getIconName = (name: string) => {
 };
 
 const LastDestinations = () => {
+  const dispatch = useDispatch();
+
   const addresses: Address[] = useSelector(
     (state: RootState) => state.address.addressList
+  );
+  const focusedField = useSelector(
+    (state: RootState) => state.uiState.focusedField
   );
 
   const dataToRender: Address[] =
     addresses && addresses.length > 0 ? addresses : defaultAddresses;
 
+  const handleAddressPress = (item: Address) => {
+    const locationData = {
+      name: item.name,
+      coords: null,
+    };
+
+    if (focusedField === "departure") {
+      dispatch(setDeparture(locationData));
+    } else if (focusedField === "destination") {
+      dispatch(setDestination(locationData));
+    }
+  };
+
   return (
     <View style={styles.suggestions}>
       {dataToRender.map((item, index) => (
-        <View key={index} style={styles.suggestionItem}>
+        <TouchableOpacity
+          key={index}
+          style={styles.suggestionItem}
+          onPress={() => handleAddressPress(item)}
+        >
           <View style={styles.iconContainer}>
             <MaterialCommunityIcons
               name={
@@ -55,7 +81,7 @@ const LastDestinations = () => {
             />
           </View>
           <Text style={styles.suggestionText}>{item.name}</Text>
-        </View>
+        </TouchableOpacity>
       ))}
     </View>
   );

@@ -57,6 +57,15 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   const selectedDays = useSelector(
     (state: RootState) => state.days.selectedDays
   );
+  const departureAddress = useSelector(
+    (state: RootState) => state.address.departure
+  );
+  const destinationAddress = useSelector(
+    (state: RootState) => state.address.destination
+  );
+
+  useEffect(() => console.log(departureAddress), [departureAddress]);
+  useEffect(() => console.log(destinationAddress), [destinationAddress]);
 
   const handleExpandSheet = () => {
     Animated.timing(sheetHeight, {
@@ -147,6 +156,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   const handleBackPress = () => {
     dispatch(setUIState("sheet-expanded"));
     handleCloseSlide();
+    destinationInputRef.current?.focus();
   };
 
   const handleOpenSlide = () => {
@@ -623,6 +633,7 @@ const styles = StyleSheet.create({
     top: 0,
     right: 0,
     bottom: 0,
+    left: 0,
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
     backgroundColor: "#fff",
