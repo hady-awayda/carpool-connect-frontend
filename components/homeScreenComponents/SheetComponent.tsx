@@ -12,6 +12,7 @@ import {
 } from "@/data/redux/scheduleSlice/slice";
 import { RootState } from "@/data/redux/store";
 import { setFocusedField, setUIState } from "@/data/redux/UIStateSlice/slice";
+import { GOOGLE_MAPS_API_KEY } from "@env";
 import { Ionicons } from "@expo/vector-icons";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -31,10 +32,7 @@ import BoldButton from "../BoldButton";
 import BorderedButton from "../BorderedButton";
 import AnimatedTextInput from "./AnimatedTextInput";
 import { SheetComponentProps } from "./interfaces";
-import { GOOGLE_MAPS_API_KEY } from "@env";
-import Constants from "expo-constants";
 
-const googleMapsApiKey = Constants.manifest.extra.googleMapsApiKey;
 const daysOfWeek = [
   "Monday",
   "Tuesday",

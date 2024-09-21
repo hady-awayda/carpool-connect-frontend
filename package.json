@@ -41,6 +41,7 @@
     "react-hook-form": "^7.53.0",
     "react-native": "^0.75.2",
     "react-native-config": "^1.5.3",
+    "react-native-dotenv": "^3.4.11",
     "react-native-gesture-handler": "~2.19.0",
     "react-native-maps": "^1.18.0",
     "react-native-reanimated": "~3.10.1",
@@ -53,6 +54,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@types/expo": "^32.0.13",
     "@types/jest": "^29.5.12",
     "@types/lodash.debounce": "^4.0.9",
     "@types/node": "^22.5.5",
