@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Variables";
+import { Colors, Typography } from "@/constants/Variables";
 import {
   setDeparture,
   setDestination,
@@ -66,9 +66,6 @@ const BottomContent: React.FC<BottomContentProps> = ({ animateToState }) => {
       dispatch(setDestination({ name, coords }));
     }
 
-    if (uiState === "setting-departure") {
-      animateToState("full");
-    }
     animateToState("full");
   };
 

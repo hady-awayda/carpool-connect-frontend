@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
   suggestionText: {
     color: Colors.light.text,
-    ...Typography.body,
+    ...Typography.title2,
   },
 });
 

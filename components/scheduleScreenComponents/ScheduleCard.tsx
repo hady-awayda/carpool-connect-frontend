@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Variables";
+import { Colors, Typography } from "@/constants/Variables";
 import { useEffect, useState } from "react";
 import {
   View,
@@ -161,11 +161,25 @@ const ScheduleCard = ({ schedule, onPress }: ScheduleCardProps) => {
       </View>
 
       <View style={styles.infoContainer}>
-        <Text style={styles.title}>{scheduleType}</Text>
-        <Text style={styles.text}>From: {departureName}</Text>
-        <Text style={styles.text}>To: {destinationName}</Text>
-        <Text style={styles.text}>Departure: {formatTime(departureTime)}</Text>
-        <Text style={styles.text}>Arrival: {formatTime(arrivalTime)}</Text>
+        <Text style={styles.title}>
+          {scheduleType[0].toUpperCase() + scheduleType.slice(1)}
+        </Text>
+        <View style={styles.textContainer}>
+          <Text style={styles.leftText}>From: </Text>
+          <Text style={styles.text}>{departureName}</Text>
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.leftText}>To: </Text>
+          <Text style={styles.text}>{destinationName}</Text>
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.leftText}>Departure: </Text>
+          <Text style={styles.text}>{formatTime(departureTime)}</Text>
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.leftText}>Arrival: </Text>
+          <Text style={styles.text}>{formatTime(arrivalTime)}</Text>
+        </View>
         <View style={styles.weekdayContainer}>
           {schedulePattern && schedulePattern.length > 0 ? (
             daysOfWeek.map((day, index) => (
@@ -224,9 +238,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+  textContainer: {
+    flexDirection: "row",
+    marginTop: 6,
+  },
+  leftText: {
+    ...Typography.title,
+  },
   text: {
-    fontSize: 14,
-    marginVertical: 2,
+    marginVertical: 1,
+    ...Typography.text,
   },
   weekdayContainer: {
     flexDirection: "row",

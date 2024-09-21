@@ -28,8 +28,13 @@ export const Typography: { [key: string]: TextStyle } = {
     fontWeight: "bold",
     fontFamily: "Urbanist_700Bold",
   },
-  heading2: {
+  heading1: {
     fontSize: 22,
+    fontWeight: "bold",
+    fontFamily: "Urbanist_700Bold",
+  },
+  heading2: {
+    fontSize: 20,
     fontWeight: "bold",
     fontFamily: "Urbanist_700Bold",
   },
@@ -40,18 +45,19 @@ export const Typography: { [key: string]: TextStyle } = {
   },
   title: {
     fontSize: 16,
-    fontWeight: "500",
-    fontFamily: "Urbanist_700Bold",
+    fontWeight: "600",
+  },
+  title2: {
+    fontSize: 16,
+    fontWeight: "400",
   },
   body: {
-    fontSize: 16,
-    fontWeight: "normal",
-    fontFamily: "Urbanist_400Regular",
+    fontSize: 15,
+    fontWeight: "500",
   },
-  Text: {
+  text: {
     fontSize: 14,
-    fontWeight: "normal",
-    fontFamily: "Urbanist_400Regular",
+    fontWeight: "400",
   },
 };
 
