@@ -1,4 +1,5 @@
 import UserSchedulesList from "@/components/scheduleScreenComponents/UserSchedulesList";
+import { Colors } from "@/constants/Variables";
 import { useRouter } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -31,7 +32,7 @@ const SchedulesScreen: React.FC = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#fff",
   },
   header: {
     flexDirection: "row",
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   newButton: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: Colors.light.primary,
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 5,

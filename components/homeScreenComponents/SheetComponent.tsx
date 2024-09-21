@@ -26,7 +26,7 @@ import {
   View,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import addSchedule from "../../data/remote/addSchedule";
+import addSchedule from "../../data/remote/userSchedules/create";
 import BoldButton from "../BoldButton";
 import BorderedButton from "../BorderedButton";
 import AnimatedTextInput from "./AnimatedTextInput";

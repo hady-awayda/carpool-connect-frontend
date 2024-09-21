@@ -44,6 +44,8 @@ const ScheduleCard = ({ schedule, onPress }: ScheduleCardProps) => {
     schedulePattern,
   } = schedule;
 
+  console.log("hi");
+
   const formatTime = (time: Date) => {
     const date = new Date(time);
     return `${date.getHours()}:${date

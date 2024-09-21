@@ -3,7 +3,7 @@ import store from "@/data/redux/store";
 
 const API_BASE_URL =
   "http://carpool-dev-load-balancer-854327849.eu-central-1.elb.amazonaws.com/api/";
-const LOCAL_BASE_URL = "http://10.18.200.185:5000/api/";
+const LOCAL_BASE_URL = "http://150.150.150.109:5000/api/";
 
 const SOCKET_IO_URL =
   "ws://carpool-dev-load-balancer-854327849.eu-central-1.elb.amazonaws.com/socket.io/?EIO=4&transport=websocket";
@@ -56,6 +56,7 @@ export const apiRequest = async (
       data: method !== "GET" ? data : undefined,
       ...config,
     });
+
     return response.data;
   } catch (error: any) {
     console.log(error);
