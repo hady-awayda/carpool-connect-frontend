@@ -19,6 +19,7 @@ import {
   Dimensions,
   Keyboard,
   StyleSheet,
+  Switch,
   Text,
   TextInput,
   TouchableOpacity,
@@ -30,16 +31,33 @@ import BoldButton from "../BoldButton";
 import BorderedButton from "../BorderedButton";
 import AnimatedTextInput from "./AnimatedTextInput";
 import { LocationProps, SheetComponentProps } from "./interfaces";
+import { toggleDay } from "@/data/redux/daysSlice/slice";
+
+const daysOfWeek = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
 
 const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   const [sheetHeight] = useState(
     new Animated.Value(Dimensions.get("window").height * 0.25)
+  );
+  const [secondSheetPosition] = useState(
+    new Animated.Value(Dimensions.get("window").width)
   );
   const [departureTimeOpacity] = useState(new Animated.Value(0));
   const [destinationTimeOpacity] = useState(new Animated.Value(0));
   const [buttonsOpacity] = useState(new Animated.Value(0));
   const [addButtonOpacity] = useState(new Animated.Value(0));
   const [iconRotation] = useState(new Animated.Value(0));
+  const selectedDays = useSelector(
+    (state: RootState) => state.days.selectedDays
+  );
 
   const handleExpandSheet = () => {
     Animated.timing(sheetHeight, {
@@ -124,6 +142,32 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
 
   const handleArrowPress = () => {
     dispatch(setUIState("slide-1"));
+    handleOpenSlide();
+  };
+
+  const handleBackPress = () => {
+    dispatch(setUIState("sheet-expanded"));
+    handleCloseSlide();
+  };
+
+  const handleOpenSlide = () => {
+    Animated.timing(secondSheetPosition, {
+      toValue: 0,
+      duration: 400,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handleCloseSlide = () => {
+    Animated.timing(secondSheetPosition, {
+      toValue: Dimensions.get("window").width,
+      duration: 400,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const toggleDaySelection = (day: string) => {
+    dispatch(toggleDay(day));
   };
 
   const dispatch = useDispatch();
@@ -264,7 +308,9 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   return (
     <Animated.View style={[styles.sheetContainer, { height: sheetHeight }]}>
       <View style={styles.routeHeader}>
-        <TouchableOpacity onPress={handleClosePress}>
+        <TouchableOpacity
+          onPress={uiState === "slide-1" ? handleBackPress : handleClosePress}
+        >
           <Animated.View
             style={
               uiState === "slide-1" && {
@@ -299,182 +345,221 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
         )}
       </View>
 
-      <View style={styles.inputWrapper}>
-        <AnimatedTextInput
-          value={departure.name}
-          placeholder="Departure"
-          inputRef={departureInputRef}
-          onChangeText={(text) => handleSettingDeparture(text)}
-          onIcon1Press={() => handleSettingDeparture("")}
-          onIcon2Press={handleSettingMapLocation}
-          onFocus={() => dispatch(setFocusedField("departure"))}
-          isFocused={focusedField === "departure"}
-          leftIcon1={{ name: "search", color: "black" }}
-          leftIcon2={{
-            name: "radiobox-marked",
-            color: departure.name ? Colors.light.secondary : "#bbb",
-          }}
-          rightIcon1={{ name: "close-circle", color: "#bbb" }}
-          rightIcon2={{
-            name: "map-marker-radius",
-            color: Colors.light.primary,
-          }}
-        />
+      <View style={{ flex: 1 }}>
+        <View style={styles.inputWrapper}>
+          <AnimatedTextInput
+            value={departure.name}
+            placeholder="Departure"
+            inputRef={departureInputRef}
+            onChangeText={(text) => handleSettingDeparture(text)}
+            onIcon1Press={() => handleSettingDeparture("")}
+            onIcon2Press={handleSettingMapLocation}
+            onFocus={() => dispatch(setFocusedField("departure"))}
+            isFocused={focusedField === "departure"}
+            leftIcon1={{ name: "search", color: "black" }}
+            leftIcon2={{
+              name: "radiobox-marked",
+              color: departure.name ? Colors.light.secondary : "#bbb",
+            }}
+            rightIcon1={{ name: "close-circle", color: "#bbb" }}
+            rightIcon2={{
+              name: "map-marker-radius",
+              color: Colors.light.primary,
+            }}
+          />
 
-        <AnimatedTextInput
-          value={destination.name}
-          placeholder="Destination"
-          inputRef={destinationInputRef}
-          onChangeText={(text) => handleSettingDestination(text)}
-          onIcon1Press={() => handleSettingDestination("")}
-          onIcon2Press={handleSettingMapLocation}
-          onFocus={() => dispatch(setFocusedField("destination"))}
-          isFocused={focusedField === "destination"}
-          leftIcon1={{ name: "search", color: "black" }}
-          leftIcon2={{
-            name: "radiobox-marked",
-            color: destination.name ? Colors.light.secondary : "#bbb",
-          }}
-          rightIcon1={{ name: "close-circle", color: "#bbb" }}
-          rightIcon2={{
-            name: "map-marker-radius",
-            color: Colors.light.secondary,
-          }}
-        />
+          <AnimatedTextInput
+            value={destination.name}
+            placeholder="Destination"
+            inputRef={destinationInputRef}
+            onChangeText={(text) => handleSettingDestination(text)}
+            onIcon1Press={() => handleSettingDestination("")}
+            onIcon2Press={handleSettingMapLocation}
+            onFocus={() => dispatch(setFocusedField("destination"))}
+            isFocused={focusedField === "destination"}
+            leftIcon1={{ name: "search", color: "black" }}
+            leftIcon2={{
+              name: "radiobox-marked",
+              color: destination.name ? Colors.light.secondary : "#bbb",
+            }}
+            rightIcon1={{ name: "close-circle", color: "#bbb" }}
+            rightIcon2={{
+              name: "map-marker-radius",
+              color: Colors.light.secondary,
+            }}
+          />
+
+          {uiState === "sheet-expanded" && (
+            <>
+              <Animated.View
+                style={[
+                  focusedField === "departureTime" && { zIndex: 400 },
+                  { opacity: departureTimeOpacity },
+                ]}
+              >
+                <AnimatedTextInput
+                  value={departureTime}
+                  placeholder="Departure Time"
+                  inputRef={departureTimeInputRef}
+                  onChangeText={(text) => dispatch(setDepartureTime(text))}
+                  onFocus={handleDepartureTime}
+                  onIcon2Press={() => dispatch(setDepartureTime(""))}
+                  isFocused={focusedField === "departureTime"}
+                  leftIcon1={{ name: "time-outline", color: "black" }}
+                  leftIcon2={{
+                    name: "clock",
+                    color: departureTime ? Colors.light.secondary : "#bbb",
+                  }}
+                  rightIcon2={{ name: "close-circle", color: "#bbb" }}
+                />
+              </Animated.View>
+
+              <Animated.View
+                style={[
+                  focusedField === "destinationTime" && { zIndex: 400 },
+                  { opacity: destinationTimeOpacity },
+                ]}
+              >
+                <AnimatedTextInput
+                  value={destinationTime}
+                  placeholder="Arrival Time"
+                  inputRef={destinationTimeInputRef}
+                  onChangeText={(text) => dispatch(setDestinationTime(text))}
+                  onFocus={() => dispatch(setFocusedField("destinationTime"))}
+                  onIcon2Press={() => dispatch(setDestinationTime(""))}
+                  isFocused={focusedField === "destinationTime"}
+                  leftIcon1={{ name: "time-outline", color: "black" }}
+                  leftIcon2={{
+                    name: "clock",
+                    color: destinationTime ? Colors.light.secondary : "#bbb",
+                  }}
+                  rightIcon2={{ name: "close-circle", color: "#bbb" }}
+                />
+              </Animated.View>
+            </>
+          )}
+        </View>
 
         {uiState === "sheet-expanded" && (
           <>
             <Animated.View
-              style={[
-                focusedField === "departureTime" && { zIndex: 400 },
-                { opacity: departureTimeOpacity },
-              ]}
+              style={[styles.travelModeContainer, { opacity: buttonsOpacity }]}
             >
-              <AnimatedTextInput
-                value={departureTime}
-                placeholder="Departure Time"
-                inputRef={departureTimeInputRef}
-                onChangeText={(text) => dispatch(setDepartureTime(text))}
-                onFocus={handleDepartureTime}
-                onIcon2Press={() => dispatch(setDepartureTime(""))}
-                isFocused={focusedField === "departureTime"}
-                leftIcon1={{ name: "time-outline", color: "black" }}
-                leftIcon2={{
-                  name: "clock",
-                  color: departureTime ? Colors.light.secondary : "#bbb",
-                }}
-                rightIcon2={{ name: "close-circle", color: "#bbb" }}
+              <BorderedButton
+                onPress={() => dispatch(setTravelMode("rider"))}
+                width={90}
+                height={40}
+                buttonText="Rider"
+                borderWidth={travelMode === "rider" ? 1.5 : 1}
+                textColor={
+                  travelMode === "rider"
+                    ? Colors.light.primary
+                    : Colors.light.text
+                }
+                borderColor={
+                  travelMode === "rider"
+                    ? Colors.light.primary
+                    : Colors.light.text
+                }
+              />
+
+              <BorderedButton
+                onPress={() => dispatch(setTravelMode("passenger"))}
+                width={120}
+                height={40}
+                buttonText="Passenger"
+                borderWidth={travelMode === "passenger" ? 1.5 : 1}
+                textColor={
+                  travelMode === "passenger"
+                    ? Colors.light.primary
+                    : Colors.light.text
+                }
+                borderColor={
+                  travelMode === "passenger"
+                    ? Colors.light.primary
+                    : Colors.light.text
+                }
+              />
+
+              <BorderedButton
+                onPress={() => dispatch(setTravelMode("partnership"))}
+                width={120}
+                height={40}
+                buttonText="Partnership"
+                borderWidth={travelMode === "partnership" ? 1.5 : 1}
+                textColor={
+                  travelMode === "partnership"
+                    ? Colors.light.primary
+                    : Colors.light.text
+                }
+                borderColor={
+                  travelMode === "partnership"
+                    ? Colors.light.primary
+                    : Colors.light.text
+                }
               />
             </Animated.View>
 
             <Animated.View
-              style={[
-                focusedField === "destinationTime" && { zIndex: 400 },
-                { opacity: destinationTimeOpacity },
-              ]}
+              style={{
+                opacity: addButtonOpacity,
+                alignItems: "center",
+                height: 100,
+                gap: 10,
+              }}
             >
-              <AnimatedTextInput
-                value={destinationTime}
-                placeholder="Arrival Time"
-                inputRef={destinationTimeInputRef}
-                onChangeText={(text) => dispatch(setDestinationTime(text))}
-                onFocus={() => dispatch(setFocusedField("destinationTime"))}
-                onIcon2Press={() => dispatch(setDestinationTime(""))}
-                isFocused={focusedField === "destinationTime"}
-                leftIcon1={{ name: "time-outline", color: "black" }}
-                leftIcon2={{
-                  name: "clock",
-                  color: destinationTime ? Colors.light.secondary : "#bbb",
-                }}
-                rightIcon2={{ name: "close-circle", color: "#bbb" }}
+              <BoldButton
+                buttonText="+ Add Schedule"
+                onPress={handleSubmitSchedule}
+                buttonStyle={{ backgroundColor: Colors.light.primary }}
+                width={352}
+              />
+              <BorderedButton
+                buttonText="Set Days"
+                onPress={handleArrowPress}
+                width={352}
               />
             </Animated.View>
           </>
         )}
       </View>
 
-      {uiState === "sheet-expanded" && (
-        <>
-          <Animated.View
-            style={[styles.travelModeContainer, { opacity: buttonsOpacity }]}
-          >
-            <BorderedButton
-              onPress={() => dispatch(setTravelMode("rider"))}
-              width={90}
-              height={40}
-              buttonText="Rider"
-              borderWidth={travelMode === "rider" ? 1.5 : 1}
-              textColor={
-                travelMode === "rider"
-                  ? Colors.light.primary
-                  : Colors.light.text
-              }
-              borderColor={
-                travelMode === "rider"
-                  ? Colors.light.primary
-                  : Colors.light.text
-              }
-            />
+      <Animated.View
+        style={[
+          styles.secondSheet,
+          { transform: [{ translateX: secondSheetPosition }] },
+        ]}
+      >
+        <View style={styles.routeHeader}>
+          <TouchableOpacity onPress={handleBackPress}>
+            <Ionicons name="arrow-back" size={28} color="black" />
+          </TouchableOpacity>
+          <Text style={styles.routeTitle}>Set Days</Text>
+        </View>
 
-            <BorderedButton
-              onPress={() => dispatch(setTravelMode("passenger"))}
-              width={120}
-              height={40}
-              buttonText="Passenger"
-              borderWidth={travelMode === "passenger" ? 1.5 : 1}
-              textColor={
-                travelMode === "passenger"
-                  ? Colors.light.primary
-                  : Colors.light.text
-              }
-              borderColor={
-                travelMode === "passenger"
-                  ? Colors.light.primary
-                  : Colors.light.text
-              }
-            />
-
-            <BorderedButton
-              onPress={() => dispatch(setTravelMode("partnership"))}
-              width={120}
-              height={40}
-              buttonText="Partnership"
-              borderWidth={travelMode === "partnership" ? 1.5 : 1}
-              textColor={
-                travelMode === "partnership"
-                  ? Colors.light.primary
-                  : Colors.light.text
-              }
-              borderColor={
-                travelMode === "partnership"
-                  ? Colors.light.primary
-                  : Colors.light.text
-              }
-            />
-          </Animated.View>
-
-          <Animated.View
-            style={{
-              opacity: addButtonOpacity,
-              alignItems: "center",
-              height: 100,
-              gap: 10,
-            }}
-          >
+        <View style={styles.buttonContainer}>
+          {daysOfWeek.map((day) => (
             <BoldButton
-              buttonText="+ Add Schedule"
-              onPress={handleSubmitSchedule}
-              buttonStyle={{ backgroundColor: Colors.light.primary }}
-              width={352}
+              key={day}
+              buttonText={day}
+              onPress={() => toggleDaySelection(day)}
+              buttonStyle={{
+                backgroundColor: selectedDays[day]
+                  ? Colors.light.primary
+                  : Colors.light.text,
+                borderColor: selectedDays[day]
+                  ? Colors.light.primary
+                  : Colors.light.text,
+                borderWidth: 1,
+                justifyContent: "center",
+              }}
+              width={240}
+              height={48}
+              textStyle={{ color: "#fff" }}
             />
-            <BorderedButton
-              buttonText="Set Days"
-              onPress={handleArrowPress}
-              width={352}
-            />
-          </Animated.View>
-        </>
-      )}
+          ))}
+        </View>
+      </Animated.View>
     </Animated.View>
   );
 };
@@ -532,6 +617,29 @@ const styles = StyleSheet.create({
   travelModeText: {
     color: Colors.light.background,
     fontSize: 16,
+  },
+  secondSheet: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    width: Dimensions.get("window").width,
+    backgroundColor: "#fff",
+    padding: 16,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  buttonContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 60,
+    gap: 6,
   },
 });
 
