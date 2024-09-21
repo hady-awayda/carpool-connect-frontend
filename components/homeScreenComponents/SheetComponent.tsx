@@ -297,6 +297,18 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
     debouncedFindAddresses(text);
   };
 
+  const handleClearingDeparture = () => {
+    dispatch(setDeparture({ ...departure, name: "" }));
+    dispatch(setFocusedField("departure"));
+    animateToState("full");
+  };
+
+  const handleClearingDestination = () => {
+    dispatch(setDestination({ ...destination, name: "" }));
+    dispatch(setFocusedField("destination"));
+    animateToState("full");
+  };
+
   const handleSettingDestination = (text: string) => {
     dispatch(setDestination({ ...destination, name: text }));
     debouncedFindAddresses(text);
@@ -361,7 +373,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
             placeholder="Departure"
             inputRef={departureInputRef}
             onChangeText={(text) => handleSettingDeparture(text)}
-            onIcon1Press={() => handleSettingDeparture("")}
+            onIcon1Press={handleClearingDeparture}
             onIcon2Press={handleSettingMapLocation}
             onFocus={() => dispatch(setFocusedField("departure"))}
             isFocused={focusedField === "departure"}
@@ -382,7 +394,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
             placeholder="Destination"
             inputRef={destinationInputRef}
             onChangeText={(text) => handleSettingDestination(text)}
-            onIcon1Press={() => handleSettingDestination("")}
+            onIcon1Press={handleClearingDestination}
             onIcon2Press={handleSettingMapLocation}
             onFocus={() => dispatch(setFocusedField("destination"))}
             isFocused={focusedField === "destination"}

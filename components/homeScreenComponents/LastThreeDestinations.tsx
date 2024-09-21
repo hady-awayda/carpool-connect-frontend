@@ -9,6 +9,11 @@ import {
   setDeparture,
   setDestination,
 } from "@/data/redux/addressListSlice/slice";
+import {
+  setUIState,
+  setFocusedField,
+  UIState,
+} from "@/data/redux/UIStateSlice/slice"; // Import UIState actions
 
 const defaultAddresses: Address[] = [
   {
@@ -36,15 +41,24 @@ const getIconName = (name: string) => {
   return "map-marker";
 };
 
-const LastDestinations = () => {
+const LastDestinations = ({
+  animateToState,
+}: {
+  animateToState: (state: UIState) => void;
+}) => {
   const dispatch = useDispatch();
 
   const addresses: Address[] = useSelector(
     (state: RootState) => state.address.addressList
   );
+  const departure = useSelector((state: RootState) => state.address.departure);
+  const destination = useSelector(
+    (state: RootState) => state.address.destination
+  );
   const focusedField = useSelector(
     (state: RootState) => state.uiState.focusedField
   );
+  const uiState = useSelector((state: RootState) => state.uiState.uiState); // Get current UI state
 
   const dataToRender: Address[] =
     addresses && addresses.length > 0 ? addresses : defaultAddresses;
@@ -52,13 +66,35 @@ const LastDestinations = () => {
   const handleAddressPress = (item: Address) => {
     const locationData = {
       name: item.name,
-      coords: null,
+      coords: null, // You can enhance this with real coordinates if needed
     };
 
+    // If UI state is "expanded", handle default behavior (set destination and switch to full)
+    if (uiState === "expanded") {
+      if (!destination.name) {
+        dispatch(setDestination(locationData));
+      }
+      dispatch(setUIState("full"));
+      return;
+    }
+
+    // Handle switching between departure and destination based on the focusedField
     if (focusedField === "departure") {
       dispatch(setDeparture(locationData));
+      // If the destination isn't set, switch focus to it
+      if (!destination.name) {
+        dispatch(setFocusedField("destination"));
+      } else {
+        animateToState("sheet-expanded");
+      }
     } else if (focusedField === "destination") {
       dispatch(setDestination(locationData));
+      // If the departure isn't set, switch focus to it
+      if (!departure.name) {
+        dispatch(setFocusedField("departure"));
+      } else {
+        animateToState("sheet-expanded");
+      }
     }
   };
 

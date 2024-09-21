@@ -16,12 +16,13 @@ import DestinationField from "./DestinationField";
 import { LocationCoords } from "./interfaces";
 import LastDestinations from "./LastThreeDestinations";
 import Location from "expo-location";
+import { UIState } from "@/data/redux/UIStateSlice/slice";
 
 type BottomContentProps = {
-  showRouteSheet: () => void;
+  animateToState: (animateTo: UIState) => void;
 };
 
-const BottomContent: React.FC<BottomContentProps> = ({ showRouteSheet }) => {
+const BottomContent: React.FC<BottomContentProps> = ({ animateToState }) => {
   const uiState = useSelector((state: RootState) => state.uiState.uiState);
   const dispatch = useDispatch();
 
@@ -76,9 +77,9 @@ const BottomContent: React.FC<BottomContentProps> = ({ showRouteSheet }) => {
           onPress={handleSettingLocation}
         />
       ) : (
-        <DestinationField showRouteSheet={showRouteSheet} />
+        <DestinationField showRouteSheet={() => animateToState("full")} />
       )}
-      <LastDestinations />
+      <LastDestinations {...{ animateToState }} />
     </Animated.View>
   );
 };

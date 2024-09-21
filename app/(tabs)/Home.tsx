@@ -204,7 +204,7 @@ const HomeScreen = () => {
               { transform: [{ translateY: bottomContentTranslateY }] },
             ]}
           >
-            <BottomContent showRouteSheet={() => animateToState("full")} />
+            <BottomContent {...{ animateToState }} />
           </Animated.View>
         </PanGestureHandler>
       </TouchableOpacity>
