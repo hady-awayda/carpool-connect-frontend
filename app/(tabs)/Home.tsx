@@ -1,5 +1,6 @@
 import BottomContent from "@/components/homeScreenComponents/BottomContent";
 import MapComponent from "@/components/homeScreenComponents/MapComponent";
+import SettingLocationSheet from "@/components/homeScreenComponents/SettingLocationSheet";
 import SheetComponent from "@/components/homeScreenComponents/SheetComponent";
 import { Colors } from "@/constants/Variables";
 import { setDeparture, setLocation } from "@/data/redux/addressListSlice/slice";
@@ -160,6 +161,11 @@ const HomeScreen = () => {
       <GestureHandlerRootView style={{ flex: 1 }}>
         <TouchableOpacity activeOpacity={1} style={styles.container}>
           <StatusBar style="auto" />
+
+          {(uiState === "setting-departure" ||
+            uiState === "setting-destination") && (
+            <SettingLocationSheet animateToState={animateToState} />
+          )}
 
           <MapComponent />
           {isMarkerOverlayVisible && (

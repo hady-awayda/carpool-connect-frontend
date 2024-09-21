@@ -133,7 +133,8 @@ const styles = StyleSheet.create({
   },
   suggestionText: {
     color: Colors.light.text,
-    ...Typography.title2,
+    ...Typography.text,
+    fontSize: 16,
   },
 });
 

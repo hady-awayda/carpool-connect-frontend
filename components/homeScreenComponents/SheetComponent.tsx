@@ -12,14 +12,13 @@ import {
 } from "@/data/redux/scheduleSlice/slice";
 import { RootState } from "@/data/redux/store";
 import { setFocusedField, setUIState } from "@/data/redux/UIStateSlice/slice";
+import findPlaceByName from "@/data/remote/location/findAddressByName";
 import { Ionicons } from "@expo/vector-icons";
-import axios from "axios";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Animated,
   Dimensions,
-  Keyboard,
   StyleSheet,
   Text,
   TextInput,
@@ -55,18 +54,61 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   const [buttonsOpacity] = useState(new Animated.Value(0));
   const [addButtonOpacity] = useState(new Animated.Value(0));
   const [iconRotation] = useState(new Animated.Value(0));
+
+  const dispatch = useDispatch();
   const selectedDays = useSelector(
     (state: RootState) => state.days.selectedDays
   );
-  const departureAddress = useSelector(
-    (state: RootState) => state.address.departure
-  );
-  const destinationAddress = useSelector(
+  const departure = useSelector((state: RootState) => state.address.departure);
+  const destination = useSelector(
     (state: RootState) => state.address.destination
   );
+  const departureTime = useSelector(
+    (state: RootState) => state.schedule.departureTime
+  );
+  const destinationTime = useSelector(
+    (state: RootState) => state.schedule.destinationTime
+  );
+  const uiState = useSelector((state: RootState) => state.uiState.uiState);
+  const travelMode = useSelector(
+    (state: RootState) => state.schedule.travelMode
+  );
+  const focusedField = useSelector(
+    (state: RootState) => state.uiState.focusedField
+  );
 
-  useEffect(() => console.log(departureAddress), [departureAddress]);
-  useEffect(() => console.log(destinationAddress), [destinationAddress]);
+  const departureInputRef = useRef<TextInput>(null);
+  const destinationInputRef = useRef<TextInput>(null);
+  const departureTimeInputRef = useRef<TextInput>(null);
+  const destinationTimeInputRef = useRef<TextInput>(null);
+
+  useEffect(() => {
+    if (uiState !== "full" && uiState !== "sheet-expanded") {
+      departureInputRef.current?.blur();
+      destinationInputRef.current?.blur();
+      departureTimeInputRef.current?.blur();
+      destinationTimeInputRef.current?.blur();
+    }
+    if (uiState === "full") {
+      handleCloseSheet();
+      if (focusedField === "departure") {
+        departureInputRef.current?.focus();
+      } else if (focusedField === "destination") {
+        destinationInputRef.current?.focus();
+      } else
+        departure.name === ""
+          ? departureInputRef.current?.focus()
+          : destinationInputRef.current?.focus();
+    }
+    if (uiState === "sheet-expanded") {
+      handleExpandSheet();
+      if (focusedField === "departureTime") {
+        departureTimeInputRef.current?.focus();
+      } else if (focusedField === "destinationTime") {
+        destinationTimeInputRef.current?.focus();
+      }
+    }
+  }, [uiState, focusedField]);
 
   const handleExpandSheet = () => {
     Animated.timing(sheetHeight, {
@@ -176,63 +218,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
     }).start();
   };
 
-  const toggleDaySelection = (day: string) => {
-    dispatch(toggleDay(day));
-  };
-
-  const dispatch = useDispatch();
-  const departure = useSelector((state: RootState) => state.address.departure);
-  const destination = useSelector(
-    (state: RootState) => state.address.destination
-  );
-  const departureTime = useSelector(
-    (state: RootState) => state.schedule.departureTime
-  );
-  const destinationTime = useSelector(
-    (state: RootState) => state.schedule.destinationTime
-  );
-  const uiState = useSelector((state: RootState) => state.uiState.uiState);
-  const travelMode = useSelector(
-    (state: RootState) => state.schedule.travelMode
-  );
-  const focusedField = useSelector(
-    (state: RootState) => state.uiState.focusedField
-  );
-  useEffect(() => console.log(uiState), [uiState]);
-
-  const departureInputRef = useRef<TextInput>(null);
-  const destinationInputRef = useRef<TextInput>(null);
-  const departureTimeInputRef = useRef<TextInput>(null);
-  const destinationTimeInputRef = useRef<TextInput>(null);
-
-  useEffect(() => {
-    if (uiState !== "full" && uiState !== "sheet-expanded") {
-      departureInputRef.current?.blur();
-      destinationInputRef.current?.blur();
-      departureTimeInputRef.current?.blur();
-      destinationTimeInputRef.current?.blur();
-    }
-    if (uiState === "full") {
-      handleCloseSheet();
-      if (focusedField === "departure") {
-        departureInputRef.current?.focus();
-      } else if (focusedField === "destination") {
-        destinationInputRef.current?.focus();
-      } else
-        departure.name === ""
-          ? departureInputRef.current?.focus()
-          : destinationInputRef.current?.focus();
-    }
-    if (uiState === "sheet-expanded") {
-      handleExpandSheet();
-      if (focusedField === "departureTime") {
-        departureTimeInputRef.current?.focus();
-      } else if (focusedField === "destinationTime") {
-        destinationTimeInputRef.current?.focus();
-      }
-    }
-  }, [uiState, focusedField]);
-
   const handleClosePress = () => {
     if (uiState === "slide-1") {
       animateToState("sheet-expanded");
@@ -252,40 +237,6 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
       animateToState("setting-departure");
     } else if (focusedField === "destination") {
       animateToState("setting-destination");
-    }
-  };
-
-  const findPlaceByName = async (name: string, limit = 5, page = 1) => {
-    const encodedName = encodeURIComponent(name);
-    const apiKey = "AIzaSyCzduXSDjg5mbh4txUTEVVu7LN1O53_fEc";
-    const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodedName}&key=${apiKey}`;
-
-    try {
-      const response = await axios.get(url);
-      const data = response.data;
-
-      if (data.status === "OK" && data.results.length > 0) {
-        const places = data.results.slice(0, limit).map((item: any) => ({
-          name: item.name,
-          address: item.formatted_address,
-          coords: {
-            latitude: item.geometry.location.lat,
-            longitude: item.geometry.location.lng,
-            latitudeDelta: 0.004,
-            longitudeDelta: 0.004,
-          },
-          placeId: item.place_id,
-          types: item.types,
-        }));
-
-        return places;
-      } else {
-        console.log("No results found or error occurred.");
-        return [];
-      }
-    } catch (error) {
-      console.error("Error fetching places:", error);
-      return [];
     }
   };
 
@@ -585,7 +536,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
             <BoldButton
               key={day}
               buttonText={day}
-              onPress={() => toggleDaySelection(day)}
+              onPress={() => dispatch(toggleDay(day))}
               buttonStyle={{
                 backgroundColor: selectedDays[day]
                   ? Colors.light.primary
