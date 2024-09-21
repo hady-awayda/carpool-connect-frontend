@@ -17,6 +17,8 @@ import {
   Animated,
   Dimensions,
   Easing,
+  KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
@@ -91,7 +93,7 @@ const HomeScreen = () => {
     dispatch(setUIState(state));
     Animated.timing(animatedValue, {
       toValue: uiStateValues[state],
-      duration: 600,
+      duration: 300,
       easing: Easing.bezier(0.35, 0.14, 0.29, 0.99),
       useNativeDriver: true,
     }).start(() => {

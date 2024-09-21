@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 20,
     backgroundColor: "#fff",
+    paddingBottom: 140,
   },
   title: {
     fontFamily: "Urbanist_700Bold",

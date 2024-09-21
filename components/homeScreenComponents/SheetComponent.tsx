@@ -43,68 +43,65 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   const handleExpandSheet = () => {
     Animated.timing(sheetHeight, {
       toValue: Dimensions.get("window").height * 0.55,
-      duration: 500,
+      duration: 100,
       useNativeDriver: false,
     }).start();
 
-    Animated.stagger(150, [
+    Animated.stagger(20, [
       Animated.timing(departureTimeOpacity, {
         toValue: 1,
-        duration: 300,
+        duration: 200,
         useNativeDriver: true,
       }),
       Animated.timing(destinationTimeOpacity, {
         toValue: 1,
-        duration: 500,
+        duration: 200,
         useNativeDriver: true,
       }),
       Animated.timing(buttonsOpacity, {
         toValue: 1,
-        duration: 700,
+        duration: 200,
         useNativeDriver: true,
       }),
       Animated.timing(addButtonOpacity, {
         toValue: 1,
-        duration: 900,
+        duration: 200,
         useNativeDriver: true,
       }),
     ]).start();
-
-    dispatch(setFocusedField("departureTime"));
-    animateToState("sheet-expanded");
   };
 
   const handleCloseSheet = () => {
     Animated.parallel([
       Animated.timing(sheetHeight, {
         toValue: Dimensions.get("window").height * 0.25,
-        duration: 500,
+        duration: 200,
         useNativeDriver: false,
       }),
-      // Reverse the opacity for all elements
-      Animated.timing(departureTimeOpacity, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      Animated.timing(destinationTimeOpacity, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      Animated.timing(buttonsOpacity, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      Animated.timing(addButtonOpacity, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-    ]).start();
 
-    animateToState("full");
+      Animated.stagger(100, [
+        Animated.timing(departureTimeOpacity, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(destinationTimeOpacity, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(buttonsOpacity, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(addButtonOpacity, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+      ]),
+    ]).start();
   };
 
   const dispatch = useDispatch();
@@ -139,6 +136,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
       destinationTimeInputRef.current?.blur();
     }
     if (uiState === "full") {
+      handleCloseSheet();
       if (focusedField === "departure") {
         departureInputRef.current?.focus();
       } else if (focusedField === "destination") {
@@ -149,6 +147,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
           : destinationInputRef.current?.focus();
     }
     if (uiState === "sheet-expanded") {
+      handleExpandSheet();
       if (focusedField === "departureTime") {
         departureTimeInputRef.current?.focus();
       } else if (focusedField === "destinationTime") {
@@ -156,6 +155,18 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
       }
     }
   }, [uiState]);
+
+  const handleClosePress = () => {
+    if (uiState === "sheet-expanded") {
+      animateToState("full");
+    } else if (uiState === "full") {
+      animateToState("expanded");
+    }
+  };
+
+  const handleExpandPress = () => {
+    animateToState("sheet-expanded");
+  };
 
   const handleSettingMapLocation = () => {
     if (focusedField === "departure") {
@@ -229,11 +240,11 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   return (
     <Animated.View style={[styles.sheetContainer, { height: sheetHeight }]}>
       <View style={styles.routeHeader}>
-        <TouchableOpacity onPress={handleCloseSheet}>
+        <TouchableOpacity onPress={handleClosePress}>
           <Ionicons name="close" size={28} />
         </TouchableOpacity>
         <Text style={styles.routeTitle}>Your route</Text>
-        <TouchableOpacity onPress={handleExpandSheet}>
+        <TouchableOpacity onPress={handleExpandPress}>
           <Ionicons name="add" size={28} />
         </TouchableOpacity>
       </View>
@@ -392,7 +403,9 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
             />
           </Animated.View>
 
-          <Animated.View style={{ opacity: addButtonOpacity }}>
+          <Animated.View
+            style={{ opacity: addButtonOpacity, alignItems: "center" }}
+          >
             <BoldButton
               buttonText="+ Add Schedule"
               onPress={handleSubmitSchedule}
