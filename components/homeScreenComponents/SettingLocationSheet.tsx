@@ -2,7 +2,7 @@ import { Colors, Typography } from "@/constants/Variables";
 import { RootState } from "@/data/redux/store";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Location from "expo-location"; // Importing expo-location
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -11,33 +11,93 @@ import {
   View,
 } from "react-native";
 import MapView, { Marker, Region } from "react-native-maps";
-import { useSelector } from "react-redux";
-import { SettingLocationSheetProps } from "./interfaces";
+import { useDispatch, useSelector } from "react-redux";
+import { LocationSheetProps } from "./interfaces";
+import {
+  setDeparture,
+  setLocation,
+  setSearch,
+} from "@/data/redux/addressListSlice/slice";
 
 const { height, width } = Dimensions.get("window");
 
-const SettingLocationSheet = ({
-  animateToState,
-}: SettingLocationSheetProps) => {
+const SettingLocationSheet = ({ animateToState }: LocationSheetProps) => {
+  const dispatch = useDispatch();
   const uiState = useSelector((state: RootState) => state.uiState.uiState);
   const location = useSelector((state: RootState) => state.address.location);
+  const departure = useSelector((state: RootState) => state.address.departure);
   const [isFetchingLocation, setIsFetchingLocation] = useState<boolean>(true);
   const [locationName, setLocationName] = useState<string>(
     uiState === "setting-departure" ? "Set Departure" : "Set Destination"
   );
-
-  const mapRef = useRef<MapView>(null);
-
   const [region, setRegion] = useState({
     latitude: location.coords.latitude,
     longitude: location.coords.longitude,
-    latitudeDelta: 0.003,
-    longitudeDelta: 0.003,
+    latitudeDelta: 0.004,
+    longitudeDelta: 0.004,
   });
+  const search = useSelector((state: RootState) => state.address.search);
+  const [isUpdating, setIsUpdating] = useState<Boolean>(
+    uiState === "setting-departure" || uiState === "setting-destination"
+  );
+  let initialLocationFetch = false;
+
+  const mapRef = useRef<MapView>(null);
+
+  useEffect(() => {
+    console.log(uiState);
+    setIsUpdating(
+      uiState === "setting-departure" || uiState === "setting-destination"
+    );
+  }, [uiState]);
+
+  useEffect(() => {
+    (async () => {
+      initialLocationFetch = true;
+      let { status } = await Location.requestForegroundPermissionsAsync();
+
+      if (status !== "granted") {
+        return;
+      }
+
+      let loc = await Location.getCurrentPositionAsync({});
+
+      const coords = {
+        latitude: loc.coords.latitude,
+        longitude: loc.coords.longitude,
+        latitudeDelta: 0.004,
+        longitudeDelta: 0.004,
+      };
+
+      let name = "Unknown Location";
+
+      try {
+        let [address] = await Location.reverseGeocodeAsync({
+          latitude: loc.coords.latitude,
+          longitude: loc.coords.longitude,
+        });
+
+        name =
+          address.city || address.region || address.name || "Unknown Location";
+      } catch (error) {
+        console.error("Error in reverse geocoding:", error);
+      }
+
+      dispatch(setLocation({ name, coords }));
+
+      if (!departure.name) {
+        dispatch(setDeparture({ name, coords }));
+      }
+
+      animateToState("expanded");
+      initialLocationFetch = false;
+    })();
+  }, []);
 
   const onRegionChangeComplete = (region: Region) => {
     console.log("Center coordinates:", region.latitude, region.longitude);
     fetchLocationName(region.latitude, region.longitude);
+    // console.log("search:", search);
     setRegion(region);
   };
 
@@ -49,16 +109,25 @@ const SettingLocationSheet = ({
         longitude,
       });
 
-      console.log(addresses);
-
       if (addresses.length > 0) {
-        const address =
+        const address: string =
           addresses[0].street ||
           addresses[0].city ||
           addresses[0].region ||
           addresses[0].name ||
           "Unknown Location";
         setLocationName(address);
+        dispatch(
+          setSearch({
+            name: address,
+            coords: {
+              latitude,
+              longitude,
+              latitudeDelta: 0.004,
+              longitudeDelta: 0.004,
+            },
+          })
+        );
       } else {
         setLocationName("Unknown Location");
       }
@@ -72,8 +141,7 @@ const SettingLocationSheet = ({
 
   return (
     <>
-      {(uiState === "setting-departure" ||
-        uiState === "setting-destination") && (
+      {isUpdating && (
         <View style={styles.container}>
           <MaterialCommunityIcons
             name="map-marker"
@@ -98,20 +166,33 @@ const SettingLocationSheet = ({
           <Text style={styles.title}>{locationName}</Text>
         </View>
       )}
-      {location && (
+      {location && !initialLocationFetch && (
         <MapView
           ref={mapRef}
           style={[StyleSheet.absoluteFillObject]}
           initialRegion={region}
-          onRegionChangeComplete={onRegionChangeComplete}
+          onRegionChangeComplete={
+            isUpdating ? onRegionChangeComplete : undefined
+          }
           showsCompass={false}
         >
-          <Marker
-            coordinate={{
-              latitude: region.latitude,
-              longitude: region.longitude,
-            }}
-          />
+          {0 ? (
+            <Marker
+              pinColor="transparent"
+              coordinate={{
+                latitude: region.latitude,
+                longitude: region.longitude,
+              }}
+            />
+          ) : (
+            <Marker coordinate={location.coords} title="Your Location">
+              <MaterialCommunityIcons
+                name="map-marker"
+                size={44}
+                color={Colors.light.secondary}
+              />
+            </Marker>
+          )}
         </MapView>
       )}
     </>

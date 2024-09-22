@@ -1,5 +1,4 @@
 import BottomContent from "@/components/homeScreenComponents/BottomContent";
-import MapComponent from "@/components/homeScreenComponents/MapComponent";
 import SettingLocationSheet from "@/components/homeScreenComponents/SettingLocationSheet";
 import SheetComponent from "@/components/homeScreenComponents/SheetComponent";
 import { setDeparture, setLocation } from "@/data/redux/addressListSlice/slice";
@@ -9,7 +8,6 @@ import {
   setUIState,
   UIState,
 } from "@/data/redux/UIStateSlice/slice";
-import * as Location from "expo-location";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef } from "react";
 import {
@@ -26,6 +24,7 @@ import {
 } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
+import * as Location from "expo-location";
 
 const { height } = Dimensions.get("window");
 
@@ -45,47 +44,6 @@ const HomeScreen = () => {
     "setting-destination": 5,
     "slide-1": 6,
   };
-
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-
-      if (status !== "granted") {
-        return;
-      }
-
-      let loc = await Location.getCurrentPositionAsync({});
-
-      const coords = {
-        latitude: loc.coords.latitude,
-        longitude: loc.coords.longitude,
-        latitudeDelta: 0.004,
-        longitudeDelta: 0.004,
-      };
-
-      let name = "Unknown Location";
-
-      try {
-        let [address] = await Location.reverseGeocodeAsync({
-          latitude: loc.coords.latitude,
-          longitude: loc.coords.longitude,
-        });
-
-        name =
-          address.city || address.region || address.name || "Unknown Location";
-      } catch (error) {
-        console.error("Error in reverse geocoding:", error);
-      }
-
-      dispatch(setLocation({ name, coords }));
-
-      if (!departure.name) {
-        dispatch(setDeparture({ name, coords }));
-      }
-
-      animateToState("expanded");
-    })();
-  }, []);
 
   const animateToState = (state: UIState) => {
     dispatch(setAnimationComplete(false));
@@ -130,12 +88,12 @@ const HomeScreen = () => {
   const sheetTranslateY = animatedValue.interpolate({
     inputRange: [0, 1, 2, 3, 4, 5],
     outputRange: [
-      -height * 1.3,
-      -height * 1.3,
-      -height * 0.955,
-      -height * 0.955,
-      -height * 1.3,
-      -height * 1.3,
+      -height * 0.65,
+      -height * 0.65,
+      0,
+      0,
+      -height * 0.65,
+      -height * 0.65,
     ],
   });
 
@@ -157,7 +115,7 @@ const HomeScreen = () => {
         <TouchableOpacity activeOpacity={1} style={styles.container}>
           <StatusBar style="auto" />
 
-          <SettingLocationSheet animateToState={animateToState} />
+          <SettingLocationSheet {...{ animateToState, initialLocationFetch }} />
 
           <PanGestureHandler
             onGestureEvent={onGestureEvent}
@@ -202,7 +160,6 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   sheetContainer: {
-    // position: "absolute",
     width: "100%",
     bottom: 0,
     zIndex: 2,

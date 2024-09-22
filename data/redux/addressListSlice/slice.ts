@@ -9,6 +9,7 @@ type AddressState = {
   location: LocationProps;
   departure: LocationProps;
   destination: LocationProps;
+  search: LocationProps;
 };
 
 const initialState: AddressState = {
@@ -16,8 +17,8 @@ const initialState: AddressState = {
   location: {
     name: "Fetching...",
     coords: {
-      latitude: 33.78,
-      longitude: 33.62,
+      latitude: 33.90105779618675,
+      longitude: 35.500431060791016,
       latitudeDelta: 0.004,
       longitudeDelta: 0.004,
     },
@@ -32,6 +33,15 @@ const initialState: AddressState = {
     },
   },
   destination: {
+    name: "",
+    coords: {
+      latitude: 33.90105779618675,
+      longitude: 35.500431060791016,
+      latitudeDelta: 0.004,
+      longitudeDelta: 0.004,
+    },
+  },
+  search: {
     name: "",
     coords: {
       latitude: 33.90105779618675,
@@ -58,10 +68,18 @@ const addressSlice = createSlice({
     setDestination: (state, action: PayloadAction<LocationProps>) => {
       state.destination = action.payload;
     },
+    setSearch: (state, action: PayloadAction<LocationProps>) => {
+      state.search = action.payload;
+    },
   },
 });
 
-export const { updateAddressList, setLocation, setDeparture, setDestination } =
-  addressSlice.actions;
+export const {
+  updateAddressList,
+  setLocation,
+  setDeparture,
+  setDestination,
+  setSearch,
+} = addressSlice.actions;
 
 export default addressSlice.reducer;

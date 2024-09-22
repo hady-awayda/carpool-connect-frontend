@@ -4,7 +4,6 @@ import {
   setDestination,
 } from "@/data/redux/addressListSlice/slice";
 import { RootState } from "@/data/redux/store";
-import { UIState } from "@/data/redux/UIStateSlice/slice";
 import Location from "expo-location";
 import {
   Animated,
@@ -13,21 +12,19 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Region } from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
 import BoldButton from "../BoldButton";
 import DestinationField from "./DestinationField";
-import { LocationCoords } from "./interfaces";
 import LastDestinations from "./LastThreeDestinations";
-
-type BottomContentProps = {
-  animateToState: (animateTo: UIState) => void;
-};
+import { BottomContentProps } from "./interfaces";
 
 const BottomContent: React.FC<BottomContentProps> = ({ animateToState }) => {
-  const uiState = useSelector((state: RootState) => state.uiState.uiState);
   const dispatch = useDispatch();
+  const uiState = useSelector((state: RootState) => state.uiState.uiState);
+  const search = useSelector((state: RootState) => state.address.search);
 
-  const getMarkerCoordinates = async (): Promise<LocationCoords> => {
+  const getMarkerCoordinates = async (): Promise<Region> => {
     try {
       let location = await Location.getCurrentPositionAsync({});
       return {
@@ -42,7 +39,7 @@ const BottomContent: React.FC<BottomContentProps> = ({ animateToState }) => {
     }
   };
 
-  const getAddressName = async (coords: LocationCoords): Promise<string> => {
+  const getAddressName = async (coords: Region): Promise<string> => {
     try {
       const [address] = await Location.reverseGeocodeAsync({
         latitude: coords.latitude,
@@ -62,9 +59,9 @@ const BottomContent: React.FC<BottomContentProps> = ({ animateToState }) => {
     const name = await getAddressName(coords);
 
     if (uiState === "setting-departure") {
-      dispatch(setDeparture({ name, coords }));
+      dispatch(setDeparture(search));
     } else if (uiState === "setting-destination") {
-      dispatch(setDestination({ name, coords }));
+      dispatch(setDestination(search));
     }
 
     animateToState("full");
