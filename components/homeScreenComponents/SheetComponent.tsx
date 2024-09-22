@@ -31,6 +31,7 @@ import BoldButton from "../BoldButton";
 import BorderedButton from "../BorderedButton";
 import AnimatedTextInput from "./AnimatedTextInput";
 import { SheetComponentProps } from "./interfaces";
+import DateTimePickerInput from "./DateTimePickerInput";
 
 const daysOfWeek = [
   "Monday",
@@ -43,6 +44,8 @@ const daysOfWeek = [
 ];
 
 const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
+  const [showDateTimePicker, setShowPicker] = useState(false);
+
   const [sheetHeight] = useState(
     new Animated.Value(Dimensions.get("window").height * 0.25)
   );
@@ -284,6 +287,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   };
 
   const handleSubmitSchedule = async () => {
+    console.log(departureTime, destinationTime);
     if (!departure.name || !destination.name) {
       alert("Please select departure and destination!");
       return;
@@ -292,10 +296,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
       alert("Please select departure and destination time!");
       return;
     }
-    if (departureTime > destinationTime) {
-      alert("Departure time can't be ahead of destination time!");
-      return;
-    }
+
     try {
       const response = await addSchedule();
 
@@ -310,6 +311,16 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
       alert("An error occurred while adding the schedule. Please try again.");
       console.error("Error:", error);
     }
+  };
+
+  const handleDateTimeConfirm = (time: string) => {
+    if (focusedField === "departureTime") {
+      dispatch(setDepartureTime(time));
+    } else if (focusedField === "destinationTime") {
+      dispatch(setDestinationTime(time));
+    }
+
+    setShowPicker(false);
   };
 
   return (
@@ -408,16 +419,17 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
                   value={departureTime}
                   placeholder="Departure Time"
                   inputRef={departureTimeInputRef}
-                  onChangeText={(text) => dispatch(setDepartureTime(text))}
                   onFocus={handleDepartureTime}
-                  onIcon2Press={() => dispatch(setDepartureTime(""))}
+                  onIcon1Press={() => setDepartureTime("")}
+                  onIcon2Press={() => setShowPicker(true)}
                   isFocused={focusedField === "departureTime"}
                   leftIcon1={{ name: "time-outline", color: "black" }}
                   leftIcon2={{
                     name: "clock",
                     color: departureTime ? Colors.light.secondary : "#bbb",
                   }}
-                  rightIcon2={{ name: "close-circle", color: "#bbb" }}
+                  rightIcon1={{ name: "close-circle", color: "#bbb" }}
+                  rightIcon2={{ name: "calendar", color: "#bbb" }}
                 />
               </Animated.View>
 
@@ -431,18 +443,37 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
                   value={destinationTime}
                   placeholder="Arrival Time"
                   inputRef={destinationTimeInputRef}
-                  onChangeText={(text) => dispatch(setDestinationTime(text))}
                   onFocus={handleDestinationTime}
-                  onIcon2Press={() => dispatch(setDestinationTime(""))}
+                  onIcon1Press={() => setDestinationTime("")}
+                  onIcon2Press={() => setShowPicker(true)}
                   isFocused={focusedField === "destinationTime"}
                   leftIcon1={{ name: "time-outline", color: "black" }}
                   leftIcon2={{
                     name: "clock",
                     color: destinationTime ? Colors.light.secondary : "#bbb",
                   }}
-                  rightIcon2={{ name: "close-circle", color: "#bbb" }}
+                  rightIcon1={{ name: "close-circle", color: "#bbb" }}
+                  rightIcon2={{ name: "calendar", color: "#bbb" }}
                 />
               </Animated.View>
+
+              {showDateTimePicker && (
+                <Animated.View
+                  style={[
+                    styles.sheetContainer,
+                    { height: Dimensions.get("window").height * 0.3 },
+                  ]}
+                >
+                  <View style={styles.inputWrapper}>
+                    <DateTimePickerInput
+                      value={destinationTime}
+                      placeholder="Arrival Time"
+                      setShowPicker={setShowPicker}
+                      onConfirm={handleDateTimeConfirm}
+                    />
+                  </View>
+                </Animated.View>
+              )}
             </>
           )}
         </View>

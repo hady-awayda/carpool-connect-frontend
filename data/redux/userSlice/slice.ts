@@ -19,7 +19,6 @@ const userSlice = createSlice({
     },
     setEmail: (state, action: PayloadAction<string | null>) => {
       state.email = action.payload;
-      console.log(state.email);
     },
     setRole: (state, action: PayloadAction<string | null>) => {
       state.role = action.payload;

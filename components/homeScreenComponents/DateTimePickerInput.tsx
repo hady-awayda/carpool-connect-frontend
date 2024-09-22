@@ -15,16 +15,16 @@ interface DateTimePickerInputProps extends TextInputProps {
   value: string;
   placeholder: string;
   onConfirm: (time: string) => void;
+  setShowPicker: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const DateTimePickerInput: React.FC<DateTimePickerInputProps> = ({
   value,
   placeholder,
   onConfirm,
+  setShowPicker,
   ...textInputProps
 }) => {
-  const [showPicker, setShowPicker] = useState(false);
-
   const handleDateChange = (event: any, selectedDate?: Date) => {
     setShowPicker(false);
     if (selectedDate) {
@@ -36,40 +36,16 @@ const DateTimePickerInput: React.FC<DateTimePickerInputProps> = ({
     }
   };
 
-  const openPicker = () => {
-    setShowPicker(true);
-  };
-
   return (
     <View>
-      <TouchableOpacity onPress={openPicker}>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.textInput}
-            value={value}
-            placeholder={placeholder}
-            editable={false}
-            {...textInputProps}
-          />
-          <MaterialCommunityIcons
-            name="clock"
-            size={24}
-            color={value ? Colors.light.secondary : "#bbb"}
-            style={styles.icon}
-          />
-        </View>
-      </TouchableOpacity>
-
-      {showPicker && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={new Date()}
-          mode="time"
-          is24Hour={true}
-          display="default"
-          onChange={handleDateChange}
-        />
-      )}
+      <DateTimePicker
+        testID="dateTimePicker"
+        value={new Date()}
+        mode="time"
+        is24Hour={true}
+        display="default"
+        onChange={handleDateChange}
+      />
     </View>
   );
 };

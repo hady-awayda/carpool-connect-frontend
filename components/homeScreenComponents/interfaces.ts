@@ -7,7 +7,7 @@ export type AnimatedTextInputProps = {
   value: string;
   placeholder: string;
   inputRef?: React.RefObject<TextInput>;
-  onChangeText: (text: string) => void;
+  onChangeText?: (text: string) => void;
   onFocus?: () => void;
   onBlur?: () => void;
   onPress?: () => void;

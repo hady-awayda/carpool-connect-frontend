@@ -1,11 +1,42 @@
-import { apiRequest } from "../apiHandler";
 import store from "@/data/redux/store";
+import { apiRequest } from "../apiHandler";
+
+const convertToISOString = (timeString: string): string => {
+  const now = new Date();
+
+  const timePattern = /(\d{1,2}):(\d{2})\s?(AM|PM)/i;
+  const match = timeString.match(timePattern);
+
+  if (!match) {
+    throw new Error("Invalid time format");
+  }
+
+  let [, hours, minutes, meridian] = match;
+  hours = parseInt(hours);
+  minutes = parseInt(minutes);
+
+  if (meridian.toUpperCase() === "PM" && hours < 12) {
+    hours += 12;
+  } else if (meridian.toUpperCase() === "AM" && hours === 12) {
+    hours = 0;
+  }
+
+  now.setHours(hours, minutes, 0, 0);
+
+  const offset = 3 * 60 * 60 * 1000;
+  const adjustedTime = new Date(now.getTime() + offset);
+
+  return adjustedTime.toISOString();
+};
 
 const addSchedule = async () => {
   const endpoint = "/user-schedules";
   const method = "POST";
 
   const state = store.getState();
+
+  const departureISOTime = convertToISOString(state.schedule.departureTime);
+  const destinationISOTime = convertToISOString(state.schedule.destinationTime);
 
   const scheduleData = {
     scheduleType: state.schedule.travelMode,
@@ -15,8 +46,8 @@ const addSchedule = async () => {
     departureLng: state.address.departure.coords?.longitude,
     destinationLat: state.address.destination.coords?.latitude,
     destinationLng: state.address.destination.coords?.longitude,
-    departureTime: Date.now(),
-    arrivalTime: Date.now(),
+    departureTime: departureISOTime,
+    arrivalTime: destinationISOTime,
     isDefault: true,
     isActive: true,
     selectedCar: "C63 AMG",
