@@ -39,6 +39,9 @@ const SettingLocationSheet = ({ animateToState }: LocationSheetProps) => {
   );
   const [initialLocationFetched, setInitialLocationFetched] = useState(false);
   const previousRegionRef = useRef<Region | null>(null);
+  const [currentRegion, setCurrentRegion] = useState<Region | undefined>(
+    undefined
+  );
 
   const mapRef = useRef<MapView>(null);
 
@@ -86,10 +89,29 @@ const SettingLocationSheet = ({ animateToState }: LocationSheetProps) => {
         dispatch(setDeparture({ name, coords }));
       }
 
+      setCurrentRegion(coords);
       animateToState("expanded");
       setInitialLocationFetched(true);
     })();
   }, []);
+
+  useEffect(() => {
+    if (uiState === "setting-departure" && location.coords) {
+      setCurrentRegion({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.004,
+        longitudeDelta: 0.004,
+      });
+    } else if (uiState === "setting-destination" && destination.coords) {
+      setCurrentRegion({
+        latitude: destination.coords.latitude,
+        longitude: destination.coords.longitude,
+        latitudeDelta: 0.004,
+        longitudeDelta: 0.004,
+      });
+    }
+  }, [uiState, location, departure, destination]);
 
   const onRegionChangeComplete = (region: Region) => {
     if (previousRegionRef.current) {
@@ -244,6 +266,7 @@ const SettingLocationSheet = ({ animateToState }: LocationSheetProps) => {
           ref={mapRef}
           style={[StyleSheet.absoluteFillObject]}
           initialRegion={location.coords}
+          region={currentRegion}
           onRegionChangeComplete={
             isUpdating ? onRegionChangeComplete : undefined
           }
