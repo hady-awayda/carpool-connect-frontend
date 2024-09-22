@@ -26,6 +26,9 @@ const SettingLocationSheet = ({ animateToState }: LocationSheetProps) => {
   const uiState = useSelector((state: RootState) => state.uiState.uiState);
   const location = useSelector((state: RootState) => state.address.location);
   const departure = useSelector((state: RootState) => state.address.departure);
+  const destination = useSelector(
+    (state: RootState) => state.address.destination
+  );
   const [locationName, setLocationName] = useState<string>(
     uiState === "setting-departure" ? "Set Departure" : "Set Destination"
   );
@@ -146,8 +149,8 @@ const SettingLocationSheet = ({ animateToState }: LocationSheetProps) => {
             size={48}
             color={
               uiState === "setting-departure"
-                ? Colors.light.primary
-                : Colors.light.secondary
+                ? Colors.light.secondary
+                : Colors.light.blue
             }
             style={styles.fullScreenMarker}
           />
@@ -178,9 +181,29 @@ const SettingLocationSheet = ({ animateToState }: LocationSheetProps) => {
             <MaterialCommunityIcons
               name="map-marker"
               size={44}
-              color={Colors.light.secondary}
+              color={Colors.light.primary}
             />
           </Marker>
+
+          {uiState === "setting-departure" && destination.coords && (
+            <Marker coordinate={destination.coords} title="Destination">
+              <MaterialCommunityIcons
+                name="map-marker"
+                size={44}
+                color={Colors.light.blue}
+              />
+            </Marker>
+          )}
+
+          {uiState === "setting-destination" && departure.coords && (
+            <Marker coordinate={departure.coords} title="Departure">
+              <MaterialCommunityIcons
+                name="map-marker"
+                size={44}
+                color={Colors.light.secondary}
+              />
+            </Marker>
+          )}
         </MapView>
       )}
     </>
