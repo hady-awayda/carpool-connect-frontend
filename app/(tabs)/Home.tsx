@@ -157,12 +157,7 @@ const HomeScreen = () => {
         <TouchableOpacity activeOpacity={1} style={styles.container}>
           <StatusBar style="auto" />
 
-          {(uiState === "setting-departure" ||
-            uiState === "setting-destination") && (
-            <SettingLocationSheet animateToState={animateToState} />
-          )}
-
-          <MapComponent />
+          <SettingLocationSheet animateToState={animateToState} />
 
           <PanGestureHandler
             onGestureEvent={onGestureEvent}
@@ -207,6 +202,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   sheetContainer: {
+    // position: "absolute",
     width: "100%",
     bottom: 0,
     zIndex: 2,
