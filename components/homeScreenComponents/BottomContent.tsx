@@ -23,6 +23,10 @@ const BottomContent: React.FC<BottomContentProps> = ({ animateToState }) => {
   const dispatch = useDispatch();
   const uiState = useSelector((state: RootState) => state.uiState.uiState);
   const search = useSelector((state: RootState) => state.address.search);
+  const departure = useSelector((state: RootState) => state.address.departure);
+  const destination = useSelector(
+    (state: RootState) => state.address.destination
+  );
 
   const getMarkerCoordinates = async (): Promise<Region> => {
     try {

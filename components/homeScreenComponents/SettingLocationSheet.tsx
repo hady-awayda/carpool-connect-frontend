@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import MapView, { Marker, Region } from "react-native-maps";
+import MapView, { LatLng, Marker, Region } from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
 import { LocationSheetProps } from "./interfaces";
 import {
@@ -40,7 +40,7 @@ const SettingLocationSheet = ({ animateToState }: LocationSheetProps) => {
   const [isUpdating, setIsUpdating] = useState<Boolean>(
     uiState === "setting-departure" || uiState === "setting-destination"
   );
-  let initialLocationFetch = false;
+  const [initialLocationFetched, setInitialLocationFetched] = useState(false);
 
   const mapRef = useRef<MapView>(null);
 
@@ -53,7 +53,6 @@ const SettingLocationSheet = ({ animateToState }: LocationSheetProps) => {
 
   useEffect(() => {
     (async () => {
-      initialLocationFetch = true;
       let { status } = await Location.requestForegroundPermissionsAsync();
 
       if (status !== "granted") {
@@ -90,7 +89,7 @@ const SettingLocationSheet = ({ animateToState }: LocationSheetProps) => {
       }
 
       animateToState("expanded");
-      initialLocationFetch = false;
+      setInitialLocationFetched(true);
     })();
   }, []);
 
@@ -166,11 +165,11 @@ const SettingLocationSheet = ({ animateToState }: LocationSheetProps) => {
           <Text style={styles.title}>{locationName}</Text>
         </View>
       )}
-      {location && !initialLocationFetch && (
+      {location && initialLocationFetched && (
         <MapView
           ref={mapRef}
           style={[StyleSheet.absoluteFillObject]}
-          initialRegion={region}
+          initialRegion={location.coords}
           onRegionChangeComplete={
             isUpdating ? onRegionChangeComplete : undefined
           }
