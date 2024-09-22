@@ -4,6 +4,7 @@ import { Tabs } from "expo-router";
 import { useEffect, useState } from "react";
 import { BackHandler, Keyboard, Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import ScheduleStack from "./ScheduleStack";
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
@@ -57,7 +58,7 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="Schedule"
+        name="ScheduleStack"
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="calendar" color={color} size={size} />

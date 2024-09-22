@@ -164,7 +164,9 @@ const ScheduleCard = ({ schedule, onPress }: ScheduleCardProps) => {
         </Text>
         <View style={styles.textContainer}>
           <Text style={styles.leftText}>From:</Text>
-          <Text style={styles.text}>{departureName?.slice(0, 24)}</Text>
+          <Text style={styles.text}>
+            {departureName?.split(" ").slice(0, 3).join(" ")}
+          </Text>
         </View>
 
         <View style={styles.textContainer}>
