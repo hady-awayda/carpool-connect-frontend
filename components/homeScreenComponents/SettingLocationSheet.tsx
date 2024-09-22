@@ -6,6 +6,7 @@ import {
 } from "@/data/redux/addressListSlice/slice";
 import { RootState } from "@/data/redux/store";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import axios from "axios";
 import * as Location from "expo-location";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -15,7 +16,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import MapView, { Marker, Region } from "react-native-maps";
+import MapView, { LatLng, Marker, Polyline, Region } from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
 import { LocationSheetProps } from "./interfaces";
 
@@ -23,6 +24,7 @@ const { height, width } = Dimensions.get("window");
 
 const SettingLocationSheet = ({ animateToState }: LocationSheetProps) => {
   const dispatch = useDispatch();
+  const [route, setRoute] = useState<LatLng[]>([]);
   const uiState = useSelector((state: RootState) => state.uiState.uiState);
   const location = useSelector((state: RootState) => state.address.location);
   const departure = useSelector((state: RootState) => state.address.departure);
@@ -140,6 +142,76 @@ const SettingLocationSheet = ({ animateToState }: LocationSheetProps) => {
     }
   };
 
+  const centerCoords = previousRegionRef.current || location.coords;
+  const depLat =
+    uiState === "setting-departure"
+      ? centerCoords.latitude
+      : departure.coords.latitude;
+  const depLng =
+    uiState === "setting-departure"
+      ? centerCoords.longitude
+      : departure.coords.longitude;
+  const destLat =
+    uiState === "setting-destination"
+      ? centerCoords.latitude
+      : destination.coords.latitude;
+  const destLng =
+    uiState === "setting-destination"
+      ? centerCoords.longitude
+      : destination.coords.longitude;
+
+  const fetchRoute = async () => {
+    try {
+      const response = await axios.get(
+        `https://maps.googleapis.com/maps/api/directions/json?origin=${depLat},${depLng}&destination=${destLat},${destLng}&key=${"AIzaSyCzduXSDjg5mbh4txUTEVVu7LN1O53_fEc"}`
+      );
+      const points = response.data.routes[0].overview_polyline.points;
+      const decodedPoints = decodePolyline(points);
+      setRoute(decodedPoints);
+    } catch (error) {
+      console.error("Error fetching directions:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchRoute();
+  }, [depLat, depLng, destLat, destLng]);
+
+  const decodePolyline = (encoded: string): LatLng[] => {
+    let points = [];
+    let index = 0,
+      len = encoded.length;
+    let lat = 0,
+      lng = 0;
+
+    while (index < len) {
+      let b,
+        shift = 0,
+        result = 0;
+      do {
+        b = encoded.charCodeAt(index++) - 63;
+        result |= (b & 0x1f) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+      let dlat = (result & 1) != 0 ? ~(result >> 1) : result >> 1;
+      lat += dlat;
+
+      shift = 0;
+      result = 0;
+      do {
+        b = encoded.charCodeAt(index++) - 63;
+        result |= (b & 0x1f) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+      let dlng = (result & 1) != 0 ? ~(result >> 1) : result >> 1;
+      lng += dlng;
+
+      points.push({ latitude: lat / 1e5, longitude: lng / 1e5 });
+    }
+
+    return points;
+  };
+
   return (
     <>
       {isUpdating && (
@@ -203,6 +275,22 @@ const SettingLocationSheet = ({ animateToState }: LocationSheetProps) => {
                 color={Colors.light.secondary}
               />
             </Marker>
+          )}
+
+          {uiState === "setting-departure" && destination.coords && (
+            <Polyline
+              coordinates={route}
+              strokeColor={Colors.light.primary}
+              strokeWidth={3}
+            />
+          )}
+
+          {uiState === "setting-destination" && departure.coords && (
+            <Polyline
+              coordinates={route}
+              strokeColor={Colors.light.secondary}
+              strokeWidth={6}
+            />
           )}
         </MapView>
       )}
