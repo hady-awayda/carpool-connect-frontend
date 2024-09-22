@@ -292,10 +292,24 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
       alert("Please select departure and destination time!");
       return;
     }
-    if (departureTime > destinationTime)
+    if (departureTime > destinationTime) {
       alert("Departure time can't be ahead of destination time!");
-    addSchedule();
-    animateToState("full");
+      return;
+    }
+    try {
+      const response = await addSchedule();
+
+      if (response.isActive) {
+        console.log(response);
+        animateToState("expanded");
+        alert("Schedule successfully added!");
+      } else {
+        alert("Failed to add the schedule. Please try again.");
+      }
+    } catch (error) {
+      alert("An error occurred while adding the schedule. Please try again.");
+      console.error("Error:", error);
+    }
   };
 
   return (

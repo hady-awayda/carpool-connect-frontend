@@ -1,7 +1,12 @@
 import { Colors, Typography } from "@/constants/Variables";
+import {
+  setDeparture,
+  setLocation,
+  setSearch,
+} from "@/data/redux/addressListSlice/slice";
 import { RootState } from "@/data/redux/store";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import * as Location from "expo-location"; // Importing expo-location
+import * as Location from "expo-location";
 import { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
@@ -10,14 +15,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import MapView, { LatLng, Marker, Region } from "react-native-maps";
+import MapView, { Marker, Region } from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
 import { LocationSheetProps } from "./interfaces";
-import {
-  setDeparture,
-  setLocation,
-  setSearch,
-} from "@/data/redux/addressListSlice/slice";
 
 const { height, width } = Dimensions.get("window");
 
@@ -30,17 +30,12 @@ const SettingLocationSheet = ({ animateToState }: LocationSheetProps) => {
   const [locationName, setLocationName] = useState<string>(
     uiState === "setting-departure" ? "Set Departure" : "Set Destination"
   );
-  const [region, setRegion] = useState({
-    latitude: location.coords.latitude,
-    longitude: location.coords.longitude,
-    latitudeDelta: 0.004,
-    longitudeDelta: 0.004,
-  });
   const search = useSelector((state: RootState) => state.address.search);
   const [isUpdating, setIsUpdating] = useState<Boolean>(
     uiState === "setting-departure" || uiState === "setting-destination"
   );
   const [initialLocationFetched, setInitialLocationFetched] = useState(false);
+  const previousRegionRef = useRef<Region | null>(null);
 
   const mapRef = useRef<MapView>(null);
 
@@ -94,10 +89,18 @@ const SettingLocationSheet = ({ animateToState }: LocationSheetProps) => {
   }, []);
 
   const onRegionChangeComplete = (region: Region) => {
+    if (previousRegionRef.current) {
+      const isSameRegion =
+        Math.abs(region.latitude - previousRegionRef.current.latitude) <
+          0.0001 &&
+        Math.abs(region.longitude - previousRegionRef.current.longitude) <
+          0.0001;
+      if (isSameRegion) return;
+    }
+
     console.log("Center coordinates:", region.latitude, region.longitude);
     fetchLocationName(region.latitude, region.longitude);
-    // console.log("search:", search);
-    setRegion(region);
+    previousRegionRef.current = region;
   };
 
   const fetchLocationName = async (latitude: number, longitude: number) => {
@@ -175,23 +178,13 @@ const SettingLocationSheet = ({ animateToState }: LocationSheetProps) => {
           }
           showsCompass={false}
         >
-          {0 ? (
-            <Marker
-              pinColor="transparent"
-              coordinate={{
-                latitude: region.latitude,
-                longitude: region.longitude,
-              }}
+          <Marker coordinate={location.coords} title="Your Location">
+            <MaterialCommunityIcons
+              name="map-marker"
+              size={44}
+              color={Colors.light.secondary}
             />
-          ) : (
-            <Marker coordinate={location.coords} title="Your Location">
-              <MaterialCommunityIcons
-                name="map-marker"
-                size={44}
-                color={Colors.light.secondary}
-              />
-            </Marker>
-          )}
+          </Marker>
         </MapView>
       )}
     </>
