@@ -134,27 +134,33 @@ const ScheduleCard = ({ schedule, onPress }: ScheduleCardProps) => {
           }}
           scrollEnabled={false}
           zoomEnabled={false}
+          customMapStyle={[
+            {
+              elementType: "labels",
+              stylers: [{ visibility: "off" }],
+            },
+          ]}
         >
           <Marker coordinate={{ latitude: depLat, longitude: depLng }}>
             <MaterialCommunityIcons
               name="map-marker"
               size={30}
-              color={Colors.light.primary}
+              color={Colors.light.secondary}
             />
           </Marker>
 
           <Marker coordinate={{ latitude: destLat, longitude: destLng }}>
             <MaterialCommunityIcons
               name="map-marker"
-              size={30}
-              color={Colors.light.primary}
+              size={28}
+              color={Colors.light.blue}
             />
           </Marker>
           {route.length > 0 && (
             <Polyline
               coordinates={route}
-              strokeColor={Colors.light.secondary}
-              strokeWidth={6}
+              strokeColor={Colors.light.primary}
+              strokeWidth={3}
             />
           )}
         </MapView>
@@ -165,19 +171,20 @@ const ScheduleCard = ({ schedule, onPress }: ScheduleCardProps) => {
           {scheduleType[0].toUpperCase() + scheduleType.slice(1)}
         </Text>
         <View style={styles.textContainer}>
-          <Text style={styles.leftText}>From: </Text>
+          <Text style={styles.leftText}>From:</Text>
           <Text style={styles.text}>{departureName?.slice(0, 24)}</Text>
         </View>
+
         <View style={styles.textContainer}>
-          <Text style={styles.leftText}>To: </Text>
-          <Text style={styles.text}>{destinationName?.slice(0, 16)}</Text>
-        </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.leftText}>Departure: </Text>
+          <Text style={styles.leftText}>Departure:</Text>
           <Text style={styles.text}>{formatTime(departureTime)}</Text>
         </View>
         <View style={styles.textContainer}>
-          <Text style={styles.leftText}>Arrival: </Text>
+          <Text style={styles.leftText}>To:</Text>
+          <Text style={styles.text}>{destinationName?.slice(0, 16)}</Text>
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.leftText}>Arrival:</Text>
           <Text style={styles.text}>{formatTime(arrivalTime)}</Text>
         </View>
         <View style={styles.weekdayContainer}>
