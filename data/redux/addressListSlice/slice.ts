@@ -15,15 +15,30 @@ const initialState: AddressState = {
   addressList: [],
   location: {
     name: "Fetching...",
-    coords: null,
+    coords: {
+      latitude: 33.78,
+      longitude: 33.62,
+      latitudeDelta: 0.004,
+      longitudeDelta: 0.004,
+    },
   },
   departure: {
     name: "",
-    coords: null,
+    coords: {
+      latitude: 33.90105779618675,
+      longitude: 35.500431060791016,
+      latitudeDelta: 0.004,
+      longitudeDelta: 0.004,
+    },
   },
   destination: {
     name: "",
-    coords: null,
+    coords: {
+      latitude: 33.90105779618675,
+      longitude: 35.500431060791016,
+      latitudeDelta: 0.004,
+      longitudeDelta: 0.004,
+    },
   },
 };
 

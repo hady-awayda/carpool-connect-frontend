@@ -32,7 +32,7 @@ export type LocationCoords = {
 
 export type LocationProps = {
   name: string;
-  coords: LocationCoords | null;
+  coords: LocationCoords;
 };
 
 export type Address = {

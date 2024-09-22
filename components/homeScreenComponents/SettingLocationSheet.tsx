@@ -1,8 +1,9 @@
 import { Colors, Typography } from "@/constants/Variables";
 import { RootState } from "@/data/redux/store";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import * as Location from "expo-location"; // Importing expo-location
+import { useRef, useState } from "react";
 import {
-  Animated,
   Dimensions,
   StyleSheet,
   Text,
@@ -12,8 +13,6 @@ import {
 import MapView, { Marker, Region } from "react-native-maps";
 import { useSelector } from "react-redux";
 import { SettingLocationSheetProps } from "./interfaces";
-import { useEffect, useRef, useState } from "react";
-import axios from "axios";
 
 const { height, width } = Dimensions.get("window");
 
@@ -30,8 +29,8 @@ const SettingLocationSheet = ({
   const mapRef = useRef<MapView>(null);
 
   const [region, setRegion] = useState({
-    latitude: location.coords?.latitude,
-    longitude: location.coords?.longitude,
+    latitude: location.coords.latitude,
+    longitude: location.coords.longitude,
     latitudeDelta: 0.003,
     longitudeDelta: 0.003,
   });
@@ -45,53 +44,67 @@ const SettingLocationSheet = ({
   const fetchLocationName = async (latitude: number, longitude: number) => {
     setIsFetchingLocation(true);
     try {
-      const apiKey = "AIzaSyCzduXSDjg5mbh4txUTEVVu7LN1O53_fEc";
-      const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`;
+      const addresses = await Location.reverseGeocodeAsync({
+        latitude,
+        longitude,
+      });
 
-      const response = await axios.get(url);
-      const address =
-        response.data.results[0]?.formatted_address || "Unknown Location";
+      console.log(addresses);
 
-      setLocationName(address);
-      setIsFetchingLocation(false);
+      if (addresses.length > 0) {
+        const address =
+          addresses[0].street ||
+          addresses[0].city ||
+          addresses[0].region ||
+          addresses[0].name ||
+          "Unknown Location";
+        setLocationName(address);
+      } else {
+        setLocationName("Unknown Location");
+      }
     } catch (error) {
       console.error("Error fetching location name:", error);
       setLocationName("Unknown Location");
+    } finally {
       setIsFetchingLocation(false);
     }
   };
 
   return (
     <>
-      <View style={styles.container}>
-        <MaterialCommunityIcons
-          name="map-marker"
-          size={48}
-          color={
-            uiState === "setting-departure"
-              ? Colors.light.primary
-              : Colors.light.secondary
-          }
-          style={styles.fullScreenMarker}
-        />
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => animateToState("full")}
-        >
+      {(uiState === "setting-departure" ||
+        uiState === "setting-destination") && (
+        <View style={styles.container}>
           <MaterialCommunityIcons
-            name="chevron-left"
-            size={24}
-            color={Colors.light.text}
+            name="map-marker"
+            size={48}
+            color={
+              uiState === "setting-departure"
+                ? Colors.light.primary
+                : Colors.light.secondary
+            }
+            style={styles.fullScreenMarker}
           />
-        </TouchableOpacity>
-        <Text style={styles.title}>{locationName.split(",")[0]}</Text>
-      </View>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => animateToState("full")}
+          >
+            <MaterialCommunityIcons
+              name="chevron-left"
+              size={24}
+              color={Colors.light.text}
+            />
+          </TouchableOpacity>
+          <Text style={styles.title}>{locationName}</Text>
+        </View>
+      )}
       {location && (
         <MapView
           ref={mapRef}
           style={[StyleSheet.absoluteFillObject]}
           initialRegion={region}
           onRegionChangeComplete={onRegionChangeComplete}
+          showsCompass={false}
         >
           <Marker
             coordinate={{
