@@ -40,3 +40,6 @@ export type Address = {
   icon?: string;
   coords: LocationCoords;
 };
+export type SettingLocationSheetProps = {
+  animateToState: (animateTo: UIState) => void;
+};

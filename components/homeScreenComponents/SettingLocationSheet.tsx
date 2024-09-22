@@ -1,21 +1,18 @@
 import { Colors, Typography } from "@/constants/Variables";
 import { RootState } from "@/data/redux/store";
-import { UIState } from "@/data/redux/UIStateSlice/slice";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
-  Animated,
   Dimensions,
   StyleSheet,
   Text,
   TouchableOpacity,
+  View,
 } from "react-native";
 import { useSelector } from "react-redux";
+import { SettingLocationSheetProps } from "./interfaces";
 
 const { height } = Dimensions.get("window");
-
-type SettingLocationSheetProps = {
-  animateToState: (animateTo: UIState) => void;
-};
+const { width } = Dimensions.get("window");
 
 const SettingLocationSheet: React.FC<SettingLocationSheetProps> = ({
   animateToState,
@@ -23,7 +20,17 @@ const SettingLocationSheet: React.FC<SettingLocationSheetProps> = ({
   const uiState = useSelector((state: RootState) => state.uiState.uiState);
 
   return (
-    <Animated.View style={styles.sheetContainer}>
+    <View style={styles.container}>
+      <MaterialCommunityIcons
+        name="map-marker"
+        size={48}
+        color={
+          uiState === "setting-departure"
+            ? Colors.light.primary
+            : Colors.light.secondary
+        }
+        style={styles.fullScreenMarker}
+      />
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => animateToState("full")}
@@ -37,12 +44,12 @@ const SettingLocationSheet: React.FC<SettingLocationSheetProps> = ({
       <Text style={styles.title}>
         {uiState === "setting-departure" ? "Set Departure" : "Set Destination"}
       </Text>
-    </Animated.View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  sheetContainer: {
+  container: {
     position: "absolute",
     top: 0,
     left: 0,
@@ -83,6 +90,17 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 10,
     marginRight: 10,
+  },
+  fullScreenMarker: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    transform: [
+      { translateY: height / 2 - 48 },
+      { translateX: width / 2 - 24 },
+    ],
   },
 });
 

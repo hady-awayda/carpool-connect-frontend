@@ -76,7 +76,11 @@ const BottomContent: React.FC<BottomContentProps> = ({ animateToState }) => {
       {uiState === "setting-departure" || uiState === "setting-destination" ? (
         <View style={{ alignItems: "center" }}>
           <BoldButton
-            buttonText="Confirm Location"
+            buttonText={
+              uiState === "setting-departure"
+                ? "Confirm Departure"
+                : "Confirm Destination"
+            }
             buttonStyle={{ backgroundColor: Colors.light.primary }}
             onPress={handleSettingLocation}
             width={340}

@@ -2,7 +2,6 @@ import BottomContent from "@/components/homeScreenComponents/BottomContent";
 import MapComponent from "@/components/homeScreenComponents/MapComponent";
 import SettingLocationSheet from "@/components/homeScreenComponents/SettingLocationSheet";
 import SheetComponent from "@/components/homeScreenComponents/SheetComponent";
-import { Colors } from "@/constants/Variables";
 import { setDeparture, setLocation } from "@/data/redux/addressListSlice/slice";
 import { RootState } from "@/data/redux/store";
 import {
@@ -10,7 +9,6 @@ import {
   setUIState,
   UIState,
 } from "@/data/redux/UIStateSlice/slice";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef } from "react";
@@ -153,9 +151,6 @@ const HomeScreen = () => {
     ],
   });
 
-  const isMarkerOverlayVisible =
-    uiState === "setting-departure" || uiState === "setting-destination";
-
   return (
     <SafeAreaView edges={["left", "right", "bottom"]} style={styles.safeArea}>
       <GestureHandlerRootView style={{ flex: 1 }}>
@@ -168,23 +163,6 @@ const HomeScreen = () => {
           )}
 
           <MapComponent />
-          {isMarkerOverlayVisible && (
-            <Animated.View
-              style={styles.fullScreenMarkerOverlay}
-              pointerEvents="box-none"
-            >
-              <MaterialCommunityIcons
-                name="map-marker"
-                size={60}
-                color={
-                  uiState === "setting-departure"
-                    ? Colors.light.primary
-                    : Colors.light.secondary
-                }
-                style={styles.fullScreenMarker}
-              />
-            </Animated.View>
-          )}
 
           <PanGestureHandler
             onGestureEvent={onGestureEvent}
@@ -238,21 +216,6 @@ const styles = StyleSheet.create({
     width: "100%",
     bottom: 0,
     zIndex: 1,
-  },
-  fullScreenMarkerOverlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    transform: [{ translateY: -30 }],
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 3,
-  },
-  fullScreenMarker: {
-    position: "absolute",
-    zIndex: 4,
   },
 });
 
