@@ -10,22 +10,9 @@ import {
 import MapView, { LatLng, Marker, Polyline } from "react-native-maps";
 import axios from "axios";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Schedule } from "./Schedule";
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-type Schedule = {
-  id: number;
-  scheduleType: string;
-  departureName?: string | null;
-  destinationName?: string | null;
-  departureLat: number;
-  departureLng: number;
-  destinationLat: number;
-  destinationLng: number;
-  departureTime: Date;
-  arrivalTime: Date;
-  schedulePattern?: boolean[] | null;
-};
 
 type ScheduleCardProps = {
   schedule: Schedule;
@@ -115,10 +102,15 @@ const ScheduleCard = ({ schedule, onPress }: ScheduleCardProps) => {
 
   const formatTime = (time: Date) => {
     const date = new Date(time);
-    return `${date.getHours()}:${date
-      .getMinutes()
-      .toString()
-      .padStart(2, "0")}`;
+    let hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+
+    const ampm = hours >= 12 ? "PM" : "AM";
+
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+
+    return `${hours}:${minutes} ${ampm}`;
   };
 
   return (
@@ -181,7 +173,9 @@ const ScheduleCard = ({ schedule, onPress }: ScheduleCardProps) => {
         </View>
         <View style={styles.textContainer}>
           <Text style={styles.leftText}>To:</Text>
-          <Text style={styles.text}>{destinationName?.slice(0, 16)}</Text>
+          <Text style={styles.text}>
+            {destinationName?.split(" ").slice(0, 3).join(" ")}
+          </Text>
         </View>
         <View style={styles.textContainer}>
           <Text style={styles.leftText}>Arrival:</Text>

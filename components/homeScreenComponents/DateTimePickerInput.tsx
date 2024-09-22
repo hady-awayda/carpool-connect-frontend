@@ -42,7 +42,7 @@ const DateTimePickerInput: React.FC<DateTimePickerInputProps> = ({
         testID="dateTimePicker"
         value={new Date()}
         mode="time"
-        is24Hour={true}
+        is24Hour={false}
         display="default"
         onChange={handleDateChange}
       />

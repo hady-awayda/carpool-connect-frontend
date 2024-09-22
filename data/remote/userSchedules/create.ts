@@ -23,8 +23,7 @@ const convertToISOString = (timeString: string): string => {
 
   now.setHours(hours, minutes, 0, 0);
 
-  const offset = 3 * 60 * 60 * 1000;
-  const adjustedTime = new Date(now.getTime() + offset);
+  const adjustedTime = new Date(now.getTime());
 
   return adjustedTime.toISOString();
 };
