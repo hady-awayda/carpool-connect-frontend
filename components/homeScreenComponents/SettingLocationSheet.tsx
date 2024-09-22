@@ -26,11 +26,9 @@ const SettingLocationSheet = ({ animateToState }: LocationSheetProps) => {
   const uiState = useSelector((state: RootState) => state.uiState.uiState);
   const location = useSelector((state: RootState) => state.address.location);
   const departure = useSelector((state: RootState) => state.address.departure);
-  const [isFetchingLocation, setIsFetchingLocation] = useState<boolean>(true);
   const [locationName, setLocationName] = useState<string>(
     uiState === "setting-departure" ? "Set Departure" : "Set Destination"
   );
-  const search = useSelector((state: RootState) => state.address.search);
   const [isUpdating, setIsUpdating] = useState<Boolean>(
     uiState === "setting-departure" || uiState === "setting-destination"
   );
@@ -104,7 +102,6 @@ const SettingLocationSheet = ({ animateToState }: LocationSheetProps) => {
   };
 
   const fetchLocationName = async (latitude: number, longitude: number) => {
-    setIsFetchingLocation(true);
     try {
       const addresses = await Location.reverseGeocodeAsync({
         latitude,
@@ -137,7 +134,6 @@ const SettingLocationSheet = ({ animateToState }: LocationSheetProps) => {
       console.error("Error fetching location name:", error);
       setLocationName("Unknown Location");
     } finally {
-      setIsFetchingLocation(false);
     }
   };
 

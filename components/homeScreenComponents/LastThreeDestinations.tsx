@@ -15,14 +15,32 @@ const defaultAddresses: Address[] = [
   {
     name: "Beirut Rafic Hariri Airport (BEY)",
     icon: "airplane",
+    coords: {
+      latitude: 33.82627465906504,
+      longitude: 35.492483507841825,
+      latitudeDelta: 0.004,
+      longitudeDelta: 0.004,
+    },
   },
   {
     name: "Hamra",
     icon: "coffee-outline",
+    coords: {
+      latitude: 33.896242816294034,
+      longitude: 35.483034420758486,
+      latitudeDelta: 0.004,
+      longitudeDelta: 0.004,
+    },
   },
   {
     name: "City Centre Beirut",
     icon: "shopping-outline",
+    coords: {
+      latitude: 33.8532428,
+      longitude: 35.5340779,
+      latitudeDelta: 0.004,
+      longitudeDelta: 0.004,
+    },
   },
 ];
 

@@ -4,7 +4,6 @@ import {
   setDestination,
 } from "@/data/redux/addressListSlice/slice";
 import { RootState } from "@/data/redux/store";
-import Location from "expo-location";
 import {
   Animated,
   Dimensions,
@@ -12,7 +11,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Region } from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
 import BoldButton from "../BoldButton";
 import DestinationField from "./DestinationField";
@@ -23,45 +21,8 @@ const BottomContent: React.FC<BottomContentProps> = ({ animateToState }) => {
   const dispatch = useDispatch();
   const uiState = useSelector((state: RootState) => state.uiState.uiState);
   const search = useSelector((state: RootState) => state.address.search);
-  const departure = useSelector((state: RootState) => state.address.departure);
-  const destination = useSelector(
-    (state: RootState) => state.address.destination
-  );
-
-  const getMarkerCoordinates = async (): Promise<Region> => {
-    try {
-      let location = await Location.getCurrentPositionAsync({});
-      return {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-        latitudeDelta: 0.004,
-        longitudeDelta: 0.004,
-      };
-    } catch (error) {
-      console.error("Error fetching location:", error);
-      return { latitude: 0, longitude: 0, latitudeDelta: 0, longitudeDelta: 0 };
-    }
-  };
-
-  const getAddressName = async (coords: Region): Promise<string> => {
-    try {
-      const [address] = await Location.reverseGeocodeAsync({
-        latitude: coords.latitude,
-        longitude: coords.longitude,
-      });
-      return (
-        address.city || address.region || address.name || "Unknown Location"
-      );
-    } catch (error) {
-      console.error("Error in reverse geocoding:", error);
-      return "Unknown Location";
-    }
-  };
 
   const handleSettingLocation = async () => {
-    const coords = await getMarkerCoordinates();
-    const name = await getAddressName(coords);
-
     if (uiState === "setting-departure") {
       dispatch(setDeparture(search));
     } else if (uiState === "setting-destination") {
