@@ -1,22 +1,23 @@
-import { Colors, Typography } from "@/constants/Variables";
+import { Colors } from "@/constants/Variables";
 import {
   setDeparture,
   setDestination,
 } from "@/data/redux/addressListSlice/slice";
 import { RootState } from "@/data/redux/store";
+import { UIState } from "@/data/redux/UIStateSlice/slice";
+import Location from "expo-location";
 import {
   Animated,
   Dimensions,
   StyleSheet,
   TouchableOpacity,
+  View,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import BoldButton from "../BoldButton";
 import DestinationField from "./DestinationField";
 import { LocationCoords } from "./interfaces";
 import LastDestinations from "./LastThreeDestinations";
-import Location from "expo-location";
-import { UIState } from "@/data/redux/UIStateSlice/slice";
 
 type BottomContentProps = {
   animateToState: (animateTo: UIState) => void;
@@ -73,11 +74,14 @@ const BottomContent: React.FC<BottomContentProps> = ({ animateToState }) => {
     <Animated.View style={[styles.container]}>
       <TouchableOpacity style={styles.slider}></TouchableOpacity>
       {uiState === "setting-departure" || uiState === "setting-destination" ? (
-        <BoldButton
-          buttonText="Confirm Location"
-          buttonStyle={{ backgroundColor: Colors.light.primary }}
-          onPress={handleSettingLocation}
-        />
+        <View style={{ alignItems: "center" }}>
+          <BoldButton
+            buttonText="Confirm Location"
+            buttonStyle={{ backgroundColor: Colors.light.primary }}
+            onPress={handleSettingLocation}
+            width={340}
+          />
+        </View>
       ) : (
         <DestinationField showRouteSheet={() => animateToState("full")} />
       )}

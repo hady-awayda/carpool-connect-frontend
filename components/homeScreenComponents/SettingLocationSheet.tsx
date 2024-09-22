@@ -1,13 +1,7 @@
-import { Colors } from "@/constants/Variables";
-import {
-  setDeparture,
-  setDestination,
-} from "@/data/redux/addressListSlice/slice";
+import { Colors, Typography } from "@/constants/Variables";
 import { RootState } from "@/data/redux/store";
 import { UIState } from "@/data/redux/UIStateSlice/slice";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import axios from "axios";
-import { useEffect, useState } from "react";
 import {
   Animated,
   Dimensions,
@@ -15,7 +9,7 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const { height } = Dimensions.get("window");
 
@@ -27,23 +21,15 @@ const SettingLocationSheet: React.FC<SettingLocationSheetProps> = ({
   animateToState,
 }) => {
   const uiState = useSelector((state: RootState) => state.uiState.uiState);
-  const dispatch = useDispatch();
-  const [locationOptions, setLocationOptions] = useState([]);
-
-  const handleConfirmLocation = (place: any) => {
-    if (uiState === "setting-departure") {
-      dispatch(setDeparture({ name: place.name, coords: place.coords }));
-    } else if (uiState === "setting-destination") {
-      dispatch(setDestination({ name: place.name, coords: place.coords }));
-    }
-    animateToState("full");
-  };
 
   return (
     <Animated.View style={styles.sheetContainer}>
-      <TouchableOpacity onPress={() => animateToState("full")}>
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => animateToState("full")}
+      >
         <MaterialCommunityIcons
-          name="close"
+          name="chevron-left"
           size={24}
           color={Colors.light.text}
         />
@@ -59,27 +45,44 @@ const styles = StyleSheet.create({
   sheetContainer: {
     position: "absolute",
     top: 0,
-    height: height * 0.15,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    flex: 1,
+    justifyContent: "flex-start",
+    alignItems: "flex-end",
+    flexDirection: "row",
+    height: height * 0.12,
     width: "100%",
-    backgroundColor: "#fff",
     borderRadius: 20,
     paddingHorizontal: 20,
     zIndex: 3,
   },
   title: {
-    fontSize: 18,
-    textAlign: "center",
-    marginVertical: 10,
+    height: 50,
+    paddingLeft: 32,
+    paddingTop: 7,
     color: Colors.light.text,
+    ...Typography.heading,
   },
-  placeName: {
-    fontSize: 16,
-    color: Colors.light.primary,
-    marginVertical: 8,
-  },
-  placeAddress: {
-    fontSize: 12,
-    color: Colors.light.secondary,
+  backButton: {
+    width: 50,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 44,
+    borderColor: Colors.light.backgroundIcons,
+    borderWidth: 0.5,
+    backgroundColor: "#fff",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 10,
+    marginRight: 10,
   },
 });
 
