@@ -49,25 +49,3 @@ const DateTimePickerInput: React.FC<DateTimePickerInputProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#fff",
-    borderColor: "#ddd",
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-  },
-  textInput: {
-    flex: 1,
-    fontSize: 16,
-  },
-  icon: {
-    marginLeft: 8,
-  },
-});
-
-export default DateTimePickerInput;

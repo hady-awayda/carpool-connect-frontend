@@ -1,31 +1,28 @@
+import { useLocalSearchParams } from "expo-router";
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-import { useRoute } from "@react-navigation/native";
 import BoldButton from "../BoldButton";
-import { useNavigation } from "@react-navigation/native";
 
-const ScheduleDetails = () => {
-  const route = useRoute();
-  const navigation = useNavigation();
+const ScheduleDetails: React.FC = () => {
+  const { id, schedule } = useLocalSearchParams();
+  const scheduleData = JSON.parse(schedule);
+  console.log(id);
 
   return (
     <View style={styles.container}>
-      {/* Top third: Schedule information */}
       <View style={styles.topSection}>
         <Text>From: {schedule.departureName}</Text>
         <Text>To: {schedule.destinationName}</Text>
         <Text>Departure Time: {schedule.departureTime}</Text>
         <Text>Arrival Time: {schedule.destinationTime}</Text>
 
-        {/* Button to navigate to User Profile */}
         <BoldButton
           buttonText="Go to User Profile"
           onPress={() => navigation.navigate("UserProfile")}
         />
       </View>
 
-      {/* Bottom two-thirds: Scrollable Map */}
       <View style={styles.mapSection}>
         <MapView
           style={styles.map}

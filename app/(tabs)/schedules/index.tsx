@@ -1,10 +1,9 @@
 import { useRouter } from "expo-router";
-import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import BoldButton from "../BoldButton";
-import UserSchedulesList from "./UserSchedulesList";
-import { Colors, Typography } from "../../constants/Variables";
+import { Colors, Typography } from "../../../constants/Variables";
+import BoldButton from "../../../components/BoldButton";
+import UserSchedulesList from "./SchedulesListScreen";
 
 const SchedulesScreen: React.FC = () => {
   const router = useRouter();

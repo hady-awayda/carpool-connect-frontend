@@ -1,16 +1,16 @@
+import { Schedule } from "@/components/scheduleScreenComponents/ScheduleInterfaces";
 import { Colors, Typography } from "@/constants/Variables";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
   Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import MapView, { LatLng, Marker, Polyline } from "react-native-maps";
-import axios from "axios";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Schedule } from "./Schedule";
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 

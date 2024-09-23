@@ -19,24 +19,9 @@ export default function RootLayout() {
     <Provider store={store}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <Stack screenOptions={{ headerShown: false, animation: "simple_push" }}>
-          <Stack.Screen
-            name="index"
-            options={{
-              title: "Welcome",
-            }}
-          />
-          <Stack.Screen
-            name="login"
-            options={{
-              title: "Login",
-            }}
-          />
-          <Stack.Screen
-            name="register"
-            options={{
-              title: "Sign Up",
-            }}
-          />
+          <Stack.Screen name="index" />
+          <Stack.Screen name="login" />
+          <Stack.Screen name="register" />
         </Stack>
       </ThemeProvider>
     </Provider>

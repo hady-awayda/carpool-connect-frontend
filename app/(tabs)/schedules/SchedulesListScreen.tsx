@@ -1,15 +1,16 @@
-import React, { useEffect, useState, useCallback } from "react";
-import {
-  View,
-  FlatList,
-  ActivityIndicator,
-  Text,
-  Alert,
-  RefreshControl,
-} from "react-native";
-import ScheduleCard from "./ScheduleCard";
-import { Schedule } from "./Schedule";
 import { fetchUserSchedules } from "@/data/remote/userSchedules/read";
+import { useCallback, useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  RefreshControl,
+  Text,
+  View,
+} from "react-native";
+import { Schedule } from "../../../components/scheduleScreenComponents/ScheduleInterfaces";
+import { router } from "expo-router";
+import ScheduleCard from "./ScheduleCard";
 
 const UserSchedulesList: React.FC = () => {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
@@ -34,6 +35,13 @@ const UserSchedulesList: React.FC = () => {
     fetchData();
   }, []);
 
+  const navigateToScheduleDetails = (schedule: Schedule) => {
+    router.push({
+      pathname: "/(screens)/ScheduleTab",
+      params: { id: schedule.id, schedule: JSON.stringify(schedule) },
+    });
+  };
+
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     fetchData();
@@ -56,7 +64,7 @@ const UserSchedulesList: React.FC = () => {
         renderItem={({ item }) => (
           <ScheduleCard
             schedule={item}
-            onPress={() => console.log("Pressed schedule", item.id)}
+            onPress={() => navigateToScheduleDetails(item)}
           />
         )}
         ListFooterComponent={() => (
