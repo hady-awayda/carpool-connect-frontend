@@ -1,5 +1,3 @@
-import { Schedule } from "./ScheduleInterfaces";
-
 export type Schedule = {
   id: number;
   userId: number;
