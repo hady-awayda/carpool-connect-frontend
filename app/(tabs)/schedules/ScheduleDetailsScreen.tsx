@@ -1,12 +1,20 @@
 import BoldButton from "@/components/BoldButton";
 import { Schedule } from "@/components/scheduleScreenComponents/ScheduleInterfaces";
-import { Typography } from "@/constants/Variables";
-import { useLocalSearchParams, useSegments } from "expo-router";
+import { Colors, Typography } from "@/constants/Variables";
+import { useLocalSearchParams, useRouter, useSegments } from "expo-router";
 import React from "react";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Mapbox from "../../../components/Mapbox";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const ScheduleDetails: React.FC = () => {
+  const router = useRouter();
   const { id, schedule } = useLocalSearchParams();
   const currentTab = useSegments()[1];
 
@@ -15,16 +23,12 @@ const ScheduleDetails: React.FC = () => {
     : null;
 
   const {
+    userId,
     scheduleType,
     departureName = "Unknown",
     destinationName = "Unknown",
-    departureLat,
-    departureLng,
-    destinationLat,
-    destinationLng,
     departureTime,
     arrivalTime,
-    schedulePattern = [],
   } = scheduleData;
 
   const formatTime = (time: Date) => {
@@ -50,7 +54,14 @@ const ScheduleDetails: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <View>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <MaterialCommunityIcons
+            name="arrow-left"
+            size={32}
+            color={Colors.light.text}
+          />
+        </TouchableOpacity>
         <Text style={styles.title}>Schedule Details</Text>
       </View>
       <View style={styles.scheduleCard}>
@@ -84,11 +95,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     justifyContent: "flex-start",
     alignItems: "center",
-    gap: height / 30,
+    gap: height / 128,
+  },
+  header: {
+    marginTop: height / 40,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    paddingTop: 28,
+    paddingBottom: 10,
+    backgroundColor: "#fff",
+    width: width * 0.9,
   },
   title: {
-    marginTop: height / 16,
     ...Typography.heading,
+    marginLeft: width / 8,
   },
   scheduleCard: {
     height: height / 5,
@@ -99,15 +120,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     width: width * 0.9,
-  },
-  map: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  mapContainer: {
-    width: width * 0.9,
-    height: width * 1.2,
-    borderRadius: 10,
-    overflow: "hidden",
   },
 });
 

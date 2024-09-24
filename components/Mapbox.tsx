@@ -11,12 +11,13 @@ const { width } = Dimensions.get("window");
 
 const mapSizes = {
   normal: {
-    width: width * 0.9,
-    height: width * 1.2,
+    width,
+    height: width * 1.35,
   },
   mini: {
     width: width / 2.75,
     height: width / 2.75,
+    borderRadius: 10,
   },
 };
 
@@ -90,7 +91,6 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   mapContainer: {
-    borderRadius: 10,
     overflow: "hidden",
   },
 });
