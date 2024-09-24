@@ -59,6 +59,10 @@ export const Typography: { [key: string]: TextStyle } = {
     fontSize: 14,
     fontFamily: "Urbanist_400Regular",
   },
+  text2: {
+    fontSize: 14,
+    fontFamily: "Urbanist_700Bold",
+  },
 };
 
 export const Spacing = {

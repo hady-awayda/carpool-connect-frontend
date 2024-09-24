@@ -1,6 +1,7 @@
 import BoldButton from "@/components/BoldButton";
 import { Schedule } from "@/components/scheduleScreenComponents/ScheduleInterfaces";
 import { Colors, Typography } from "@/constants/Variables";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter, useSegments } from "expo-router";
 import React from "react";
 import {
@@ -11,7 +12,6 @@ import {
   View,
 } from "react-native";
 import Mapbox from "../../../components/Mapbox";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -76,18 +76,23 @@ const ScheduleDetails: React.FC = () => {
       </View>
 
       <View style={styles.scheduleCard}>
-        <View>
-          {currentTab === "schedules" && (
-            <BoldButton
-              buttonText="View Profile"
-              onPress={() => handleProfileNavigation(userId)}
-            />
-          )}
-        </View>
-        <View style={styles.infoContainer}>
+        <View style={styles.headerContainer}>
           <Text style={styles.title}>
             {scheduleType[0].toUpperCase() + scheduleType.slice(1)}
           </Text>
+          <View>
+            {currentTab === "schedules" && (
+              <BoldButton
+                buttonText="User Profile"
+                width={width / 4}
+                height={height / 30}
+                textStyle={{ ...Typography.text2 }}
+                onPress={() => handleProfileNavigation(userId)}
+              />
+            )}
+          </View>
+        </View>
+        <View style={styles.infoContainer}>
           <View style={styles.textContainer}>
             <Text style={styles.leftText}>From:</Text>
             <Text style={styles.text}>
@@ -168,6 +173,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     width: width * 0.95,
+  },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    width: width * 0.8,
   },
   infoContainer: {
     flex: 1,
