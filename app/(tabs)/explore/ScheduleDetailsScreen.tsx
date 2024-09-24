@@ -81,7 +81,7 @@ const ScheduleDetails: React.FC = () => {
             {scheduleType[0].toUpperCase() + scheduleType.slice(1)}
           </Text>
           <View>
-            {currentTab !== "schedules" && (
+            {currentTab === "explore" && (
               <BorderedButton
                 buttonText="User Profile"
                 width={width / 4}

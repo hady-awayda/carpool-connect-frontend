@@ -10,6 +10,8 @@ export type Schedule = {
   destinationLng: number;
   departureTime: Date;
   arrivalTime: Date;
+  isDefault: boolean;
+  isActive: boolean;
   schedulePattern?: boolean[] | null;
   schedulePreference?: string[] | null;
 };

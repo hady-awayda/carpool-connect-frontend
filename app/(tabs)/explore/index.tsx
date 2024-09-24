@@ -4,25 +4,42 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Colors, Typography } from "../../../constants/Variables";
 import BoldButton from "../../../components/BoldButton";
 import UserSchedulesList from "./SchedulesListScreen";
+import { useState } from "react";
 
 const SchedulesScreen: React.FC = () => {
-  // const handleFilters = () => {};
+  const [departureTimeFlexibility, setDepartureTimeFlexibility] =
+    useState<number>(0.5);
+  const [destinationTimeFlexibility, setDestinationTimeFlexibility] =
+    useState<number>(0.5);
+  const [departureDistanceProximity, setDepartureDistanceProximity] =
+    useState<number>(1);
+  const [destinationDistanceProximity, setDestinationDistanceProximity] =
+    useState<number>(1);
+
+  const handleFilters = () => {};
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.header}>
         <Text style={styles.title}>Find Schedules</Text>
 
-        {/* <BoldButton
+        <BoldButton
           onPress={handleFilters}
           buttonText="Filters"
           width={80}
           height={40}
           buttonStyle={{ backgroundColor: Colors.light.primary }}
-        /> */}
+        />
       </View>
 
-      <UserSchedulesList />
+      <UserSchedulesList
+        {...{
+          departureTimeFlexibility,
+          destinationTimeFlexibility,
+          departureDistanceProximity,
+          destinationDistanceProximity,
+        }}
+      />
     </SafeAreaView>
   );
 };

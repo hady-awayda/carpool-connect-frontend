@@ -1,3 +1,4 @@
+import BoldButton from "@/components/BoldButton";
 import Mapbox from "@/components/Mapbox";
 import { ScheduleCardProps } from "@/components/scheduleScreenComponents/ScheduleInterfaces";
 import { Colors, Typography } from "@/constants/Variables";
@@ -18,6 +19,7 @@ const ScheduleCard = ({ scheduleData, onPress }: ScheduleCardProps) => {
     destinationName = "Unknown",
     departureTime,
     arrivalTime,
+    isDefault,
     schedulePattern = [],
   } = scheduleData;
 
@@ -34,6 +36,8 @@ const ScheduleCard = ({ scheduleData, onPress }: ScheduleCardProps) => {
     return `${hours}:${minutes} ${ampm}`;
   };
 
+  const { width, height } = Dimensions.get("window");
+
   return (
     <TouchableOpacity
       activeOpacity={0.85}
@@ -45,9 +49,20 @@ const ScheduleCard = ({ scheduleData, onPress }: ScheduleCardProps) => {
       </View>
 
       <View style={styles.infoContainer}>
-        <Text style={styles.title}>
-          {scheduleType[0].toUpperCase() + scheduleType.slice(1)}
-        </Text>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>
+            {scheduleType[0].toUpperCase() + scheduleType.slice(1)}
+          </Text>
+          {isDefault && (
+            <BoldButton
+              buttonText="Main"
+              width={width / 7}
+              height={height / 34}
+              buttonStyle={{ backgroundColor: Colors.light.primary }}
+              textStyle={Typography.text2}
+            />
+          )}
+        </View>
         <View style={styles.textContainer}>
           <Text style={styles.leftText}>From:</Text>
           <Text style={styles.text}>
@@ -114,6 +129,11 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     flex: 1,
+  },
+  titleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   title: {
     ...Typography.subheading,
