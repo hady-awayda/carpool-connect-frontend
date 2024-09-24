@@ -12,6 +12,7 @@ import {
   View,
 } from "react-native";
 import Mapbox from "../../../components/Mapbox";
+import { setDefaultSchedule } from "@/data/remote/userSchedules/setDefault";
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -54,6 +55,16 @@ const ScheduleDetails: React.FC = () => {
     });
   };
 
+  const handleSetDefault = async () => {
+    try {
+      const res = await setDefaultSchedule(scheduleData.id);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+      alert("Failed to set default schedule");
+    }
+  };
+
   if (!scheduleData) {
     return (
       <View style={styles.container}>
@@ -81,7 +92,7 @@ const ScheduleDetails: React.FC = () => {
             {scheduleType[0].toUpperCase() + scheduleType.slice(1)}
           </Text>
           <View>
-            {currentTab === "explore" && (
+            {currentTab === "explore" ? (
               <BorderedButton
                 buttonText="User Profile"
                 width={width / 4}
@@ -90,6 +101,14 @@ const ScheduleDetails: React.FC = () => {
                 borderColor={Colors.light.secondary}
                 textColor={Colors.light.secondary}
                 onPress={() => handleProfileNavigation(userId)}
+              />
+            ) : (
+              <BorderedButton
+                buttonText="Set as Main"
+                width={width / 4}
+                height={height / 34}
+                textStyle={Typography.text2}
+                onPress={handleSetDefault}
               />
             )}
           </View>

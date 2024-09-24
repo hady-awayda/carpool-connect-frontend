@@ -59,7 +59,7 @@ const UserSchedulesList: React.FC = () => {
   return (
     <View style={{ flex: 1 }}>
       <FlatList
-        data={schedules}
+        data={schedules.reverse()}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={{ marginHorizontal: 16 }}>
