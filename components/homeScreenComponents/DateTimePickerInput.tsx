@@ -1,15 +1,7 @@
 // DateTimePickerInput.tsx
-import React, { useState } from "react";
-import {
-  TextInput,
-  TextInputProps,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-} from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { Colors } from "@/constants/Variables";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import React from "react";
+import { TextInputProps, View } from "react-native";
 
 interface DateTimePickerInputProps extends TextInputProps {
   value: string;
@@ -49,3 +41,5 @@ const DateTimePickerInput: React.FC<DateTimePickerInputProps> = ({
     </View>
   );
 };
+
+export default DateTimePickerInput;

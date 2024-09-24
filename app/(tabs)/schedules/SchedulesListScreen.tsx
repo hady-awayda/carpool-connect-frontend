@@ -37,7 +37,7 @@ const UserSchedulesList: React.FC = () => {
 
   const navigateToScheduleDetails = (schedule: Schedule) => {
     router.push({
-      pathname: "/(screens)/ScheduleTab",
+      pathname: "/(tabs)/schedules/ScheduleDetailsScreen",
       params: { id: schedule.id, schedule: JSON.stringify(schedule) },
     });
   };

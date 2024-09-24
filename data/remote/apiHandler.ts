@@ -34,7 +34,9 @@ api.interceptors.request.use(
 api.interceptors.request.use(
   async (config) => {
     console.log("Axios Base URL:", config.baseURL);
-    const token = store.getState().token.token;
+    // const token = store.getState().token.token;
+    const token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo5LCJuYW1lIjoiaGFkeSIsImVtYWlsIjoiaGFkeTJAdXNlci5jb20iLCJyb2xlIjoidXNlciJ9LCJpYXQiOjE3MjcxNDg3NzYsImV4cCI6MTc5MDI2Mzk3Nn0.2VcNV-rQ5f-GuEtwe77SyH-4XL4sVRshzPMGFUfbgAQ";
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
