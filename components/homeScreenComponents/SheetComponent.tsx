@@ -43,6 +43,8 @@ const daysOfWeek = [
   "Sunday",
 ];
 
+const { width } = Dimensions.get("window");
+
 const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
   const [showDateTimePicker, setShowPicker] = useState(false);
 
@@ -550,12 +552,12 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
                 buttonText="+ Add Schedule"
                 onPress={handleSubmitSchedule}
                 buttonStyle={{ backgroundColor: Colors.light.primary }}
-                width={352}
+                width={width * 0.915}
               />
               <BorderedButton
                 buttonText="Set Days"
                 onPress={handleArrowPress}
-                width={352}
+                width={width * 0.915}
               />
             </Animated.View>
           </>

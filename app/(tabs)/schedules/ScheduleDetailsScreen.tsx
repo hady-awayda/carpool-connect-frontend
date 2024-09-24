@@ -1,22 +1,18 @@
 import BoldButton from "@/components/BoldButton";
 import { Schedule } from "@/components/scheduleScreenComponents/ScheduleInterfaces";
-import { Colors } from "@/constants/Variables";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import axios from "axios";
-import { useLocalSearchParams } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { Typography } from "@/constants/Variables";
+import { useLocalSearchParams, useSegments } from "expo-router";
+import React from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
-import MapView, { LatLng, Marker, Polyline } from "react-native-maps";
+import Mapbox from "../../../components/Mapbox";
 
 const ScheduleDetails: React.FC = () => {
   const { id, schedule } = useLocalSearchParams();
+  const currentTab = useSegments()[1];
 
   const scheduleData: Schedule = schedule
     ? JSON.parse(schedule as string)
     : null;
-  console.log(scheduleData.destinationLat, scheduleData.destinationLng);
-
-  const [route, setRoute] = useState<LatLng[]>([]);
 
   const {
     scheduleType,
@@ -30,71 +26,6 @@ const ScheduleDetails: React.FC = () => {
     arrivalTime,
     schedulePattern = [],
   } = scheduleData;
-
-  const parseCoordinate = (value: string | number) => {
-    const parsed = parseFloat(String(value));
-    return isNaN(parsed) ? 0 : parsed;
-  };
-
-  const depLat = parseCoordinate(departureLat);
-  const depLng = parseCoordinate(departureLng);
-  const destLat = parseCoordinate(destinationLat);
-  const destLng = parseCoordinate(destinationLng);
-
-  const latitudeDelta = Math.abs(depLat - destLat) * 1.5;
-  const longitudeDelta = Math.abs(depLng - destLng) * 1.5;
-
-  const fetchRoute = async () => {
-    try {
-      const response = await axios.get(
-        `https://maps.googleapis.com/maps/api/directions/json?origin=${depLat},${depLng}&destination=${destLat},${destLng}&key=${"AIzaSyCzduXSDjg5mbh4txUTEVVu7LN1O53_fEc"}`
-      );
-      const points = response.data.routes[0].overview_polyline.points;
-      const decodedPoints = decodePolyline(points);
-      setRoute(decodedPoints);
-    } catch (error) {
-      console.error("Error fetching directions:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchRoute();
-  }, [depLat, depLng, destLat, destLng]);
-
-  const decodePolyline = (encoded: string): LatLng[] => {
-    let points = [];
-    let index = 0,
-      len = encoded.length;
-    let lat = 0,
-      lng = 0;
-
-    while (index < len) {
-      let b,
-        shift = 0,
-        result = 0;
-      do {
-        b = encoded.charCodeAt(index++) - 63;
-        result |= (b & 0x1f) << shift;
-        shift += 5;
-      } while (b >= 0x20);
-      let dlat = (result & 1) != 0 ? ~(result >> 1) : result >> 1;
-      lat += dlat;
-
-      shift = 0;
-      result = 0;
-      do {
-        b = encoded.charCodeAt(index++) - 63;
-        result |= (b & 0x1f) << shift;
-        shift += 5;
-      } while (b >= 0x20);
-      let dlng = (result & 1) != 0 ? ~(result >> 1) : result >> 1;
-      lng += dlng;
-
-      points.push({ latitude: lat / 1e5, longitude: lng / 1e5 });
-    }
-
-    return points;
-  };
 
   const formatTime = (time: Date) => {
     const date = new Date(time);
@@ -119,83 +50,55 @@ const ScheduleDetails: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.topSection}>
-        <Text>From: {departureName}</Text>
-        <Text>To: {destinationName}</Text>
-        <Text>Departure Time: {formatTime(departureTime)}</Text>
-        <Text>Arrival Time: {formatTime(arrivalTime)}</Text>
-
-        <BoldButton
-          buttonText="Go to User Profile"
-          onPress={() => console.log("Navigating to User Profile")}
-        />
+      <View>
+        <Text style={styles.title}>Schedule Details</Text>
       </View>
-
-      <View style={styles.mapSection}>
-        <View style={styles.mapContainer}>
-          <MapView
-            style={styles.map}
-            initialRegion={{
-              latitude: (depLat + destLat) / 2,
-              longitude: (depLng + destLng) / 2,
-              latitudeDelta: latitudeDelta || 0.05,
-              longitudeDelta: longitudeDelta || 0.05,
-            }}
-            scrollEnabled={true}
-            zoomEnabled={true}
-            customMapStyle={[
-              {
-                elementType: "labels",
-                stylers: [{ visibility: "off" }],
-              },
-            ]}
-          >
-            <Marker coordinate={{ latitude: depLat, longitude: depLng }}>
-              <MaterialCommunityIcons
-                name="map-marker"
-                size={30}
-                color={Colors.light.secondary}
-              />
-            </Marker>
-
-            <Marker coordinate={{ latitude: destLat, longitude: destLng }}>
-              <MaterialCommunityIcons
-                name="map-marker"
-                size={28}
-                color={Colors.light.blue}
-              />
-            </Marker>
-            {route.length > 0 && (
-              <Polyline
-                coordinates={route}
-                strokeColor={Colors.light.primary}
-                strokeWidth={3}
-              />
-            )}
-          </MapView>
+      <View style={styles.scheduleCard}>
+        <View>
+          {currentTab !== "schedules" && (
+            <BoldButton
+              buttonText="Go to User Profile"
+              onPress={() => console.log("Navigating to User Profile")}
+            />
+          )}
+        </View>
+        <View>
+          <Text>From: {departureName}</Text>
+          <Text>To: {destinationName}</Text>
+          <Text>Departure Time: {formatTime(departureTime)}</Text>
+          <Text>Arrival Time: {formatTime(arrivalTime)}</Text>
         </View>
       </View>
+
+      <Mapbox {...{ scheduleData, mapSize: "normal" }} />
     </View>
   );
 };
 
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: "column",
     backgroundColor: "#fff",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
+    gap: height / 30,
   },
-  topSection: {
-    flex: 1 / 3,
+  title: {
+    marginTop: height / 16,
+    ...Typography.heading,
+  },
+  scheduleCard: {
+    height: height / 5,
+    marginBottom: height / 200,
     padding: 16,
     justifyContent: "center",
     alignItems: "center",
-  },
-  mapSection: {
-    flex: 2 / 3,
+    borderWidth: 1,
+    borderRadius: 8,
+    width: width * 0.9,
   },
   map: {
     ...StyleSheet.absoluteFillObject,

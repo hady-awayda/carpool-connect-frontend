@@ -2,7 +2,7 @@ import { Colors } from "@/constants/Variables";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { useEffect, useState } from "react";
-import { BackHandler, Keyboard, Platform } from "react-native";
+import { Keyboard, Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function TabLayout() {
