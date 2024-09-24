@@ -114,7 +114,11 @@ const ScheduleCard = ({ schedule, onPress }: ScheduleCardProps) => {
   };
 
   return (
-    <TouchableOpacity activeOpacity={0.8} onPress={onPress} style={styles.card}>
+    <TouchableOpacity
+      activeOpacity={0.85}
+      onPress={onPress}
+      style={styles.card}
+    >
       <View style={styles.mapContainer}>
         <MapView
           style={styles.map}

@@ -41,8 +41,20 @@ const Mapbox = ({
       <MapView
         style={styles.map}
         initialRegion={{ latitude, longitude, latitudeDelta, longitudeDelta }}
-        scrollEnabled={true}
-        zoomEnabled={true}
+        {...(mapSize === "mini" && {
+          scrollEnabled: false,
+          zoomEnabled: false,
+          customMapStyle: [
+            {
+              elementType: "labels",
+              stylers: [{ visibility: "off" }],
+            },
+          ],
+        })}
+        {...(mapSize === "normal" && {
+          scrollEnabled: true,
+          zoomEnabled: true,
+        })}
         showsCompass={false}
       >
         <Marker coordinate={{ latitude: depLat, longitude: depLng }}>
