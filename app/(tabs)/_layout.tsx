@@ -31,15 +31,6 @@ export default function TabLayout() {
     };
   }, []);
 
-  // useEffect(() => {
-  //   const backHandler = BackHandler.addEventListener(
-  //     "hardwareBackPress",
-  //     () => true
-  //   );
-
-  //   return () => backHandler.remove();
-  // }, []);
-
   return (
     <Tabs
       screenOptions={{

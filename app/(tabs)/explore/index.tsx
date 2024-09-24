@@ -6,20 +6,20 @@ import BoldButton from "../../../components/BoldButton";
 import UserSchedulesList from "./SchedulesListScreen";
 
 const SchedulesScreen: React.FC = () => {
-  const handleFilters = () => {};
+  // const handleFilters = () => {};
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.header}>
-        <Text style={styles.title}>Find Rides</Text>
+        <Text style={styles.title}>Find Schedules</Text>
 
-        <BoldButton
+        {/* <BoldButton
           onPress={handleFilters}
           buttonText="Filters"
           width={80}
           height={40}
           buttonStyle={{ backgroundColor: Colors.light.primary }}
-        />
+        /> */}
       </View>
 
       <UserSchedulesList />

@@ -1,4 +1,4 @@
-import { fetchUserSchedules } from "@/data/remote/userSchedules/read";
+import { findSchedules } from "@/data/remote/findSchedules/read";
 import { router } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import {
@@ -20,7 +20,7 @@ const UserSchedulesList: React.FC = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetchUserSchedules();
+      const response = await findSchedules();
       setSchedules(response);
       setLoading(false);
       setRefreshing(false);
@@ -37,7 +37,7 @@ const UserSchedulesList: React.FC = () => {
 
   const navigateToScheduleDetails = (schedule: Schedule) => {
     router.push({
-      pathname: "/(tabs)/schedules/ScheduleDetailsScreen",
+      pathname: "/(tabs)/explore/ScheduleDetailsScreen",
       params: { id: schedule.id, schedule: JSON.stringify(schedule) },
     });
   };
