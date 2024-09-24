@@ -12,7 +12,19 @@ import {
 import { Schedule } from "../../../components/scheduleScreenComponents/ScheduleInterfaces";
 import ScheduleCard from "./ScheduleCard";
 
-const UserSchedulesList: React.FC = () => {
+type FindSchedulesProps = {
+  departureTimeFlexibility: number;
+  destinationTimeFlexibility: number;
+  departureDistanceProximity: number;
+  destinationDistanceProximity: number;
+};
+
+const UserSchedulesList: React.FC<FindSchedulesProps> = ({
+  departureTimeFlexibility,
+  destinationTimeFlexibility,
+  departureDistanceProximity,
+  destinationDistanceProximity,
+}) => {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
@@ -20,7 +32,13 @@ const UserSchedulesList: React.FC = () => {
 
   const fetchData = async () => {
     try {
-      const response = await findSchedules();
+      const response = await findSchedules(
+        departureTimeFlexibility,
+        destinationTimeFlexibility,
+        departureDistanceProximity,
+        destinationDistanceProximity,
+        undefined
+      );
       setSchedules(response);
       setLoading(false);
       setRefreshing(false);
