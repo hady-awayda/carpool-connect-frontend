@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Variables";
+import { Colors, Typography } from "@/constants/Variables";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useEffect, useRef } from "react";
 import {
@@ -21,9 +21,11 @@ const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
   placeholder,
   inputRef,
   onChangeText,
-  onMapLocationSelect,
   onFocus,
   onBlur,
+  onPress,
+  onIcon1Press,
+  onIcon2Press,
   isFocused,
   leftIcon1,
   leftIcon2,
@@ -59,7 +61,8 @@ const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
         />
       )}
 
-      <View
+      <TouchableOpacity
+        onPress={onPress}
         style={[
           styles.inputContainer,
           isFocused && styles.focusedInputContainer,
@@ -76,13 +79,13 @@ const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
           cursorColor={Colors.light.primary}
           selectionColor={Colors.light.primary}
         />
-      </View>
+      </TouchableOpacity>
 
       {isFocused && (
         <>
           {value !== "" && (
             <TouchableOpacity
-              onPress={() => onChangeText("")}
+              onPress={onIcon1Press}
               style={styles.rightIconButton}
             >
               <Ionicons
@@ -92,10 +95,7 @@ const AnimatedTextInput: React.FC<AnimatedTextInputProps> = ({
               />
             </TouchableOpacity>
           )}
-          <TouchableOpacity
-            onPress={onMapLocationSelect}
-            style={styles.rightIcon}
-          >
+          <TouchableOpacity onPress={onIcon2Press} style={styles.rightIcon}>
             <MaterialCommunityIcons
               name={rightIcon2?.name}
               size={24}
@@ -123,32 +123,34 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   inputContainer: {
-    borderWidth: 1,
-    borderColor: "#fff",
+    height: 50,
     paddingLeft: 48,
     paddingRight: 80,
-    justifyContent: "center",
     backgroundColor: "transparent",
+    borderWidth: 1,
+    borderColor: "#fff",
   },
   focusedInputContainer: {
-    backgroundColor: Colors.light.background,
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "transparent",
   },
   textInput: {
     fontSize: 16,
     color: "#000",
-    height: 48,
+    height: 50,
+    ...Typography.title,
   },
   overlayBorder: {
     position: "absolute",
-    top: -0.5,
     left: 0,
     right: 0,
-    bottom: 0,
+    bottom: -1,
     height: 52,
     borderWidth: 2,
     borderColor: Colors.light.primary,
     borderRadius: 8,
-    zIndex: 1,
+    zIndex: 200,
   },
   leftIcon: {
     position: "absolute",

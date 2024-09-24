@@ -9,76 +9,49 @@ import {
   Dimensions,
   StyleSheet,
   TouchableOpacity,
+  View,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import BoldButton from "../BoldButton";
 import DestinationField from "./DestinationField";
-import { LocationCoords } from "./interfaces";
 import LastDestinations from "./LastThreeDestinations";
-import Location from "expo-location";
+import { BottomContentProps } from "./interfaces";
 
-type BottomContentProps = {
-  showRouteSheet: () => void;
-};
-
-const BottomContent: React.FC<BottomContentProps> = ({ showRouteSheet }) => {
-  const uiState = useSelector((state: RootState) => state.uiState.uiState);
+const BottomContent: React.FC<BottomContentProps> = ({ animateToState }) => {
   const dispatch = useDispatch();
-
-  const getMarkerCoordinates = async (): Promise<LocationCoords> => {
-    try {
-      let location = await Location.getCurrentPositionAsync({});
-      return {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-        latitudeDelta: 0.004,
-        longitudeDelta: 0.004,
-      };
-    } catch (error) {
-      console.error("Error fetching location:", error);
-      return { latitude: 0, longitude: 0, latitudeDelta: 0, longitudeDelta: 0 };
-    }
-  };
-
-  const getAddressName = async (coords: LocationCoords): Promise<string> => {
-    try {
-      const [address] = await Location.reverseGeocodeAsync({
-        latitude: coords.latitude,
-        longitude: coords.longitude,
-      });
-      return (
-        address.city || address.region || address.name || "Unknown Location"
-      );
-    } catch (error) {
-      console.error("Error in reverse geocoding:", error);
-      return "Unknown Location";
-    }
-  };
+  const uiState = useSelector((state: RootState) => state.uiState.uiState);
+  const search = useSelector((state: RootState) => state.address.search);
 
   const handleSettingLocation = async () => {
-    const coords = await getMarkerCoordinates();
-    const name = await getAddressName(coords);
-
     if (uiState === "setting-departure") {
-      dispatch(setDeparture({ name, coords }));
+      dispatch(setDeparture(search));
     } else if (uiState === "setting-destination") {
-      dispatch(setDestination({ name, coords }));
+      dispatch(setDestination(search));
     }
+
+    animateToState("full");
   };
 
   return (
     <Animated.View style={[styles.container]}>
       <TouchableOpacity style={styles.slider}></TouchableOpacity>
       {uiState === "setting-departure" || uiState === "setting-destination" ? (
-        <BoldButton
-          buttonText="Confirm Location"
-          buttonStyle={{ backgroundColor: Colors.light.primary }}
-          onPress={handleSettingLocation}
-        />
+        <View style={{ alignItems: "center" }}>
+          <BoldButton
+            buttonText={
+              uiState === "setting-departure"
+                ? "Confirm Departure"
+                : "Confirm Destination"
+            }
+            buttonStyle={{ backgroundColor: Colors.light.primary }}
+            onPress={handleSettingLocation}
+            width={340}
+          />
+        </View>
       ) : (
-        <DestinationField showRouteSheet={showRouteSheet} />
+        <DestinationField showRouteSheet={() => animateToState("full")} />
       )}
-      <LastDestinations />
+      <LastDestinations {...{ animateToState }} />
     </Animated.View>
   );
 };

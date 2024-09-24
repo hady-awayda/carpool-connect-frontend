@@ -35,12 +35,6 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
-  circle: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: "blue",
-  },
 });
 
 export default MapComponent;

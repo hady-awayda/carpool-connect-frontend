@@ -2,7 +2,7 @@ import { Colors } from "@/constants/Variables";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { useEffect, useState } from "react";
-import { BackHandler, Keyboard, Platform } from "react-native";
+import { Keyboard, Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function TabLayout() {
@@ -31,15 +31,6 @@ export default function TabLayout() {
     };
   }, []);
 
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      () => true
-    );
-
-    return () => backHandler.remove();
-  }, []);
-
   return (
     <Tabs
       screenOptions={{
@@ -57,7 +48,7 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="Schedule"
+        name="schedules"
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="calendar" color={color} size={size} />
@@ -65,7 +56,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="Explore"
+        name="explore"
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="search" color={color} size={size} />

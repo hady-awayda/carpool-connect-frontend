@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Variables";
+import { Colors, Typography } from "@/constants/Variables";
 import { useState } from "react";
 import {
   TouchableOpacity,
@@ -23,7 +23,7 @@ const BoldButton: React.FC<BoldButtonProps> = ({
   buttonStyle,
   textStyle,
   buttonText,
-  width,
+  width = 340,
   height = 54,
 }) => {
   const [animation] = useState(new Animated.Value(0));
@@ -93,11 +93,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonText: {
-    fontFamily: "Urbanist_700Bold",
     color: "#fff",
-    fontSize: 16,
     textAlign: "center",
     width: "100%",
+    ...Typography.title,
   },
   animationStyle: {
     flex: 1,

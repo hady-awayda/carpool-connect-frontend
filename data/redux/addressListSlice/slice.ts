@@ -1,26 +1,54 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { LocationProps } from "@/components/homeScreenComponents/interfaces";
+import {
+  Address,
+  LocationProps,
+} from "@/components/homeScreenComponents/interfaces";
 
 type AddressState = {
-  addressList: any[];
+  addressList: Address[];
   location: LocationProps;
   departure: LocationProps;
   destination: LocationProps;
+  search: LocationProps;
 };
 
 const initialState: AddressState = {
   addressList: [],
   location: {
     name: "Fetching...",
-    coords: null,
+    coords: {
+      latitude: 33.90105779618675,
+      longitude: 35.500431060791016,
+      latitudeDelta: 0.004,
+      longitudeDelta: 0.004,
+    },
   },
   departure: {
     name: "",
-    coords: null,
+    coords: {
+      latitude: 33.90105779618675,
+      longitude: 35.500431060791016,
+      latitudeDelta: 0.004,
+      longitudeDelta: 0.004,
+    },
   },
   destination: {
     name: "",
-    coords: null,
+    coords: {
+      latitude: 33.90105779618675,
+      longitude: 35.500431060791016,
+      latitudeDelta: 0.004,
+      longitudeDelta: 0.004,
+    },
+  },
+  search: {
+    name: "",
+    coords: {
+      latitude: 33.90105779618675,
+      longitude: 35.500431060791016,
+      latitudeDelta: 0.004,
+      longitudeDelta: 0.004,
+    },
   },
 };
 
@@ -40,10 +68,18 @@ const addressSlice = createSlice({
     setDestination: (state, action: PayloadAction<LocationProps>) => {
       state.destination = action.payload;
     },
+    setSearch: (state, action: PayloadAction<LocationProps>) => {
+      state.search = action.payload;
+    },
   },
 });
 
-export const { updateAddressList, setLocation, setDeparture, setDestination } =
-  addressSlice.actions;
+export const {
+  updateAddressList,
+  setLocation,
+  setDeparture,
+  setDestination,
+  setSearch,
+} = addressSlice.actions;
 
 export default addressSlice.reducer;

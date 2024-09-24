@@ -45,11 +45,11 @@ export default function WelcomeScreen() {
         Join our community to reduce traffic, save costs, and promote
         sustainability.
       </Text>
+      <View style={styles.credentialsContainer}>
+        <BoldButton buttonText="Login" onPress={handleLogin} />
 
-      <BoldButton buttonText="Login" onPress={handleLogin} />
-
-      <BorderedButton buttonText="Register" onPress={handleRegister} />
-
+        <BorderedButton buttonText="Register" onPress={handleRegister} />
+      </View>
       <Text style={styles.orText}>or login with</Text>
       <View style={styles.socialContainer}>
         <TouchableOpacity style={styles.socialButton}>
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   orText: {
     fontFamily: "Urbanist_400Regular",
     color: "#666",
-    marginBottom: 20,
+    marginBottom: 30,
   },
   socialContainer: {
     flexDirection: "row",
@@ -100,5 +100,10 @@ const styles = StyleSheet.create({
   },
   socialButton: {
     padding: 10,
+  },
+  credentialsContainer: {
+    height: 120,
+    justifyContent: "space-between",
+    marginBottom: 40,
   },
 });

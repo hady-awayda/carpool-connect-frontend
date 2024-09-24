@@ -1,4 +1,3 @@
-// src/data/redux/travelSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface TravelState {

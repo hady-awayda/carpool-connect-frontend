@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Variables";
+import { Colors, Typography } from "@/constants/Variables";
 import React, { useState } from "react";
 import {
   Animated,
@@ -17,6 +17,7 @@ type BorderedButtonProps = {
   borderColor?: string;
   width?: number;
   height?: number;
+  borderWidth?: number;
 };
 
 const BorderedButton: React.FC<BorderedButtonProps> = ({
@@ -26,8 +27,9 @@ const BorderedButton: React.FC<BorderedButtonProps> = ({
   buttonText,
   textColor,
   borderColor,
-  width,
-  height,
+  width = 340,
+  height = 54,
+  borderWidth = 1.5,
 }) => {
   const [animation] = useState(new Animated.Value(0));
   let pressInTime = 0;
@@ -74,7 +76,10 @@ const BorderedButton: React.FC<BorderedButtonProps> = ({
       style={[styles.button, buttonStyle, { width, height }]}
     >
       <Animated.View
-        style={[styles.animationStyle, { borderColor: animatedBorderColor }]}
+        style={[
+          styles.animationStyle,
+          { borderColor: animatedBorderColor, borderWidth },
+        ]}
       >
         <Animated.Text
           style={[styles.buttonText, textStyle, { color: animatedTextColor }]}
@@ -90,23 +95,20 @@ export default BorderedButton;
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: 5,
     width: "100%",
-    height: 54,
+    borderRadius: 5,
     justifyContent: "center",
     alignItems: "center",
   },
   buttonText: {
-    fontFamily: "Urbanist_700Bold",
-    fontSize: 16,
     textAlign: "center",
     width: "100%",
+    ...Typography.title,
   },
   animationStyle: {
     flex: 1,
     width: "100%",
     height: "100%",
-    borderWidth: 1,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 5,

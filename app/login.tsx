@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 20,
     backgroundColor: "#fff",
+    paddingBottom: 140,
   },
   title: {
     fontFamily: "Urbanist_700Bold",
@@ -116,6 +117,7 @@ const styles = StyleSheet.create({
     fontFamily: "Urbanist_400Regular",
     color: "#666",
     marginBottom: 12,
+    marginTop: 12,
   },
   errorText: {
     color: "red",

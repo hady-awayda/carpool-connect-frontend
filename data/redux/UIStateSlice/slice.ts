@@ -6,7 +6,8 @@ export type UIState =
   | "full"
   | "sheet-expanded"
   | "setting-departure"
-  | "setting-destination";
+  | "setting-destination"
+  | "slide-1";
 
 interface UIStateSlice {
   uiState: UIState;
