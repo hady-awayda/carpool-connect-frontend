@@ -1,4 +1,4 @@
-import BoldButton from "@/components/BoldButton";
+import BorderedButton from "@/components/BorderedButton";
 import { Schedule } from "@/components/scheduleScreenComponents/ScheduleInterfaces";
 import { Colors, Typography } from "@/constants/Variables";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -17,7 +17,7 @@ const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const ScheduleDetails: React.FC = () => {
   const router = useRouter();
-  const { id, schedule } = useLocalSearchParams();
+  const { schedule } = useLocalSearchParams();
   const currentTab = useSegments()[1];
 
   const scheduleData: Schedule = schedule
@@ -49,7 +49,7 @@ const ScheduleDetails: React.FC = () => {
 
   const handleProfileNavigation = (userId: number) => {
     router.push({
-      pathname: "/(profiles)UserProfile",
+      pathname: "/(profiles)(userProfile)[id]",
       params: { id: userId, schedule: JSON.stringify(schedule) },
     });
   };
@@ -68,7 +68,7 @@ const ScheduleDetails: React.FC = () => {
         <TouchableOpacity onPress={() => router.back()}>
           <MaterialCommunityIcons
             name="arrow-left"
-            size={32}
+            size={28}
             color={Colors.light.text}
           />
         </TouchableOpacity>
@@ -81,12 +81,14 @@ const ScheduleDetails: React.FC = () => {
             {scheduleType[0].toUpperCase() + scheduleType.slice(1)}
           </Text>
           <View>
-            {currentTab === "schedules" && (
-              <BoldButton
+            {currentTab !== "schedules" && (
+              <BorderedButton
                 buttonText="User Profile"
                 width={width / 4}
                 height={height / 30}
                 textStyle={{ ...Typography.text2 }}
+                borderColor={Colors.light.secondary}
+                textColor={Colors.light.secondary}
                 onPress={() => handleProfileNavigation(userId)}
               />
             )}
@@ -162,7 +164,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     ...Typography.heading,
-    marginLeft: width / 8,
+    marginLeft: width / 7.5,
   },
   scheduleCard: {
     height: height / 5,
@@ -172,6 +174,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
     borderRadius: 8,
+    borderColor: "#ddd",
     width: width * 0.95,
   },
   headerContainer: {
@@ -179,6 +182,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "flex-start",
     width: width * 0.8,
+    marginBottom: 4,
   },
   infoContainer: {
     flex: 1,
@@ -187,6 +191,7 @@ const styles = StyleSheet.create({
   title: {
     ...Typography.subheading,
     marginBottom: 12,
+    color: Colors.light.primary,
   },
   textContainer: {
     flexDirection: "row",

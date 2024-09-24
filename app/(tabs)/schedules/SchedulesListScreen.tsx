@@ -1,4 +1,5 @@
 import { fetchUserSchedules } from "@/data/remote/userSchedules/read";
+import { router } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -9,7 +10,6 @@ import {
   View,
 } from "react-native";
 import { Schedule } from "../../../components/scheduleScreenComponents/ScheduleInterfaces";
-import { router } from "expo-router";
 import ScheduleCard from "./ScheduleCard";
 
 const UserSchedulesList: React.FC = () => {
@@ -62,10 +62,12 @@ const UserSchedulesList: React.FC = () => {
         data={schedules}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <ScheduleCard
-            schedule={item}
-            onPress={() => navigateToScheduleDetails(item)}
-          />
+          <View style={{ marginHorizontal: 16 }}>
+            <ScheduleCard
+              scheduleData={item}
+              onPress={() => navigateToScheduleDetails(item)}
+            />
+          </View>
         )}
         ListFooterComponent={() => (
           <Text style={{ textAlign: "center", padding: 10 }}>End of list</Text>

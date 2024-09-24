@@ -1,8 +1,6 @@
-import { Schedule } from "@/components/scheduleScreenComponents/ScheduleInterfaces";
+import Mapbox from "@/components/Mapbox";
+import { ScheduleCardProps } from "@/components/scheduleScreenComponents/ScheduleInterfaces";
 import { Colors, Typography } from "@/constants/Variables";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import axios from "axios";
-import { useEffect, useState } from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -10,95 +8,18 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import MapView, { LatLng, Marker, Polyline } from "react-native-maps";
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-type ScheduleCardProps = {
-  schedule: Schedule;
-  onPress: () => void;
-};
-
-const ScheduleCard = ({ schedule, onPress }: ScheduleCardProps) => {
-  const [route, setRoute] = useState<LatLng[]>([]);
-
+const ScheduleCard = ({ scheduleData, onPress }: ScheduleCardProps) => {
   const {
     scheduleType,
     departureName = "Unknown",
     destinationName = "Unknown",
-    departureLat,
-    departureLng,
-    destinationLat,
-    destinationLng,
     departureTime,
     arrivalTime,
     schedulePattern = [],
-  } = schedule;
-
-  const parseCoordinate = (value: string | number) => {
-    const parsed = parseFloat(String(value));
-    return isNaN(parsed) ? 0 : parsed;
-  };
-
-  const depLat = parseCoordinate(departureLat);
-  const depLng = parseCoordinate(departureLng);
-  const destLat = parseCoordinate(destinationLat);
-  const destLng = parseCoordinate(destinationLng);
-
-  const latitudeDelta = Math.abs(depLat - destLat) * 1.5;
-  const longitudeDelta = Math.abs(depLng - destLng) * 1.5;
-
-  const fetchRoute = async () => {
-    try {
-      const response = await axios.get(
-        `https://maps.googleapis.com/maps/api/directions/json?origin=${depLat},${depLng}&destination=${destLat},${destLng}&key=${"AIzaSyCzduXSDjg5mbh4txUTEVVu7LN1O53_fEc"}`
-      );
-      const points = response.data.routes[0].overview_polyline.points;
-      const decodedPoints = decodePolyline(points);
-      setRoute(decodedPoints);
-    } catch (error) {
-      console.error("Error fetching directions:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchRoute();
-  }, [depLat, depLng, destLat, destLng]);
-
-  const decodePolyline = (encoded: string): LatLng[] => {
-    let points = [];
-    let index = 0,
-      len = encoded.length;
-    let lat = 0,
-      lng = 0;
-
-    while (index < len) {
-      let b,
-        shift = 0,
-        result = 0;
-      do {
-        b = encoded.charCodeAt(index++) - 63;
-        result |= (b & 0x1f) << shift;
-        shift += 5;
-      } while (b >= 0x20);
-      let dlat = (result & 1) != 0 ? ~(result >> 1) : result >> 1;
-      lat += dlat;
-
-      shift = 0;
-      result = 0;
-      do {
-        b = encoded.charCodeAt(index++) - 63;
-        result |= (b & 0x1f) << shift;
-        shift += 5;
-      } while (b >= 0x20);
-      let dlng = (result & 1) != 0 ? ~(result >> 1) : result >> 1;
-      lng += dlng;
-
-      points.push({ latitude: lat / 1e5, longitude: lng / 1e5 });
-    }
-
-    return points;
-  };
+  } = scheduleData;
 
   const formatTime = (time: Date) => {
     const date = new Date(time);
@@ -120,46 +41,7 @@ const ScheduleCard = ({ schedule, onPress }: ScheduleCardProps) => {
       style={styles.card}
     >
       <View style={styles.mapContainer}>
-        <MapView
-          style={styles.map}
-          initialRegion={{
-            latitude: (depLat + destLat) / 2,
-            longitude: (depLng + destLng) / 2,
-            latitudeDelta: latitudeDelta || 0.05,
-            longitudeDelta: longitudeDelta || 0.05,
-          }}
-          scrollEnabled={false}
-          zoomEnabled={false}
-          customMapStyle={[
-            {
-              elementType: "labels",
-              stylers: [{ visibility: "off" }],
-            },
-          ]}
-        >
-          <Marker coordinate={{ latitude: depLat, longitude: depLng }}>
-            <MaterialCommunityIcons
-              name="map-marker"
-              size={30}
-              color={Colors.light.secondary}
-            />
-          </Marker>
-
-          <Marker coordinate={{ latitude: destLat, longitude: destLng }}>
-            <MaterialCommunityIcons
-              name="map-marker"
-              size={28}
-              color={Colors.light.blue}
-            />
-          </Marker>
-          {route.length > 0 && (
-            <Polyline
-              coordinates={route}
-              strokeColor={Colors.light.primary}
-              strokeWidth={3}
-            />
-          )}
-        </MapView>
+        <Mapbox {...{ scheduleData: scheduleData, mapSize: "mini" }} />
       </View>
 
       <View style={styles.infoContainer}>
@@ -217,8 +99,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderColor: Colors.light.backgroundIcon,
     borderBottomWidth: 1,
-    width: width,
-    paddingHorizontal: 16,
+    width: "100%",
     paddingBottom: 0,
     paddingTop: 12,
     alignSelf: "center",
@@ -231,16 +112,13 @@ const styles = StyleSheet.create({
     marginRight: 16,
     marginLeft: 2,
   },
-  map: {
-    width: "100%",
-    height: "100%",
-  },
   infoContainer: {
     flex: 1,
   },
   title: {
     ...Typography.subheading,
     marginBottom: 8,
+    color: Colors.light.primary,
   },
   textContainer: {
     flexDirection: "row",

@@ -1,3 +1,5 @@
+import { Schedule } from "./ScheduleInterfaces";
+
 export type Schedule = {
   id: number;
   userId: number;
@@ -21,4 +23,8 @@ export type PaginatedSchedulesResponse = {
 
 export type FetchUserSchedulesParams = {
   pageParam?: number;
+};
+export type ScheduleCardProps = {
+  scheduleData: Schedule;
+  onPress: () => void;
 };
