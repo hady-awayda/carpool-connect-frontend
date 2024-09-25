@@ -1,11 +1,12 @@
-import { useRouter } from "expo-router";
+import Filter from "@/components/exploreScreenComponents/Filter";
+import { Schedule } from "@/components/scheduleScreenComponents/ScheduleInterfaces";
+import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Colors, Typography } from "../../../constants/Variables";
 import BoldButton from "../../../components/BoldButton";
+import { Colors, Typography } from "../../../constants/Variables";
 import UserSchedulesList from "./SchedulesListScreen";
-import { useState } from "react";
-import Filter from "@/components/exploreScreenComponents/Filter";
+import { findSchedules } from "@/data/remote/findSchedules/read";
 
 const SchedulesScreen: React.FC = () => {
   const [departureTimeFlexibility, setDepartureTimeFlexibility] =
@@ -17,10 +18,53 @@ const SchedulesScreen: React.FC = () => {
   const [destinationDistanceProximity, setDestinationDistanceProximity] =
     useState<number>(1);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchData = async (isRefresh = false) => {
+    try {
+      if (!isRefresh) setLoading(true);
+      const response = await findSchedules(
+        departureTimeFlexibility,
+        destinationTimeFlexibility,
+        departureDistanceProximity,
+        destinationDistanceProximity,
+        undefined
+      );
+      setSchedules(response);
+      setLoading(false);
+      setRefreshing(false);
+    } catch (err) {
+      setError((err as Error).message);
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const onClose = () => {
     setIsOpen(false);
   };
+
+  const handleApplyFilters = () => {
+    setIsOpen(false);
+    fetchData();
+  };
+
+  const handleRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchData(true);
+  }, [
+    departureTimeFlexibility,
+    destinationTimeFlexibility,
+    departureDistanceProximity,
+    destinationDistanceProximity,
+  ]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -41,16 +85,18 @@ const SchedulesScreen: React.FC = () => {
             setDestinationTimeFlexibility,
             setDepartureDistanceProximity,
             setDestinationDistanceProximity,
+            onApply: handleApplyFilters,
           }}
         />
       </View>
 
       <UserSchedulesList
         {...{
-          departureTimeFlexibility,
-          destinationTimeFlexibility,
-          departureDistanceProximity,
-          destinationDistanceProximity,
+          schedules,
+          loading,
+          error,
+          refreshing,
+          onRefresh: handleRefresh,
         }}
       />
     </SafeAreaView>

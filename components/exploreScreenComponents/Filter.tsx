@@ -1,19 +1,17 @@
 import { Colors, Typography } from "@/constants/Variables";
-import { Dimensions, Modal, StyleSheet, Text, View } from "react-native";
-import BoldButton from "../BoldButton";
-import ControlledInputField from "../ControlledInputField";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import {
+  Dimensions,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import { z } from "zod";
-
-const filterSchema = z.object({
-  departureTimeFlexibility: z.number().min(0).max(60),
-  destinationTimeFlexibility: z.number().min(0).max(60),
-  departureDistanceProximity: z.number().min(0).max(100),
-  destinationDistanceProximity: z.number().min(0).max(100),
-});
-
-type FilterFormValues = z.infer<typeof filterSchema>;
+import BoldButton from "../BoldButton";
+import ControlledInputField from "../ControlledInputField";
 
 type FilterProps = {
   isOpen: boolean;
@@ -22,7 +20,17 @@ type FilterProps = {
   setDestinationTimeFlexibility: (value: number) => void;
   setDepartureDistanceProximity: (value: number) => void;
   setDestinationDistanceProximity: (value: number) => void;
+  onApply: () => void;
 };
+
+const filterSchema = z.object({
+  departureTimeFlexibility: z.number().min(0).max(1000000),
+  destinationTimeFlexibility: z.number().min(0).max(1000000),
+  departureDistanceProximity: z.number().min(0).max(100),
+  destinationDistanceProximity: z.number().min(0).max(100),
+});
+
+type FilterFormValues = z.infer<typeof filterSchema>;
 
 const Filter = ({
   isOpen,
@@ -31,6 +39,7 @@ const Filter = ({
   setDestinationTimeFlexibility,
   setDepartureDistanceProximity,
   setDestinationDistanceProximity,
+  onApply,
 }: FilterProps) => {
   const {
     control,
@@ -45,7 +54,7 @@ const Filter = ({
     setDestinationTimeFlexibility(data.destinationTimeFlexibility);
     setDepartureDistanceProximity(data.departureDistanceProximity);
     setDestinationDistanceProximity(data.destinationDistanceProximity);
-    onClose();
+    onApply();
   };
 
   return (
@@ -55,51 +64,64 @@ const Filter = ({
       animationType="fade"
       onRequestClose={onClose}
     >
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
-          <View style={styles.filterContainer}>
-            <Text style={styles.title}>Time Flexibility</Text>
-            <ControlledInputField
-              control={control}
-              name="departureTimeFlexibility"
-              placeholder="Departure Time Flexibility (minutes)"
-              keyboardType="numeric"
-              error={errors.departureTimeFlexibility?.message}
-            />
-            <ControlledInputField
-              control={control}
-              name="destinationTimeFlexibility"
-              placeholder="Destination Time Flexibility (minutes)"
-              keyboardType="numeric"
-              error={errors.destinationTimeFlexibility?.message}
-            />
-          </View>
-          <View style={styles.filterContainer}>
-            <Text style={styles.title}>Distance Proximity</Text>
-            <ControlledInputField
-              control={control}
-              name="departureDistanceProximity"
-              placeholder="Departure Distance Proximity (km)"
-              keyboardType="numeric"
-              error={errors.departureDistanceProximity?.message}
-            />
-            <ControlledInputField
-              control={control}
-              name="destinationDistanceProximity"
-              placeholder="Destination Distance Proximity (km)"
-              keyboardType="numeric"
-              error={errors.destinationDistanceProximity?.message}
-            />
-          </View>
-          <BoldButton
-            buttonText="Apply"
-            onPress={handleSubmit(onSubmit)}
-            width={100}
-            height={50}
-            buttonStyle={{ backgroundColor: Colors.light.primary }}
-          />
+      <TouchableWithoutFeedback onPress={onClose}>
+        <View style={styles.modalOverlay}>
+          <TouchableWithoutFeedback onPress={() => {}}>
+            <View style={styles.modalContent}>
+              <View style={styles.filterContainer}>
+                <Text style={styles.title}>Time Flexibility (minutes)</Text>
+                <ControlledInputField
+                  control={control}
+                  name="departureTimeFlexibility"
+                  placeholder="Departure"
+                  keyboardType="numeric"
+                  error={errors.departureTimeFlexibility?.message}
+                />
+                <ControlledInputField
+                  control={control}
+                  name="destinationTimeFlexibility"
+                  placeholder="Destination"
+                  keyboardType="numeric"
+                  error={errors.destinationTimeFlexibility?.message}
+                />
+              </View>
+              <View style={styles.filterContainer}>
+                <Text style={styles.title}>Distance Proximity (km)</Text>
+                <ControlledInputField
+                  control={control}
+                  name="departureDistanceProximity"
+                  placeholder="Departure"
+                  keyboardType="numeric"
+                  error={errors.departureDistanceProximity?.message}
+                />
+                <ControlledInputField
+                  control={control}
+                  name="destinationDistanceProximity"
+                  placeholder="Destination"
+                  keyboardType="numeric"
+                  error={errors.destinationDistanceProximity?.message}
+                />
+              </View>
+              <View style={styles.actionContainer}>
+                <BoldButton
+                  buttonText="Apply"
+                  onPress={handleSubmit(onSubmit)}
+                  width={100}
+                  height={50}
+                  buttonStyle={{ backgroundColor: Colors.light.primary }}
+                />
+                <BoldButton
+                  buttonText="Cancel"
+                  onPress={() => onClose()}
+                  width={100}
+                  height={50}
+                  buttonStyle={{ backgroundColor: Colors.light.text }}
+                />
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };
@@ -115,11 +137,12 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: width * 0.9,
-    height: height * 0.6,
+    height: height * 0.7,
     backgroundColor: "#fff",
     borderRadius: 10,
     padding: 20,
     alignItems: "center",
+    justifyContent: "space-around",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
@@ -133,6 +156,13 @@ const styles = StyleSheet.create({
   title: {
     marginBottom: 10,
     ...Typography.heading1,
+  },
+  actionContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    marginTop: 20,
+    width: "80%",
   },
 });
 
