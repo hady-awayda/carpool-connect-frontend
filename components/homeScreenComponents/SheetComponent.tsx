@@ -595,7 +595,7 @@ const SheetComponent: React.FC<SheetComponentProps> = ({ animateToState }) => {
                 justifyContent: "center",
               }}
               textStyle={{
-                color: selectedDays[day] ? "#fff" : Colors.light.primary,
+                color: selectedDays[day] ? "#fff" : Colors.light.text,
                 ...Typography.title,
               }}
               width={240}
