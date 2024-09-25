@@ -31,7 +31,11 @@ const ControlledInputField: React.FC<ControlledInputFieldProps> = ({
           <FloatingLabelInput
             placeholder={placeholder}
             value={value}
-            onChangeText={onChange}
+            onChangeText={(text) =>
+              onChange(
+                keyboardType === "numeric" ? parseFloat(text) || 0 : text
+              )
+            }
             onBlur={onBlur}
             keyboardType={keyboardType}
             secureTextEntry={secureTextEntry}
@@ -52,6 +56,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     alignSelf: "flex-start",
     marginBottom: 12,
+    marginTop: -8,
     width: "100%",
     textAlign: "center",
   },
