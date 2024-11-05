@@ -1,12 +1,12 @@
 import Filter from "@/components/exploreScreenComponents/Filter";
 import { Schedule } from "@/components/scheduleScreenComponents/ScheduleInterfaces";
+import { findSchedules } from "@/data/remote/findSchedules/read";
 import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BoldButton from "../../../components/BoldButton";
 import { Colors, Typography } from "../../../constants/Variables";
 import UserSchedulesList from "./SchedulesListScreen";
-import { findSchedules } from "@/data/remote/findSchedules/read";
 
 const SchedulesScreen: React.FC = () => {
   const [departureTimeFlexibility, setDepartureTimeFlexibility] =
@@ -26,6 +26,7 @@ const SchedulesScreen: React.FC = () => {
   const fetchData = async (isRefresh = false) => {
     try {
       if (!isRefresh) setLoading(true);
+
       const response = await findSchedules(
         departureTimeFlexibility,
         destinationTimeFlexibility,
@@ -33,6 +34,7 @@ const SchedulesScreen: React.FC = () => {
         destinationDistanceProximity,
         undefined
       );
+      
       setSchedules(response);
       setLoading(false);
       setRefreshing(false);

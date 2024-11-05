@@ -1,7 +1,6 @@
 import BottomContent from "@/components/homeScreenComponents/BottomContent";
 import SettingLocationSheet from "@/components/homeScreenComponents/SettingLocationSheet";
 import SheetComponent from "@/components/homeScreenComponents/SheetComponent";
-import { setDeparture, setLocation } from "@/data/redux/addressListSlice/slice";
 import { RootState } from "@/data/redux/store";
 import {
   setAnimationComplete,
@@ -9,7 +8,7 @@ import {
   UIState,
 } from "@/data/redux/UIStateSlice/slice";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import {
   Animated,
   Dimensions,
@@ -30,7 +29,6 @@ const { height } = Dimensions.get("window");
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const uiState = useSelector((state: RootState) => state.uiState.uiState);
-  const departure = useSelector((state: RootState) => state.address.departure);
   const animatedValue = useRef(new Animated.Value(0)).current;
   const gestureY = useRef(new Animated.Value(0)).current;
 
