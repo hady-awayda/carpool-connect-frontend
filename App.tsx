@@ -18,6 +18,7 @@ import { router, Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import React, { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
 
 const queryClient = new QueryClient();
@@ -70,9 +71,11 @@ export default function App() {
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-          <Stack />
-        </View>
+        <SafeAreaProvider>
+          <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+            <Stack />
+          </View>
+        </SafeAreaProvider>
       </QueryClientProvider>
     </Provider>
   );
